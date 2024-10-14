@@ -1,9 +1,14 @@
 #!/bin/bash
 
-USER_CONFIG_PATH="${HOME}/printer_data/config"
-MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
+OPTIONS=pkvs
+LONGOPTS=path,klipper,venv,service
+OPTIND=1
+
+USER_CONFIG_PATH="${HOME}/punisher_data/config"
+MOONRAKER_CONFIG="${HOME}/punisher_data/config/moonraker.conf"
 KLIPPER_PATH="${HOME}/klipper"
-KLIPPER_VENV_PATH="${HOME}/klippy-env"
+KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
+KLIPPER_SERVICE_NAME="klipper.service"
 
 OLD_K_SHAKETUNE_VENV="${HOME}/klippain_shaketune-env"
 K_SHAKETUNE_PATH="${HOME}/klippain_shaketune"
@@ -23,7 +28,7 @@ function preflight_checks {
         exit -1
     fi
 
-    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F 'klipper.service')" ]; then
+    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F ${KLIPPER_SERVICE_NAME})" ]; then
         printf "[PRE-CHECK] Klipper service found! Continuing...\n\n"
     else
         echo "[ERROR] Klipper service not found, please install Klipper first!"
@@ -144,6 +149,30 @@ echo "- Klippain Shake&Tune module install script -"
 printf "=============================================\n\n"
 
 
+while getopts "$OPTIONS" opt; do
+	# Iterate over the parameters
+	case "$opt" in
+		p|path)
+		USER_CONFIG_PATH="$OPTARG/config"
+    MOONRAKER_CONFIG="$OPTARG/config/moonraker.conf"
+		;;
+
+	case "$opt" in
+		k|klipper)
+		KLIPPER_PATH="$OPTARG/klipper"
+		;;
+
+  case "$opt" in
+    v|venv)
+    KLIPPER_VENV_PATH="$OPTARG/klippy-env"
+    ;;
+  
+  case "opt" in
+    s|service)
+    KLIPPER_SERVICE_NAME="$OPTARG"
+    ;;
+	esac
+done
 # Run steps
 preflight_checks
 check_download
