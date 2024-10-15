@@ -6,7 +6,7 @@ OPTIND=1
 
 USER_CONFIG_PATH="${HOME}/punisher_data/config"
 MOONRAKER_CONFIG="${HOME}/punisher_data/config/moonraker.conf"
-MOONRAKER_SERVICE_NAME="moonraker_punisher_service"
+MOONRAKER_SERVICE_NAME="moonraker-punisher_service"
 KLIPPER_PATH="${HOME}/klipper"
 KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
 KLIPPER_SERVICE_NAME="klipper-punisher.service"
