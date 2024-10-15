@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OPTIONS=pkvs
-LONGOPTS=path,klipper,venv,service
+LONGOPTS=path,moonraker,klipper,venv,service
 OPTIND=1
 
 USER_CONFIG_PATH="${HOME}/punisher_data/config"
