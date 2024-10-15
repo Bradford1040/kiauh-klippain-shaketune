@@ -1,9 +1,15 @@
 #!/bin/bash
 
-USER_CONFIG_PATH="${HOME}/printer_data/config"
-MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
+OPTIONS=pkvs
+LONGOPTS=path,klipper,venv,service
+OPTIND=1
+
+USER_CONFIG_PATH="${HOME}/punisher_data/config"
+MOONRAKER_CONFIG="${HOME}/punisher_data/config/moonraker.conf"
+MOONRAKER_SERVICE_NAME="moonraker_punisher_service"
 KLIPPER_PATH="${HOME}/klipper"
-KLIPPER_VENV_PATH="${HOME}/klippy-env"
+KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
+KLIPPER_SERVICE_NAME="klipper-punisher.service"
 
 OLD_K_SHAKETUNE_VENV="${HOME}/klippain_shaketune-env"
 K_SHAKETUNE_PATH="${HOME}/klippain_shaketune"
@@ -23,7 +29,7 @@ function preflight_checks {
         exit -1
     fi
 
-    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F 'klipper.service')" ]; then
+    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F ${KLIPPER_SERVICE_NAME})" ]; then
         printf "[PRE-CHECK] Klipper service found! Continuing...\n\n"
     else
         echo "[ERROR] Klipper service not found, please install Klipper first!"
@@ -124,18 +130,30 @@ function add_updater {
     update_section=$(grep -c '\[update_manager[a-z ]* Klippain-ShakeTune\]' $MOONRAKER_CONFIG || true)
     if [ "$update_section" -eq 0 ]; then
         echo -n "[INSTALL] Adding update manager to moonraker.conf..."
-        cat ${K_SHAKETUNE_PATH}/moonraker.conf >> $MOONRAKER_CONFIG
+        cat <<EOF >>$MOONRAKER_CONFIG
+
+## Klippain Shake&Tune automatic update management
+[update_manager Klippain-ShakeTune]
+type: git_repo
+origin: https://github.com/Frix-x/klippain-shaketune.git
+path: ~/klippain_shaketune
+virtualenv: ~/klippy-env
+requirements: requirements.txt
+system_dependencies: system-dependencies.json
+primary_branch: main
+managed_services: klipper
+EOF
     fi
 }
 
 function restart_klipper {
     echo "[POST-INSTALL] Restarting Klipper..."
-    sudo systemctl restart klipper
+    sudo systemctl restart ${KLIPPER_SERVICE_NAME} 
 }
 
 function restart_moonraker {
     echo "[POST-INSTALL] Restarting Moonraker..."
-    sudo systemctl restart moonraker
+    sudo systemctl restart ${MOONRAKER_SERVICE_NAME}
 }
 
 
