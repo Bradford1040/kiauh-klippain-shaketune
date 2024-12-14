@@ -34,7 +34,7 @@ jobs:
         # REQUIRED 'target_repo_token' exactly like this!
         target_repo_token: ${{ secrets.GITHUB_TOKEN }}
         upstream_sync_branch: BETA_V3
-        upstream_sync_repo: Bradford1040/kiauh-klippain-shaketune
+        upstream_sync_repo: https://github.com/Bradford1040/kiauh-klippain-shaketune
         upstream_repo_access_token: ${{ secrets.UPSTREAM_REPO_SECRET }}
 
         # Set test_mode true to run tests instead of the true action!!
