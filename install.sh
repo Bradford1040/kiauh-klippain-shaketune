@@ -135,13 +135,13 @@ function add_updater {
 ## Klippain Shake&Tune automatic update management
 [update_manager Klippain-ShakeTune]
 type: git_repo
-origin: https://github.com/Frix-x/klippain-shaketune.git
+origin: https://github.com/Bradford1040/kiauh-klippain-shaketune.git
 path: ~/klippain_shaketune
-virtualenv: ~/klippy-env
+virtualenv: ~/klippy-env # ${KLIPPER_VENV_PATH}
 requirements: requirements.txt
 system_dependencies: system-dependencies.json
-primary_branch: main
-managed_services: klipper
+primary_branch: punisher
+managed_services: klipper moonraker
 EOF
     fi
 }
