@@ -12,7 +12,7 @@ jobs:
       matrix:
         klipper_repo:
           - klipper3d/klipper
-          - DangerKlippers/danger-klipper
+          - KalicoCrew/kalico
     steps: 
       - name: Checkout shaketune
         uses: actions/checkout@v4
