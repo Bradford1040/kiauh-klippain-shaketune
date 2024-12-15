@@ -20,7 +20,7 @@ jobs:
       with:
         # optional: set the branch to checkout,
         # sync action checks out your 'target_sync_branch' anyway
-        ref:  BETA_V3
+        ref:  punisher
         # REQUIRED if your upstream repo is private (see wiki)
         persist-credentials: false
 
@@ -30,10 +30,10 @@ jobs:
       id: sync
       uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
       with:
-        target_sync_branch: BETA_V3
+        target_sync_branch: punisher
         # REQUIRED 'target_repo_token' exactly like this!
         target_repo_token: ${{ secrets.GITHUB_TOKEN }}
-        upstream_sync_branch: BETA_V3
+        upstream_sync_branch: punisher
         upstream_sync_repo: https://github.com/Bradford1040/kiauh-klippain-shaketune
         upstream_repo_access_token: ${{ secrets.UPSTREAM_REPO_SECRET }}
 
