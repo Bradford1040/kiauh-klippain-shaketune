@@ -13,18 +13,7 @@ jobs:
         klipper_repo:
           - klipper3d/klipper
           - KalicoCrew/kalico
-        klipper_version:
-          - master
-          - main
-        python_version:
-          - '3.9' # Debian Bullseye default
-          - '3.11' # Debian Bookworm default
-          # Below disabled - Greenlet upstream version not compatable with py 3.12
-          # - '3.12' # Latest Released as of 2024/9
     steps: 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python_version }}
       - name: Checkout shaketune
         uses: actions/checkout@v4
         with:
@@ -34,11 +23,11 @@ jobs:
         with:
           path: klipper
           repository: ${{ matrix.klipper_repo }}
-          ref: ${{ matrix.klipper_version }}
+          ref: master
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-avr avr-libc
+          sudo apt-get install -y build-essential
       - name: Build klipper dict
         run: |
           pushd klipper
@@ -61,7 +50,7 @@ jobs:
         run: |
           pushd klipper
           mkdir ../dicts
-          cp ../klipper/out/klipper.dict ../dicts/atmega2560.dict
+          cp ../klipper/out/klipper.dict ../dicts/linux_basic.dict
           ../klippy-env/bin/python scripts/test_klippy.py -d ../dicts ../shaketune/ci/smoke-test/klippy-tests/simple.test
   lint:
     runs-on: ubuntu-latest
