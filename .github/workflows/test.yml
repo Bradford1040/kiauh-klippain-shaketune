@@ -15,7 +15,7 @@ jobs:
           - KalicoCrew/kalico
         klipper_version:
           - master
-          - v0.12.0
+          - main
         python_version:
           - '3.9' # Debian Bullseye default
           - '3.11' # Debian Bookworm default
