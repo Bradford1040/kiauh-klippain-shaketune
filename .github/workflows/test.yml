@@ -13,6 +13,11 @@ jobs:
         klipper_repo:
           - klipper3d/klipper
           - KalicoCrew/kalico
+        python_version:
+          - '3.9' # Debian Bullseye default
+          - '3.11' # Debian Bookworm default
+          # Below disabled - Greenlet upstream version not compatable with py 3.12
+          # - '3.12' # Latest Released as of 2024/9 
     steps: 
       - name: Checkout shaketune
         uses: actions/checkout@v4
