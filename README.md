@@ -21,9 +21,16 @@ Follow these steps to install Shake&Tune on your printer:
   2. ```
      git clone https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
      ```
-  3. ```cd ~/klippain_shaketune```
-  4. ```./install.sh```
+  3. ```
+     cd ~/klippain_shaketune
+     ```
+  
+  4. ```
+     ./install.sh
+     ```
+ 
   5. I highly doubt your printer name is punisher, so you are going to have to edit the install.sh 
+ 
   1. Then, append the following to your `printer.cfg` file and restart Klipper:
 ```
 [shaketune]
