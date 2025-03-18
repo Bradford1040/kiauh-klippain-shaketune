@@ -1,9 +1,15 @@
 #!/bin/bash
 
-USER_CONFIG_PATH="${HOME}/printer_data/config"
-MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
+OPTIONS=pkvs
+LONGOPTS=path,moonraker,klipper,venv,service
+OPTIND=1
+
+USER_CONFIG_PATH="${HOME}/punisher_data/config"
+MOONRAKER_CONFIG="${HOME}/punisher_data/config/moonraker.conf"
+MOONRAKER_SERVICE_NAME="moonraker-punisher.service"
 KLIPPER_PATH="${HOME}/klipper"
 KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
+KLIPPER_SERVICE_NAME="klipper-punisher.service"
 
 OLD_K_SHAKETUNE_VENV="${HOME}/klippain_shaketune-env"
 K_SHAKETUNE_PATH="${HOME}/klippain_shaketune"
@@ -23,7 +29,7 @@ function preflight_checks {
         exit -1
     fi
 
-    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F 'klipper.service')" ]; then
+    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F ${KLIPPER_SERVICE_NAME})" ]; then
         printf "[PRE-CHECK] Klipper service found! Continuing...\n\n"
     else
         echo "[ERROR] Klipper service not found, please install Klipper first!"
@@ -64,7 +70,7 @@ function check_download {
 
     if [ ! -d "${K_SHAKETUNE_PATH}" ]; then
         echo "[DOWNLOAD] Downloading Klippain Shake&Tune module repository..."
-        if git -C $shaketunedirname clone https://github.com/Frix-x/klippain-shaketune.git $shaketunebasename; then
+        if git clone https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune; then
             chmod +x ${K_SHAKETUNE_PATH}/install.sh
             printf "[DOWNLOAD] Download complete!\n\n"
         else
@@ -83,7 +89,7 @@ function setup_venv {
     fi
 
     if [ -d "${OLD_K_SHAKETUNE_VENV}" ]; then
-        echo "[INFO] Old K-Shake&Tune virtual environment found, cleaning it!"
+        echo "[INFO] Old K-Shake&Tune virtual environement found, cleaning it!"
         rm -rf "${OLD_K_SHAKETUNE_VENV}"
     fi
 
@@ -129,25 +135,25 @@ function add_updater {
 ## Klippain Shake&Tune automatic update management
 [update_manager Klippain-ShakeTune]
 type: git_repo
-origin: https://github.com/Frix-x/klippain-shaketune.git
+origin: https://github.com/Bradford1040/kiauh-klippain-shaketune.git
 path: ~/klippain_shaketune
-virtualenv: ${KLIPPER_VENV_PATH}
+virtualenv: ~/klippy-env # ${KLIPPER_VENV_PATH}
 requirements: requirements.txt
 system_dependencies: system-dependencies.json
-primary_branch: main
-managed_services: klipper
+primary_branch: punisher
+managed_services: klipper moonraker
 EOF
     fi
 }
 
 function restart_klipper {
     echo "[POST-INSTALL] Restarting Klipper..."
-    sudo systemctl restart klipper
+    sudo systemctl restart ${KLIPPER_SERVICE_NAME} 
 }
 
 function restart_moonraker {
     echo "[POST-INSTALL] Restarting Moonraker..."
-    sudo systemctl restart moonraker
+    sudo systemctl restart ${MOONRAKER_SERVICE_NAME}
 }
 
 
