@@ -1,5 +1,11 @@
 # KIAUH & Klipper Shake & Tune plugin
-###Broken at this moment 3/16/2025 will be fixing
+## I have repaired my punisher branch as of 04/11/2025!
+
+# This setup is very specialized, I use a Server not a Raspberry Pii! 
+
+# Rhino Linux, a rolling AUR release of Unbuntu & Debian Linux 13.0 mix, Python version 3.13.3
+
+# Kalico Klipper - bleeding-edge-v2
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
