@@ -13,8 +13,8 @@ from pathlib import Path
 from .helpers.console_output import ConsoleOutput
 
 KLIPPER_FOLDER = Path.home() / 'klipper'
-KLIPPER_LOG_FOLDER = Path.home() / 'printer_data/logs'
-RESULTS_BASE_FOLDER = Path.home() / 'printer_data/config/K-ShakeTune_results'
+KLIPPER_LOG_FOLDER = Path.home() / 'punisher_data/logs'
+RESULTS_BASE_FOLDER = Path.home() / 'punisher_data/config/Shaketune_results'
 RESULTS_SUBFOLDERS = {
     'axes map': 'axes_map',
     'belts comparison': 'belts',

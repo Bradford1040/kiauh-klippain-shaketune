@@ -70,7 +70,7 @@ function check_download {
 
     if [ ! -d "${K_SHAKETUNE_PATH}" ]; then
         echo "[DOWNLOAD] Downloading Klippain Shake&Tune module repository..."
-        if git clone https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune; then
+        if git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune; then
             chmod +x ${K_SHAKETUNE_PATH}/install.sh
             printf "[DOWNLOAD] Download complete!\n\n"
         else

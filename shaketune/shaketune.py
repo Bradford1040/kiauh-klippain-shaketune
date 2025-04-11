@@ -25,7 +25,7 @@ from .helpers.console_output import ConsoleOutput
 from .shaketune_config import ShakeTuneConfig
 from .shaketune_process import ShakeTuneProcess
 
-DEFAULT_FOLDER = '~/printer_data/config/ShakeTune_results'
+DEFAULT_FOLDER = '~/punisher_data/config/Shaketune_results'
 DEFAULT_NUMBER_OF_RESULTS = 10
 DEFAULT_KEEP_RAW_DATA = False
 DEFAULT_MAX_FREQ = 200.0
