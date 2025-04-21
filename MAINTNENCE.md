@@ -1,4 +1,4 @@
-## When a new stable version of klipper is released:
+# When a new stable version of klipper is released
 
 In `.github/workflows/test.yaml`, update `jobs.klippy_testing.strategy.matrix.klipper_version` to include the new version.
 
