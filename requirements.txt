@@ -14,7 +14,7 @@ certifi==2024.7.4
 chardet==5.2.0
 click==8.1.6
 colorama==0.4.6
-configobj==5.0.8
+configobj==5.0.9
 constantly==23.10.4
 cryptography==44.0.1
 defer==1.0.4
