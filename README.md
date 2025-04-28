@@ -2,7 +2,7 @@
 
 ## I have repaired my `punisher` branch as of 04/11/2025
 
-## T have moved forward with `devel-st-v2.0` and it has a dynamic `install.sh`
+## I have moved forward with `devel-st-v2.0` and it has a dynamic `install.sh`
 
 ## This setup is very specialized, I use a Server not a Raspberry Pii
 
