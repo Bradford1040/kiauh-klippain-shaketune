@@ -75,7 +75,7 @@ def compare_belts_responses(gcmd, config, st_process: ShakeTuneProcess) -> None:
                 'Z_HEIGHT parameter is required if the test_point in [resonance_tester] section is set to -1,-1,-1'
             )
         # Use center of bed in case the test point in [resonance_tester] is set to -1,-1,-1
-        # This is usefull to get something automatic and is also used in the Klippain modular config
+        # This is useful to get something automatic and is also used in the Klippain modular config
         kin_info = toolhead.kin.get_status(systime)
         mid_x = (kin_info['axis_minimum'].x + kin_info['axis_maximum'].x) / 2
         mid_y = (kin_info['axis_minimum'].y + kin_info['axis_maximum'].y) / 2

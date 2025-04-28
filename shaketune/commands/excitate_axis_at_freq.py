@@ -53,7 +53,7 @@ def excitate_axis_at_freq(gcmd, config, st_process: ShakeTuneProcess) -> None:
             st_process.get_st_config().chunk_size, printer.get_reactor(), filename
         )
 
-    ConsoleOutput.print(f'Excitating {axis.upper()} axis at {freq:.1f}Hz for {duration} seconds')
+    ConsoleOutput.print(f'Exciting {axis.upper()} axis at {freq:.1f}Hz for {duration} seconds')
 
     printer = config.get_printer()
     gcode = printer.lookup_object('gcode')
@@ -75,7 +75,7 @@ def excitate_axis_at_freq(gcmd, config, st_process: ShakeTuneProcess) -> None:
                 'Z_HEIGHT parameter is required if the test_point in [resonance_tester] section is set to -1,-1,-1'
             )
         # Use center of bed in case the test point in [resonance_tester] is set to -1,-1,-1
-        # This is usefull to get something automatic and is also used in the Klippain modular config
+        # This is useful to get something automatic and is also used in the Klippain modular config
         kin_info = toolhead.kin.get_status(systime)
         mid_x = (kin_info['axis_minimum'].x + kin_info['axis_maximum'].x) / 2
         mid_y = (kin_info['axis_minimum'].y + kin_info['axis_maximum'].y) / 2
