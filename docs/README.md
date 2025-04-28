@@ -1,14 +1,12 @@
 # Shake&Tune documentation
 
-![](./banner_long.png)
-
+![!](./banner_long.png)
 
 When perfecting 3D prints and tuning your printer, there is all that resonance testing stuff that Shake&Tune will try to help you with. But keep in mind that it's part of a complete process, and Shake&Tune alone won't magically make your printer print at lightning speed. Also, when using the tools, **it's important to get back to the original need: good prints**.
 
 While there are some ideal goals described in this documentation, you need to understand that it's not always possible to achieve them due to a variety of factors unique to each printer, such as assembly precision, components quality and brand, components wear, etc. Even a different accelerometer can give different results. But that's not a problem; the primary goal is to produce clean and satisfactory prints. If your test prints look good and meet your standards, even if the response curves aren't perfect, you're on the right track. **Trust your printer and your print results more than chasing ideal graphs!** If it's satisfactory, there's no need for further adjustments.
 
 First, you may want to read the **[input shaping and tuning generalities](./is_tuning_generalities.md)** documentation to understand how it all works and what to look for when taking these measurements.
-
 
 ## Shake&Tune macros
 
@@ -19,7 +17,6 @@ First, you may want to read the **[input shaping and tuning generalities](./is_t
 |[`AXES_SHAPER_CALIBRATION`](./macros/axes_shaper_calibrations.md)<br /><br />Create the usual input shaper graphs to tune Klipper's input shaper filters and reduce ringing/ghosting | [<img src="./images/axis_example.png">](./macros/axes_shaper_calibrations.md) |
 |[`CREATE_VIBRATIONS_PROFILE`](./macros/create_vibrations_profile.md)<br /><br />Measure your global machine vibrations as a function of toolhead direction and speed to find problematic ranges where the printer could be exposed to more VFAs in order to optimize your slicer speed profiles and TMC drivers parameters | [<img src="./images/vibrations_example.png">](./macros/create_vibrations_profile.md) |
 |[`EXCITATE_AXIS_AT_FREQ`](./macros/excitate_axis_at_freq.md)<br /><br />Maintain a specific excitation frequency, useful to inspect parasite peaks and find out what is resonating | [<img src="./images/excitate_at_freq_example.png">](./macros/excitate_axis_at_freq.md) |
-
 
 ## Resonance testing workflow
 
@@ -75,7 +72,6 @@ flowchart TB
     class tensionBelts,checkmotion,SnT_Belts,SnT_IS,SnT_Vibrations,pressureAdvance,extrusionMultiplier,testPrint,checkTMC standard;
 ```
 
+## Complementary resources
 
-## Complementary ressources
-
-  - [Sineos post](https://klipper.discourse.group/t/interpreting-the-input-shaper-graphs/9879) in the Klipper knowledge base
+- [Sineos post](https://klipper.discourse.group/t/interpreting-the-input-shaper-graphs/9879) in the Klipper knowledge base
