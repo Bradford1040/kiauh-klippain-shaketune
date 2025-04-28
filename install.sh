@@ -6,7 +6,7 @@ DEFAULT_KLIPPER_PATH="${HOME}/klipper"
 DEFAULT_KLIPPER_VENV_PATH="${HOME}/klippy-env"
 DEFAULT_K_SHAKETUNE_PATH="${HOME}/klippain_shaketune" # Where to clone the repo
 DEFAULT_REPO_URL="https://github.com/Bradford1040/kiauh-klippain-shaketune.git"
-DEFAULT_REPO_BRANCH="punisher"
+DEFAULT_REPO_BRANCH="devel-st-v2.0"
 
 # Variables to be determined / selected
 USER_CONFIG_PATH=""

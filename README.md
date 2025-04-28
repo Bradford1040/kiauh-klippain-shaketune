@@ -1,18 +1,20 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have repaired my punisher branch as of 04/11/2025
+## I have repaired my `punisher` branch as of 04/11/2025
+
+## T have moved forward with `devel-st-v2.0` and it has a dynamic `install.sh`
 
 ## This setup is very specialized, I use a Server not a Raspberry Pii
 
-## Rhino Linux, a rolling AUR release of Ubuntu & Debian Linux 13.0 mix, Python version 3.13.3
+## Rhino Linux, a rolling AUR release of Ubuntu 25.04 & Debian Linux 13.0 mix, Python version 3.13.3
 
 ## Kalico Klipper - bleeding-edge-v2
 
-Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
+* Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
-This is a modified version basically designed to work on my system, but can be edited to work on yours as well, if you need a hand just let me know, I plan on making a version that works with just one KIAUH installed printer without a custom name, the Branch will be named KIAUH_DEFAULT, but it is not completed as of yet.
+* This is a modified version basically designed to work on my system, but can be edited to work on yours as well, if you need a hand just let me know, I plan on making a version that works with just one KIAUH installed printer without a custom name, the Branch will be named KIAUH_DEFAULT, but it is not completed as of yet.
 
-Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `punisher` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
+* Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `punisher` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
 
 Check out the **[detailed documentation here](./docs/README.md)**.
 
@@ -20,9 +22,9 @@ Check out the **[detailed documentation here](./docs/README.md)**.
 
 ## Installation
 
-I removed the bash install as it would not work for you unless you edited the `install.sh` but I will add it back once I have completed the default install for KIAUH
+* I have completed the default install for KIAUH custom names, still in testing phase
 
-Follow these steps to install Shake&Tune on your printer:
+* Follow these steps to install Shake&Tune on your printer:
 
   1. Be sure to have a working accelerometer on your machine and a `[resonance_tester]` section defined. You can follow the official
 
@@ -30,19 +32,19 @@ Follow these steps to install Shake&Tune on your printer:
 
   3. Install Shake&Tune by running over SSH on your printer:
 
-   ```shell
-     git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
-   ```
+```shell
+git clone -b devel-st-v2.0 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+```
 
-   ```shell
-     cd ~/klippain_shaketune
-   ```
-  
-   ```shell
-     ./install.sh
-   ```
+```shell
+cd ~/klippain_shaketune
+```
 
-  1. I highly doubt your printer name is punisher, so you are going to have to edit the install.sh
+```shell
+./install.sh
+```
+
+  1. I highly doubt your printer name is punisher, but this `devel-st-v2.0` branch has a dynamic install.sh
 
   2. Then, append the following to your `printer.cfg` file and restart Klipper:
 
