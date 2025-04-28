@@ -49,10 +49,9 @@ On the other hand, if you're looking for mechanical problems (like a wobbly tool
 
 The motion system of a 3D printer can be described as a spring and mass system, best modeled as an harmonic oscillator. Have a look on [this Wikipedia article](https://en.wikipedia.org/wiki/Harmonic_oscillator) or [here](https://beltoforion.de/en/harmonic_oscillator/) for some examples. This type of system has two key parameters:
 
-| Undamped resonant frequency | (natural frequency) | Damping ratio ζ |
-| --- | --- |
+| Undamped resonant frequency | (natural frequency) | Damping ratio ζ
 | $$\frac{1}{2\pi}\sqrt{\frac{k}{m}}$$ | $$\frac{c}{2}\sqrt{\frac{1}{km}}$$ |
-| `k` [N/m]: spring constant | `m` [g]: moving mass | `c` [N·s/m]: viscous damping coefficient | `k` [N/m]: spring constant | `m` [g]: moving mass |
+| `k` [N/m]: spring constant | `m` [g]: moving mass | `c` [N·s/m]: viscous damping coefficient
 
 ![!](images/generalities/harmonic_oscil.png)
 
