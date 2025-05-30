@@ -1,4 +1,4 @@
-# Diagnosing problematic peaks
+SS# Diagnosing problematic peaks
 
 The `EXCITATE_AXIS_AT_FREQ` macro is particularly useful for troubleshooting mechanical vibrations or resonance issues. This macro allows you to maintain a specific excitation frequency for a set duration, enabling hands-on diagnostics.
 
