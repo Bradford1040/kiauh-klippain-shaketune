@@ -12,7 +12,16 @@ import sys
 
 def get_shaper_calibrate_module():
     if os.environ.get('SHAKETUNE_IN_CLI') != '1':
-        from ... import shaper_calibrate, shaper_defs
+        # Non-CLI mode. Assume shaper_calibrate.py and shaper_defs.py
+        # are at the project root (two levels up from this file's directory).
+        # The project root is the parent directory of the 'shaketune' package.
+        # current file: .../shaketune/graph_creators/__init__.py
+        # project_root: .../ (e.g., kiauh-klippain-shaketune/)
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        import shaper_calibrate
+        import shaper_defs
     else:
         shaper_calibrate = sys.modules['shaper_calibrate']
         shaper_defs = sys.modules['shaper_defs']
