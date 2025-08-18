@@ -54,7 +54,7 @@ pyrsistent==0.20.0
 pyserial==3.5
 pytz==2024.1
 PyYAML==6.0.1
-requests==2.32.0
+requests==2.32.4
 rich==13.7.1
 service-identity==24.1.0
 six==1.16.0
