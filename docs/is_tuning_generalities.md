@@ -52,7 +52,7 @@ The motion system of a 3D printer can be described as a spring and mass system, 
 | Undamped resonnant frequency<br />(natural frequency) | Damping ratio ζ |
 | --- | --- |
 | $$\frac{1}{2\pi}\sqrt{\frac{k}{m}}$$ | $$\frac{c}{2}\sqrt{\frac{1}{km}}$$ |
-| `k` [N/m]: spring constant<br />`m` [g]: moving mass | `c` [N·s/m]: viscous damping coefficient<br />`k` [N/m]: spring constant<br />`m` [g]: moving mass |
+| `k` [N/m]: spring constant<br />`m` [kg]: moving mass | `c` [N·s/m]: viscous damping coefficient<br />`k` [N/m]: spring constant<br />`m` [kg]: moving mass |
 
 ![](images/generalities/harmonic_oscil.png)
 

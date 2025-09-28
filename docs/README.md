@@ -20,6 +20,9 @@ First, you may want to read the **[input shaping and tuning generalities](./is_t
 |[`CREATE_VIBRATIONS_PROFILE`](./macros/create_vibrations_profile.md)<br /><br />Measure your global machine vibrations as a function of toolhead direction and speed to find problematic ranges where the printer could be exposed to more VFAs in order to optimize your slicer speed profiles and TMC drivers parameters | [<img src="./images/vibrations_example.png">](./macros/create_vibrations_profile.md) |
 |[`EXCITATE_AXIS_AT_FREQ`](./macros/excitate_axis_at_freq.md)<br /><br />Maintain a specific excitation frequency, useful to inspect parasite peaks and find out what is resonating | [<img src="./images/excitate_at_freq_example.png">](./macros/excitate_axis_at_freq.md) |
 
+## Shake&Tune CLI
+
+Shake&Tune also includes a **[command-line interface (CLI)](./cli_usage.md)** that allows you to generate graphs from existing measurement data without needing a running Klipper instance. This is particularly useful for processing data on a different machine (like your laptop) than your printer or re-run a newer/older version of Shake&Tune on already recorded data files.
 
 ## Resonance testing workflow
 

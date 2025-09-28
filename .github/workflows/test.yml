@@ -12,10 +12,10 @@ jobs:
       matrix:
         klipper_repo:
           - klipper3d/klipper
-          - DangerKlippers/danger-klipper
+          - KalicoCrew/kalico
         klipper_version:
           - master
-          - v0.12.0
+          - v0.13.0
         python_version:
           - '3.9' # Debian Bullseye default
           - '3.11' # Debian Bookworm default
@@ -76,5 +76,3 @@ jobs:
       - name: run ruff tests
         run: |
           ruff check
-
-      

@@ -156,7 +156,7 @@ def create_vibrations_profile(gcmd, config, st_process: ShakeTuneProcess) -> Non
     # Run post-processing
     ConsoleOutput.print('Machine vibrations profile generation...')
     ConsoleOutput.print('This may take some time (5-8min)')
-    creator.configure(motors_config_parser.kinematics, accel, motors_config_parser)
+    creator.configure(motors_config_parser.kinematics, accel, motors_config_parser.get_motors())
     creator.define_output_target(filename)
     measurements_manager.save_stdata()
     st_process.run(filename)

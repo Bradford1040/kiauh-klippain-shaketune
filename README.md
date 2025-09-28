@@ -87,4 +87,4 @@ Follow these steps to install Shake&Tune on your printer:
 #    without using too much RAM to generate them. Usually, you shouldn't need to change this value.
 ```
 
-Don't forget to check out **[Shake&Tune documentation here](./docs/README.md)**.
+Don't forget to check out **[Shake&Tune documentation here](./docs/README.md)** for more details and how to use the macros or the CLI.

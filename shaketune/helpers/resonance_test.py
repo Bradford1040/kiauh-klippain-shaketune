@@ -21,6 +21,7 @@
 import math
 from collections import namedtuple
 
+from ..helpers.compat import KlipperCompatibility
 from ..helpers.console_output import ConsoleOutput
 
 testParams = namedtuple(
@@ -155,35 +156,16 @@ class StaticFrequencyVibrationGenerator(BaseVibrationGenerator):
 
 # This class manages and executes resonance tests, handling both old and new Klipper logic
 class ResonanceTestManager:
-    def __init__(self, toolhead, gcode, res_tester):
+    def __init__(self, toolhead, gcode, res_tester, compat):
         self.toolhead = toolhead
         self.gcode = gcode
         self.res_tester = res_tester
         self.reactor = self.toolhead.reactor
-
-    @property
-    def is_old_klipper(self):
-        return hasattr(self.res_tester, 'test')
+        self.compat = compat
 
     def get_parameters(self):
-        if self.is_old_klipper:
-            return (
-                self.res_tester.test.min_freq,
-                self.res_tester.test.max_freq,
-                self.res_tester.test.accel_per_hz,
-                self.res_tester.test.hz_per_sec,
-                0.0,  # sweeping_period=0 to force the old style pulse-only test
-                None,  # sweeping_accel unused in old style pulse-only test
-            )
-        else:
-            return (
-                self.res_tester.generator.vibration_generator.min_freq,
-                self.res_tester.generator.vibration_generator.max_freq,
-                self.res_tester.generator.vibration_generator.accel_per_hz,
-                self.res_tester.generator.vibration_generator.hz_per_sec,
-                self.res_tester.generator.sweeping_period,
-                self.res_tester.generator.sweeping_accel,
-            )
+        """Get resonance tester parameters using the compatibility layer."""
+        return self.compat.get_res_tester_parameters()
 
     def vibrate_axis(
         self, axis_direction, min_freq=None, max_freq=None, hz_per_sec=None, accel_per_hz=None
@@ -197,7 +179,7 @@ class ResonanceTestManager:
         s_period = base_s_period
         s_accel = base_s_accel
 
-        if s_period == 0 or self.is_old_klipper:
+        if s_period == 0 or self.compat.has_legacy_res_tester_api():
             ConsoleOutput.print('Using pulse-only test')
             gen = BaseVibrationGenerator(final_min_f, final_max_f, final_aph, final_hps)
             test_params = testParams('PULSE-ONLY', final_min_f, final_max_f, final_aph, final_hps, None, None)
@@ -251,7 +233,7 @@ class ResonanceTestManager:
 
         for next_t, accel, freq in test_seq:
             t_seg = next_t - last_t
-            toolhead.cmd_M204(gcode.create_gcode_command('M204', 'M204', {'S': abs(accel)}))
+            self.compat.set_toolhead_acceleration(self.gcode, accel)
             v = last_v + accel * t_seg
             abs_v = abs(v)
             if abs_v < 1e-6:
@@ -264,7 +246,7 @@ class ResonanceTestManager:
             dX, dY, dZ = self._project_distance(d, normalized_direction)
             nX, nY, nZ = X + dX, Y + dY, Z + dZ
 
-            if not self.is_old_klipper:
+            if self.compat.can_limit_junction_speed():
                 toolhead.limit_next_junction_speed(abs_last_v)
 
             # If direction changed sign, must pass through zero velocity
@@ -290,7 +272,7 @@ class ResonanceTestManager:
         if last_v != 0.0:
             d_decel = -0.5 * last_v2 / old_max_accel if old_max_accel != 0 else 0
             ddX, ddY, ddZ = self._project_distance(d_decel, normalized_direction)
-            toolhead.cmd_M204(gcode.create_gcode_command('M204', 'M204', {'S': old_max_accel}))
+            self.compat.set_toolhead_acceleration(self.gcode, old_max_accel)
             toolhead.move([X + ddX, Y + ddY, Z + ddZ, E], abs(last_v))
 
         # Restore the previous acceleration values
@@ -321,12 +303,14 @@ class ResonanceTestManager:
 
 
 def vibrate_axis(
-    toolhead, gcode, axis_direction, min_freq, max_freq, hz_per_sec, accel_per_hz, res_tester
+    toolhead, gcode, axis_direction, min_freq, max_freq, hz_per_sec, accel_per_hz, res_tester, config
 ) -> testParams:
-    manager = ResonanceTestManager(toolhead, gcode, res_tester)
+    compat = KlipperCompatibility(config)
+    manager = ResonanceTestManager(toolhead, gcode, res_tester, compat)
     return manager.vibrate_axis(axis_direction, min_freq, max_freq, hz_per_sec, accel_per_hz)
 
 
-def vibrate_axis_at_static_freq(toolhead, gcode, axis_direction, freq, duration, accel_per_hz) -> testParams:
-    manager = ResonanceTestManager(toolhead, gcode, None)
+def vibrate_axis_at_static_freq(toolhead, gcode, axis_direction, freq, duration, accel_per_hz, config) -> testParams:
+    compat = KlipperCompatibility(config, res_tester=None)
+    manager = ResonanceTestManager(toolhead, gcode, None, compat)
     return manager.vibrate_axis_at_static_freq(axis_direction, freq, duration, accel_per_hz)

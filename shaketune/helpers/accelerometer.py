@@ -12,6 +12,7 @@
 
 
 import json
+import os
 import time
 import uuid
 from io import TextIOWrapper
@@ -199,6 +200,7 @@ class MeasurementsManager:
         except Exception as e:
             ConsoleOutput.print(f'Warning: unable to load measurements from {filename}: {e}')
             self.measurements = []
+        return self.measurements
 
     def load_from_csvs(self, klipper_CSVs: List[Path]) -> List[Measurement]:
         for logname in klipper_CSVs:
@@ -239,7 +241,15 @@ class MeasurementsManager:
 
                     # Add the parsed klipper raw accelerometer data to Shake&Tune measurements object
                     samples = [tuple(row) for row in data]
-                    self.add_measurement(name=logname.stem, samples=samples)
+                    if os.environ.get('SHAKETUNE_IN_CLI') != '1':
+                        # When running as a Klipper plugin, we can use the standard add_measurement method
+                        self.add_measurement(name=logname.stem, samples=samples)
+                    else:
+                        # When running as a CLI, we need to manually append the samples to the measurements object
+                        # as the add_measurement method requires a temp file to be set up for writing and that
+                        # is not available when running like this or would need workarounds to be implemented.
+                        # But it's not a big deal as the CLI mode is only used for single shot runs.
+                        self.measurements.append({'name': logname.stem, 'samples': samples})
             except Exception as err:
                 ConsoleOutput.print(f'Error while reading {logname}: {err}. It will be ignored by Shake&Tune!')
                 continue

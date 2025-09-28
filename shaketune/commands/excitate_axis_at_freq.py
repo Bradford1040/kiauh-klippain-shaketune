@@ -11,13 +11,13 @@ from datetime import datetime
 
 from ..helpers.accelerometer import Accelerometer, MeasurementsManager
 from ..helpers.common_func import AXIS_CONFIG
-from ..helpers.compat import res_tester_config
+from ..helpers.compat import KlipperCompatibility
 from ..helpers.console_output import ConsoleOutput
 from ..helpers.resonance_test import vibrate_axis_at_static_freq
 from ..shaketune_process import ShakeTuneProcess
 
 
-def excitate_axis_at_freq(gcmd, config, st_process: ShakeTuneProcess) -> None:
+def excitate_axis_at_freq(gcmd, klipper_config, st_process: ShakeTuneProcess) -> None:
     date = datetime.now().strftime('%Y%m%d_%H%M%S')
 
     create_graph = gcmd.get_int('CREATE_GRAPH', default=0, minval=0, maxval=1) == 1
@@ -39,7 +39,7 @@ def excitate_axis_at_freq(gcmd, config, st_process: ShakeTuneProcess) -> None:
         raise gcmd.error('AXIS selection invalid. Should be either x, y, a or b!')
 
     if create_graph:
-        printer = config.get_printer()
+        printer = klipper_config.get_printer()
         if accel_chip is None:
             accel_chip = Accelerometer.find_axis_accelerometer(printer, 'xy' if axis in {'a', 'b'} else axis)
         k_accelerometer = printer.lookup_object(accel_chip, None)
@@ -55,13 +55,15 @@ def excitate_axis_at_freq(gcmd, config, st_process: ShakeTuneProcess) -> None:
 
     ConsoleOutput.print(f'Excitating {axis.upper()} axis at {freq:.1f}Hz for {duration} seconds')
 
-    printer = config.get_printer()
+    printer = klipper_config.get_printer()
     gcode = printer.lookup_object('gcode')
     toolhead = printer.lookup_object('toolhead')
     systime = printer.get_reactor().monotonic()
 
     # Get the default values for the acceleration per Hz and the test points
-    default_min_freq, default_max_freq, default_accel_per_hz, test_points = res_tester_config(config)
+    compat = KlipperCompatibility(klipper_config)
+    res_config = compat.get_res_tester_config()
+    default_min_freq, default_max_freq, default_accel_per_hz, test_points = res_config
 
     if accel_per_hz is None:
         accel_per_hz = default_accel_per_hz
@@ -101,7 +103,7 @@ def excitate_axis_at_freq(gcmd, config, st_process: ShakeTuneProcess) -> None:
         accelerometer.start_recording(measurements_manager, name=f'staticfreq_{axis.upper()}', append_time=True)
 
     toolhead.dwell(0.5)
-    vibrate_axis_at_static_freq(toolhead, gcode, axis_config['direction'], freq, duration, accel_per_hz)
+    vibrate_axis_at_static_freq(toolhead, gcode, axis_config['direction'], freq, duration, accel_per_hz, klipper_config)
     toolhead.dwell(0.5)
 
     # Re-enable the input shaper if it was active
