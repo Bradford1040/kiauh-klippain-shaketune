@@ -511,7 +511,7 @@ function preflight_checks {
 
 function install_package_requirements {
     # Dependencies required by numpy/scipy often used in shaketune
-    local packages=("libopenblas-dev" "libatlas-base-dev" "gfortran")
+    local packages=("libopenblas-dev" "gfortran")
     local packages_to_install=()
     local needs_update=false
 
