@@ -46,7 +46,7 @@ function is_package_installed {
 }
 
 function install_package_requirements {
-    packages=("libopenblas-dev" "libatlas-base-dev")
+    packages=("libopenblas-dev")
     packages_to_install=""
 
     for package in "${packages[@]}"; do
