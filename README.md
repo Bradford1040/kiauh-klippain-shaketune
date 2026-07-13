@@ -1,12 +1,14 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have repaired my printer_1 branch as of 04/11/2025
+## I have created my printer_1 branch as of 07/13/2026
 
 ## This setup is very specialized, I use a Server not a Raspberry Pii
 
 ## Rhino Linux, a rolling AUR release of Ubuntu & Debian Linux 13.0 mix, Python version 3.13.3
 
 ## Kalico Klipper - bleeding-edge-v2
+
+## Don't worry Robert Kenpf, I'm going to help you get Shake&Tune working on your Devices! 
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
@@ -42,34 +44,34 @@ Follow these steps to install Shake&Tune on your printer:
      ./install.sh
    ```
 
-  1. I highly doubt your printer name is printer_1, so you are going to have to edit the install.sh
+  1. Your printer name is printer_1, you are going to have to install the `./install.sh`
 
   2. Then, append the following to your `printer.cfg` file and restart Klipper:
 
 ```shell
 [shaketune]
-# result_folder: ~/printer_data/config/ShakeTune_results
+result_folder: ~/printer_1_data/config/ShakeTune_results
 #    Path where the processed results will be stored. If the folder doesn't exist,
 #    it will be automatically created. You can change this if you'd like to store 
 #    results in a different location.
-# number_of_results_to_keep: 10
+number_of_results_to_keep: 10
 #    This setting defines how many results you want to keep in the result folder.
 #    Once the specified number is exceeded, older results will be automatically deleted
 #    to free up space on the SD card and avoid cluttering the results folder.
-# keep_raw_data: False
+keep_raw_data: False
 #    If set to True, Shake&Tune will store both the processed graphs and the raw accelerometer
 #    .stdata files in the results folder. This can be useful for debugging or archiving purposes.
 #    Please always attach them when reporting any issues on GitHub or Discord.
-# show_macros_in_webui: True
+show_macros_in_webui: True
 #    Mainsail and Fluidd doesn't create buttons for system commands (macros that are not part
 #    of the printer.cfg file). This option allow Shake&Tune to inject them into the webui at runtime.
 #    If set to False, the macros will be hidden but still accessible from the console by typing
 #    their names manually, which can be useful if you prefer to encapsulate them into your own macros.
-# timeout: 600
+timeout: 600
 #    This defines the maximum processing time (in seconds) to allows to Shake&Tune for generating 
 #    graphs from a .stdata file. 10 minutes should be more than enough in most cases, but if you have
 #    slower hardware (e.g., older SD cards or low-performance devices), increase it to prevent timeouts.
-# measurements_chunk_size: 2
+measurements_chunk_size: 20
 #    Each Shake&Tune command uses the accelerometer to take multiple measurements. By default,
 #    Shake&Tune will write a chunk of data to disk every two measurements, and at the end of the
 #    command will merge these chunks into the final .stdata file for processing. "2" is a very
@@ -77,11 +79,11 @@ Follow these steps to install Shake&Tune on your printer:
 #    RAM, and should work for everyone. However, if you are using a powerful computer, you may
 #    wish to increase this value to keep more measurements in memory (e.g., 15-20) before writing
 #    the chunk and avoid stressing the filesystem too much.
-# max_freq: 200
+max_freq: 200
 #    This setting defines the maximum frequency at which the calculation of the power spectral density
 #    is cutoff. The default value should be fine for most machines and accelerometer combinations and
 #    avoid touching it unless you know what you're doing.
-# dpi: 300
+dpi: 300
 #    Controls the resolution of the generated graphs. The default value of 300 dpi was optimized
 #    and strikes a balance between performance and readability, ensuring that graphs are clear
 #    without using too much RAM to generate them. Usually, you shouldn't need to change this value.
