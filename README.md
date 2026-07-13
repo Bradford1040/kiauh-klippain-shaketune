@@ -1,12 +1,12 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have created my printer_1 branch as of 07/13/2026
+## I have created a printer_1 branch as of 07/13/2026
 
-## This setup is very specialized, I use a Server not a Raspberry Pii
+## This setup is very specialized, it is for a Server or PC mainly, also will work on Raspberry Pi 3B's and up
 
-## Rhino Linux, a rolling AUR release of Ubuntu & Debian Linux 13.0 mix, Python version 3.13.3
+## Linux Distro's are widely different on python versions, so I set up different requirements.txt files, to be *Universal* across Python 3.9 - 3.14
 
-## Kalico Klipper - bleeding-edge-v2
+## Kalico Klipper-bleeding-edge-v2 or Kalico Klipper-main or Klipper3d-development or Klipper3d-main
 
 ## Don't worry Robert Kempf, I'm going to help you get Shake&Tune working on your Devices! 
 
@@ -14,7 +14,7 @@ Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/kli
 
 This is a modified version basically designed to work on my system, but can be edited to work on yours as well, if you need a hand just let me know, I plan on making a version that works with just one KIAUH installed printer without a custom name, the Branch will be named KIAUH_DEFAULT, but it is not completed as of yet.
 
-Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `printer_1` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
+Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (`klipper-printer_1.service`) & (`moonraker-printer_1.service`) or (`klipper-custom*name.service`) & (`moonraker-custom*name.service`). This branch `printer_1` version is set up for one printer in the `./install.sh` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
 
 Check out the **[detailed documentation here](./docs/README.md)**.
 
