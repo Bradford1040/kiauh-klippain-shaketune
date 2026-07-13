@@ -1,6 +1,6 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have repaired my printer1 branch as of 04/11/2025
+## I have repaired my printer_1 branch as of 04/11/2025
 
 ## This setup is very specialized, I use a Server not a Raspberry Pii
 
@@ -12,7 +12,7 @@ Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/kli
 
 This is a modified version basically designed to work on my system, but can be edited to work on yours as well, if you need a hand just let me know, I plan on making a version that works with just one KIAUH installed printer without a custom name, the Branch will be named KIAUH_DEFAULT, but it is not completed as of yet.
 
-Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `printer1` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
+Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `printer_1` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
 
 Check out the **[detailed documentation here](./docs/README.md)**.
 
@@ -31,7 +31,7 @@ Follow these steps to install Shake&Tune on your printer:
   3. Install Shake&Tune by running over SSH on your printer:
 
    ```shell
-     git clone -b printer1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+     git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
    ```
 
    ```shell
@@ -42,7 +42,7 @@ Follow these steps to install Shake&Tune on your printer:
      ./install.sh
    ```
 
-  1. I highly doubt your printer name is printer1, so you are going to have to edit the install.sh
+  1. I highly doubt your printer name is printer_1, so you are going to have to edit the install.sh
 
   2. Then, append the following to your `printer.cfg` file and restart Klipper:
 

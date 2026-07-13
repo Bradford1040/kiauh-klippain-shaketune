@@ -4,12 +4,12 @@ OPTIONS=pkvs
 LONGOPTS=path,moonraker,klipper,venv,service
 OPTIND=1
 
-USER_CONFIG_PATH="${HOME}/printer1_data/config"
-MOONRAKER_CONFIG="${HOME}/printer1_data/config/moonraker.conf"
-MOONRAKER_SERVICE_NAME="moonraker-printer1.service"
+USER_CONFIG_PATH="${HOME}/printer_1_data/config"
+MOONRAKER_CONFIG="${HOME}/printer_1_data/config/moonraker.conf"
+MOONRAKER_SERVICE_NAME="moonraker-printer_1.service"
 KLIPPER_PATH="${HOME}/klipper"
 KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
-KLIPPER_SERVICE_NAME="klipper-printer1.service"
+KLIPPER_SERVICE_NAME="klipper-printer_1.service"
 
 OLD_K_SHAKETUNE_VENV="${HOME}/klippain_shaketune-env"
 K_SHAKETUNE_PATH="${HOME}/klippain_shaketune"
@@ -70,7 +70,7 @@ function check_download {
 
     if [ ! -d "${K_SHAKETUNE_PATH}" ]; then
         echo "[DOWNLOAD] Downloading Klippain Shake&Tune module repository..."
-        if git clone -b printer1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune; then
+        if git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune; then
             chmod +x ${K_SHAKETUNE_PATH}/install.sh
             printf "[DOWNLOAD] Download complete!\n\n"
         else
@@ -140,7 +140,7 @@ path: ~/klippain_shaketune
 virtualenv: ~/klippy-env # ${KLIPPER_VENV_PATH}
 requirements: requirements.txt
 system_dependencies: system-dependencies.json
-primary_branch: printer1
+primary_branch: printer_1
 managed_services: klipper moonraker
 EOF
     fi
