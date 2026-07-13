@@ -8,7 +8,7 @@
 
 ## Kalico Klipper - bleeding-edge-v2
 
-## Don't worry Robert Kenpf, I'm going to help you get Shake&Tune working on your Devices! 
+## Don't worry Robert Kempf, I'm going to help you get Shake&Tune working on your Devices! 
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
