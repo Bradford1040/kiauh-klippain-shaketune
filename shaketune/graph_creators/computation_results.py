@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+#
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: computation_results.py
@@ -16,29 +16,42 @@ from .base_models import ComputationResult
 
 @dataclass
 class AxesMapResult(ComputationResult):
-    """Result from axes map detection computation"""
+    """Result from axes map detection computation using velocity-based algorithm"""
 
     acceleration_data: List[Tuple[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]]]
+    velocity_data: List[Tuple[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]]]
     gravity: float
-    average_noise_intensity_label: str
-    position_data: List[Tuple[np.ndarray, np.ndarray, np.ndarray]]
+    noise_level: float
+    quality_status: Dict[str, Any]
+    peak_velocities_data: List[Dict[str, float]]
     direction_vectors: List[np.ndarray]
+    actual_directions: List[np.ndarray]
+    rotation_matrix: np.ndarray  # Orthonormalized 3x3 rotation matrix
+    euler_angles: Tuple[float, float, float]  # (roll, pitch, yaw) in degrees
     angle_errors: List[float]
+    confidences: List[float]
     formatted_direction_vector: str
     accel: Optional[float] = None
+    extrapolated_axis: Optional[int] = None  # Index (0=X, 1=Y, 2=Z) if 2-axis machine
 
     def get_plot_data(self) -> Dict[str, Any]:
         return {
-            'acceleration_data_0': [d[0] for d in self.acceleration_data],
-            'acceleration_data_1': [d[1] for d in self.acceleration_data],
+            'acceleration_data': self.acceleration_data,
+            'velocity_data': self.velocity_data,
             'gravity': self.gravity,
-            'average_noise_intensity_label': self.average_noise_intensity_label,
-            'position_data': self.position_data,
+            'noise_level': self.noise_level,
+            'quality_status': self.quality_status,
+            'peak_velocities_data': self.peak_velocities_data,
             'direction_vectors': self.direction_vectors,
+            'actual_directions': self.actual_directions,
+            'rotation_matrix': self.rotation_matrix,
+            'euler_angles': self.euler_angles,
             'angle_errors': self.angle_errors,
+            'confidences': self.confidences,
             'formatted_direction_vector': self.formatted_direction_vector,
             'measurements': self.measurements,
             'accel': self.accel,
+            'extrapolated_axis': self.extrapolated_axis,
             'st_version': self.metadata.version,
         }
 

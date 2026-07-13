@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+#
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: belts_computation.py
@@ -9,12 +9,11 @@
 from typing import Any, List, NamedTuple, Optional, Tuple
 
 import numpy as np
-from scipy.stats import pearsonr
 
 from ...helpers.accelerometer import Measurement
 from ...helpers.common_func import detect_peaks
 from ...helpers.console_output import ConsoleOutput
-from .. import get_shaper_calibrate_module
+from .. import get_shaper_calibrate_module, process_accelerometer_data_compat
 from ..base_models import GraphMetadata
 from ..computation_results import BeltsResult, SignalData
 
@@ -96,7 +95,7 @@ class BeltsComputation:
         similarity_factor = None
         mhi = None
         if self.kinematics in {'limited_corexy', 'corexy', 'limited_corexz', 'corexz'}:
-            correlation, _ = pearsonr(signal1.psd, signal2.psd)
+            correlation = np.corrcoef(signal1.psd, signal2.psd)[0, 1]
             similarity_factor = correlation * 100
             similarity_factor = np.clip(similarity_factor, 0, 100)
             ConsoleOutput.print(f'Belts estimated similarity: {similarity_factor:.1f}%')
@@ -132,7 +131,7 @@ class BeltsComputation:
     def _compute_signal_data(self, data: np.ndarray, common_freqs: np.ndarray, max_freq: float) -> SignalData:
         """Compute signal data from raw measurements"""
         shaper_calibrate, _ = get_shaper_calibrate_module()
-        calibration_data = shaper_calibrate.process_accelerometer_data(data)
+        calibration_data = process_accelerometer_data_compat(shaper_calibrate, data)
 
         freqs = calibration_data.freq_bins[calibration_data.freq_bins <= max_freq]
         psd = calibration_data.get_psd('all')[calibration_data.freq_bins <= max_freq]

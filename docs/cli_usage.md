@@ -7,15 +7,15 @@ Shake&Tune includes a command-line interface (CLI) that allows you to generate g
 The CLI mode uses the same dependencies as the main Shake&Tune plugin. Ensure you have:
 
 - Python 3.9 or newer
-- Required Python packages: `numpy`, `matplotlib`, `scipy`, `zstandard`
+- Required Python packages: `numpy`, `matplotlib`, `zstandard`
 - The Klipper repository cloned locally in your home folder (no need to install it, just clone it)
 
 You can install these dependencies using:
 ```bash
 cd ~/
 git clone https://github.com/Klipper3d/klipper.git
-git clone https://github.com/Frix-x/klippain-shaketune.git
-cd klippain-shaketune
+git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+cd ~/klippain-shaketune
 pip install uv
 uv pip install -r requirements.txt
 ```
@@ -40,13 +40,13 @@ python -m shaketune.cli input_shaper --help
 
 ### Available Graph Types
 
-| Command | Description |
-|---------|-------------|
-| `static_freq` | Static frequency analysis |
-| `axes_map` | Accelerometer axes mapping detection |
-| `belts` | Belt tension comparison (CoreXY/CoreXZ) |
-| `input_shaper` | Input shaper calibration |
-| `vibrations` | Machine vibrations profile |
+| Command        | Description                             |
+| ----------------| -----------------------------------------|
+| `static_freq`  | Static frequency analysis               |
+| `axes_map`     | Accelerometer axes mapping detection    |
+| `belts`        | Belt tension comparison (CoreXY/CoreXZ) |
+| `input_shaper` | Input shaper calibration                |
+| `vibrations`   | Machine vibrations profile              |
 
 ### Input File Formats
 
@@ -72,20 +72,26 @@ All commands support these common options:
 python -m shaketune.cli axes_map \
     -o ./results/axes_map_analysis.png \
     --accel 3000 \
-    --length 100 \
     ./data/axesmap_20240817_212948.stdata
 
 # Using CSV files (requires X, Y, Z measurements)
 python -m shaketune.cli axes_map \
     -o ./results/axes_map_analysis.png \
     --accel 3000 \
-    --length 100 \
     ./data/axesmap_*.csv
+
+# With existing axes_map to verify/correct (use = syntax when value starts with -)
+python -m shaketune.cli axes_map \
+    -o ./results/axes_map_analysis.png \
+    --accel 3000 \
+    --axes_map="-y,x,z" \
+    ./data/axesmap_20240817_212948.stdata
 ```
 
-**Required parameters:** (you need to provide the values that were used during the measurement)
+**Required parameters:**
 - `--accel`: Acceleration used during measurement (mm/s²)
-- `--length`: Length of each measurement segment (mm)
+**Optional parameters:**
+- `--axes_map`: Existing axes_map configuration to invert for analysis. Use this to verify or correct an already configured axes_map. **Important:** When the value starts with `-`, use the `=` syntax (e.g., `--axes_map="-y,x,z"`).
 
 ### 2. Static Frequency Analysis
 

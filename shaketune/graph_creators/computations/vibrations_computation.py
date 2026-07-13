@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+#
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: vibrations_computation.py
@@ -17,7 +17,7 @@ from ...helpers.accelerometer import Measurement
 from ...helpers.common_func import compute_mechanical_parameters, detect_peaks, identify_low_energy_zones
 from ...helpers.console_output import ConsoleOutput
 from ...helpers.motors_config_parser import Motor
-from .. import get_shaper_calibrate_module
+from .. import get_shaper_calibrate_module, process_accelerometer_data_compat
 from ..base_models import GraphMetadata
 from ..computation_results import VibrationsResult
 
@@ -70,7 +70,7 @@ class VibrationsComputation:
                 continue  # Measurement data is not in the expected format or is empty, skip it
 
             angle, speed = self._extract_angle_and_speed(measurement['name'])
-            freq_response = shaper_calibrate.process_accelerometer_data(data)
+            freq_response = process_accelerometer_data_compat(shaper_calibrate, data)
             first_freqs = freq_response.freq_bins
             psd_sum = freq_response.psd_sum
 

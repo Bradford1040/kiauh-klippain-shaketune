@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+#
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: common_func.py
@@ -9,13 +9,9 @@
 
 
 import math
-import os
-import sys
-from importlib import import_module
 from pathlib import Path
 
 import numpy as np
-from scipy.signal import spectrogram
 
 # Constant used to define the standard axis direction and names
 AXIS_CONFIG = [
@@ -26,13 +22,6 @@ AXIS_CONFIG = [
     {'axis': 'corexz_x', 'direction': (1, 0, 1), 'label': 'belt_X'},
     {'axis': 'corexz_z', 'direction': (-1, 0, 1), 'label': 'belt_Z'},
 ]
-
-
-# TODO: remove this function when the refactoring is finished
-def setup_klipper_import(kdir):
-    kdir = os.path.expanduser(kdir)
-    sys.path.append(os.path.join(kdir, 'klippy'))
-    return import_module('.shaper_calibrate', 'extras')
 
 
 # This is used to print the current S&T version on top of the png graph file
@@ -55,27 +44,6 @@ def get_git_version():
 
     except Exception:
         return None
-
-
-# This is Klipper's spectrogram generation function adapted to use Scipy
-def compute_spectrogram(data):
-    N = data.shape[0]
-    Fs = N / (data[-1, 0] - data[0, 0])
-    # Round up to a power of 2 for faster FFT
-    M = 1 << int(0.5 * Fs - 1).bit_length()
-    window = np.kaiser(M, 6.0)
-
-    def _specgram(x):
-        return spectrogram(
-            x, fs=Fs, window=window, nperseg=M, noverlap=M // 2, detrend='constant', scaling='density', mode='psd'
-        )
-
-    d = {'x': data[:, 1], 'y': data[:, 2], 'z': data[:, 3]}
-    f, t, pdata = _specgram(d['x'])
-    for axis in 'yz':
-        pdata += _specgram(d[axis])[2]
-    return pdata, t, f
-
 
 # Compute natural resonant frequency and damping ratio by using the half power bandwidth method with interpolated frequencies
 def compute_mechanical_parameters(psd, freqs, min_freq=None):
