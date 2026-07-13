@@ -224,11 +224,11 @@ class AxesMapComputation:
             gravity=gravity,
             noise_level=noise_level,
             quality_status=quality_status,
-            peak_velocities_data=peak_velocities_data,,
+            peak_velocities_data=peak_velocities_data,
             direction_vectors=direction_vectors,
             actual_directions=actual_directions,
             rotation_matrix=rotation_matrix,
-            euler_angles=euler_angles
+            euler_angles=euler_angles,
             angle_errors=angle_errors,
             confidences=confidences,
             formatted_direction_vector=formatted_direction_vector,
