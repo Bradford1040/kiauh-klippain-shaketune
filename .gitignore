@@ -131,6 +131,7 @@ test/
 .vscode/
 *.bak
 uv.lock
+*.old
 
 # Spyder project settings
 .spyderproject

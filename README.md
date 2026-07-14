@@ -16,7 +16,7 @@ This is a modified version basically designed to work on my system, but can be e
 
 Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `punisher` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
 
-Check out the **[detailed documentation here](./docs/README.md)**.
+Check out the **[detailed documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)**.
 
 ![logo banner](./docs/banner.png)
 
@@ -89,4 +89,4 @@ Follow these steps to install Shake&Tune on your printer:
 #    without using too much RAM to generate them. Usually, you shouldn't need to change this value.
 ```
 
-Don't forget to check out **[Shake&Tune documentation here](./docs/README.md)** for more details and how to use the macros or the CLI.
+Don't forget to check out **[Shake&Tune documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)** for more details and how to use the macros or the CLI.
