@@ -163,3 +163,4 @@ test/
 .vscode/
 *.bak
 uv.lock
+*.old
