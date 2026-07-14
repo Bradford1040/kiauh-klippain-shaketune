@@ -4,7 +4,7 @@
 
 ## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki) I am still editing, so some links don't work yet
 
-## I have created a printer_1 branch as of 07/13/2026 for Robert Kempf! 
+## I have created a printer_1 branch as of 07/13/2026 for Robert Kempf
 
 ## This setup is very specialized, it is for a Server or PC mainly, also will work on Raspberry Pi 3B's and up
 
@@ -12,7 +12,7 @@
 
 ## Kalico Klipper-bleeding-edge-v2 or Kalico Klipper-main or Klipper3d-development or Klipper3d-main
 
-## Don't worry Robert Kempf, I'm going to help you get Shake&Tune working on your Devices! 
+## Don't worry Robert Kempf, I'm going to help you get Shake&Tune working on your Devices
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
@@ -47,8 +47,9 @@ Follow these steps to install Shake&Tune on your printer:
    ```shell
      ./install.sh
    ```
+
   1. Sometimes this is needed on certain linux distros, or may have already been done when installing Klippain, not sure, so I added it just in case
-  2. 
+
    ```shell
    cd ~/klippain-shaketune
 
