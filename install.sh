@@ -64,7 +64,7 @@ function check_download {
 
     if [ ! -d "${K_SHAKETUNE_PATH}" ]; then
         echo "[DOWNLOAD] Downloading Klippain Shake&Tune module repository..."
-        if git -C $shaketunedirname clone https://github.com/Frix-x/klippain-shaketune.git $shaketunebasename; then
+        if git -C $shaketunedirname clone https://github.com/Bradford1040/kiauh-klippain-shaketune.git $shaketunebasename; then
             chmod +x ${K_SHAKETUNE_PATH}/install.sh
             printf "[DOWNLOAD] Download complete!\n\n"
         else
@@ -129,7 +129,7 @@ function add_updater {
 ## Klippain Shake&Tune automatic update management
 [update_manager Klippain-ShakeTune]
 type: git_repo
-origin: https://github.com/Frix-x/klippain-shaketune.git
+origin: https://github.com/Bradford1040/kiauh-klippain-shaketune.git
 path: ~/klippain_shaketune
 virtualenv: ${KLIPPER_VENV_PATH}
 requirements: requirements.txt
