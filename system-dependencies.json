@@ -1,9 +1,17 @@
 {
     "debian": [
         "python3-venv",
-        "python3-numpy",
-        "python3-matplotlib",
+        "python3-dev",
+        "build-essential",
+        "gfortran",
         "libopenblas-dev",
-        "libatlas-base-dev"
+        "pkg-config"
+    ],
+    "arch": [
+        "python",
+        "base-devel",
+        "gcc-fortran",
+        "openblas",
+        "pkgconf"
     ]
 }
