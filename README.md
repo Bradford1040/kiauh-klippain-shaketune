@@ -45,6 +45,14 @@ Follow these steps to install Shake&Tune on your printer:
    ```shell
      ./install.sh
    ```
+  1. Sometimes this is needed on certain linux distros, or may have already been done when installing Klippain, not sure, so I added it just in case
+  2. 
+   ```shell
+   cd ~/klippain-shaketune
+
+   pip install uv
+   uv pip install -r requirements.txt
+   ```
 
   1. Your printer name is `printer_1_data` which is standard naming used with multiple printers in KIAUH. You can find your printer name by typing `ls ~/printer`.
 
