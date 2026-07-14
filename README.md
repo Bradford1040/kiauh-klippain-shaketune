@@ -1,6 +1,8 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have created a printer_1 branch as of 07/13/2026
+## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki) I am still editing, so some links don't work yet
+
+## I have created a printer_1 branch as of 07/13/2026 for Robert Kempf! 
 
 ## This setup is very specialized, it is for a Server or PC mainly, also will work on Raspberry Pi 3B's and up
 
