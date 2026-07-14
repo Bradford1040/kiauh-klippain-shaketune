@@ -1,5 +1,7 @@
 # KIAUH & Klipper Shake & Tune plugin
 
+[![wakatime](https://wakatime.com/badge/github/Bradford1040/kiauh-klippain-shaketune.svg)](https://wakatime.com/badge/github/Bradford1040/kiauh-klippain-shaketune)
+
 ## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki) I am still editing, so some links don't work yet
 
 ## I have created a printer_1 branch as of 07/13/2026 for Robert Kempf! 
