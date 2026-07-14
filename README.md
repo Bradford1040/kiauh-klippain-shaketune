@@ -54,7 +54,7 @@ Follow these steps to install Shake&Tune on your printer:
    uv pip install -r requirements.txt
    ```
 
-  1. Your printer name is `printer_1_data` which is standard naming used with multiple printers in KIAUH. You can find your printer name by typing `ls ~/printer`.
+  1. Your printer name is `printer_1_data` which is standard naming used with multiple printers in KIAUH. You can find your printer name by typing `ls ~/p*`.
 
   2. Then, append the following to your `printer.cfg` file and restart Klipper:
 
