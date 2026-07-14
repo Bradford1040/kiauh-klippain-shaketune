@@ -1,10 +1,12 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have repaired my punisher branch as of 04/11/2025
+## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki) I am still editing, so some links don't work yet
+
+## I have repaired my punisher branch as of 07/11/2026
 
 ## This setup is very specialized, I use a Server not a Raspberry Pii
 
-## Rhino Linux, a rolling AUR release of Ubuntu & Debian Linux 13.0 mix, Python version 3.13.3
+## Rhino Linux, a rolling AUR release of Ubuntu & Debian Linux 13.0 mix, Python version 3.14.6
 
 ## Kalico Klipper - bleeding-edge-v2
 
