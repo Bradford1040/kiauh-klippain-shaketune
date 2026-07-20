@@ -17,6 +17,7 @@ KLIPPER_VENV_PATH=""
 KLIPPER_SERVICE_NAME=""
 K_SHAKETUNE_PATH="" # This will hold the final path used
 INSTANCE_NAME=""    # Will store the derived name like 'punisher' or 'able'
+OS_FAMILY=""        # Will store 'debian' or 'arch'
 
 # --- Script Setup ---
 set -euo pipefail
@@ -51,7 +52,13 @@ function print_success {
 
 # Function to check if a package is installed
 function is_package_installed {
-    dpkg -s "$1" &> /dev/null
+    if [[ "$OS_FAMILY" == "debian" ]]; then
+        dpkg -s "$1" &> /dev/null
+    elif [[ "$OS_FAMILY" == "arch" ]]; then
+        pacman -Q "$1" &> /dev/null
+    else
+        return 1
+    fi
 }
 
 # --- Selection Function ---
@@ -152,12 +159,9 @@ function find_potential_services {
 
 # --- Argument Parsing ---
 function parse_arguments {
-    local parsed_opts
-    parsed_opts=$(getopt -o hv \
+    if ! parsed_opts=$(getopt -o hv \
         -l help,config-path:,klipper-path:,venv-path:,klipper-service:,moonraker-service:,repo-path:,repo-url:,repo-branch: \
-        -n "$0" -- "$@")
-
-    if [[ $? -ne 0 ]]; then
+        -n "$0" -- "$@"); then
         usage
         exit 1
     fi
@@ -437,6 +441,30 @@ function preflight_checks {
         exit 1
     fi
 
+    # --- OS Identification Check ---
+    if [[ -f /etc/os-release ]]; then
+        # shellcheck source=/dev/null
+        source /etc/os-release
+        local os_id="${ID:-}"
+        local os_id_like="${ID_LIKE:-}"
+
+        if [[ "$os_id" == *"debian"* || "$os_id_like" == *"debian"* || "$os_id" == *"ubuntu"* || "$os_id" == *"raspbian"* ]]; then
+            OS_FAMILY="debian"
+            print_info "Detected Debian-based OS: ${PRETTY_NAME:-$os_id}"
+        elif [[ "$os_id" == *"arch"* || "$os_id_like" == *"arch"* || "$os_id" == "cachyos" || "$os_id" == "manjaro" ]]; then
+            OS_FAMILY="arch"
+            print_info "Detected Arch-based OS: ${PRETTY_NAME:-$os_id}"
+        else
+            print_error "Unsupported OS distribution detected: ${PRETTY_NAME:-$os_id}"
+            print_error "This script currently supports Debian/Ubuntu and Arch/CachyOS families."
+            exit 1
+        fi
+    else
+        print_error "Cannot determine OS distribution (/etc/os-release missing)."
+        exit 1
+    fi
+    # -------------------------------
+
     # Check essential commands
     local missing_cmds=()
     for cmd in python3 git pip systemctl sudo grep awk readlink basename dirname; do
@@ -510,10 +538,16 @@ function preflight_checks {
 }
 
 function install_package_requirements {
-    # Dependencies required by numpy/scipy often used in shaketune
-    local packages=("libopenblas-dev" "gfortran")
+    local packages=()
     local packages_to_install=()
     local needs_update=false
+
+    # Assign correct package names based on OS Family
+    if [[ "$OS_FAMILY" == "debian" ]]; then
+        packages=("libopenblas-dev" "python3-dev" "gfortran")
+    elif [[ "$OS_FAMILY" == "arch" ]]; then
+        packages=("openblas" "gcc-fortran")
+    fi
 
     print_info "Checking system package requirements..."
     for package in "${packages[@]}"; do
@@ -528,12 +562,20 @@ function install_package_requirements {
 
     if [[ ${#packages_to_install[@]} -gt 0 ]]; then
         print_notice "Installing missing system packages: ${packages_to_install[*]}"
-        if [[ "$needs_update" = true ]]; then
-            print_info "Updating package lists (sudo apt-get update)..."
-            sudo apt-get update || { print_error "Failed to update package lists."; exit 1; }
+
+        if [[ "$OS_FAMILY" == "debian" ]]; then
+            if [[ "$needs_update" = true ]]; then
+                print_info "Updating package lists (sudo apt-get update)..."
+                sudo apt-get update || { print_error "Failed to update package lists."; exit 1; }
+            fi
+            print_info "Installing packages (sudo apt-get install -y)..."
+            sudo apt-get install -y "${packages_to_install[@]}" || { print_error "Failed to install system packages."; exit 1; }
+
+        elif [[ "$OS_FAMILY" == "arch" ]]; then
+            print_info "Installing packages (sudo pacman -Sy --needed --noconfirm)..."
+            sudo pacman -Sy --needed --noconfirm "${packages_to_install[@]}" || { print_error "Failed to install system packages."; exit 1; }
         fi
-        print_info "Installing packages (sudo apt-get install -y)..."
-        sudo apt-get install -y "${packages_to_install[@]}" || { print_error "Failed to install system packages."; exit 1; }
+
         print_success "System packages installed successfully."
     else
         print_info "All required system packages are already installed."
@@ -542,9 +584,8 @@ function install_package_requirements {
 
 function check_download {
     print_notice "Checking Shake&Tune Repository"
-    local repo_dir_name repo_base_name
+    local repo_dir_name
     repo_dir_name="$(dirname "${K_SHAKETUNE_PATH}")"
-    repo_base_name="$(basename "${K_SHAKETUNE_PATH}")"
 
     # Ensure parent directory exists
     mkdir -p "$repo_dir_name" || { print_error "Failed to create directory: $repo_dir_name"; exit 1; }
@@ -835,14 +876,16 @@ function add_updater {
         # Need to handle paths outside HOME gracefully (use absolute then)
         local config_repo_path
         if [[ "$K_SHAKETUNE_PATH" == "$HOME/"* ]]; then
-            config_repo_path="~/${K_SHAKETUNE_PATH#$HOME/}"
+            # shellcheck disable=SC2088
+            config_repo_path="~/${K_SHAKETUNE_PATH#"$HOME"/}"
         else
             config_repo_path="$K_SHAKETUNE_PATH" # Use absolute if not in HOME
         fi
 
         local config_venv_path
         if [[ "$KLIPPER_VENV_PATH" == "$HOME/"* ]]; then
-            config_venv_path="~/${KLIPPER_VENV_PATH#$HOME/}"
+            # shellcheck disable=SC2088
+            config_venv_path="~/${KLIPPER_VENV_PATH#"$HOME"/}"
         else
             config_venv_path="$KLIPPER_VENV_PATH" # Use absolute if not in HOME
         fi

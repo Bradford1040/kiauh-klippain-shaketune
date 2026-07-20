@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+#
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: __init__.py
@@ -20,8 +20,15 @@ def get_shaper_calibrate_module():
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
-        import shaper_calibrate
-        import shaper_defs
+        try:
+            import shaper_calibrate
+            import shaper_defs
+        except ImportError:
+            klipper_extras = os.path.expanduser("~/klipper/klippy/extras")
+            if klipper_extras not in sys.path:
+                sys.path.insert(0, klipper_extras)
+            import shaper_calibrate
+            import shaper_defs
     else:
         shaper_calibrate = sys.modules['shaper_calibrate']
         shaper_defs = sys.modules['shaper_defs']
