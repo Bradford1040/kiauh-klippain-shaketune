@@ -127,6 +127,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea/
+.ssh/
 
 # Spyder project settings
 .spyderproject

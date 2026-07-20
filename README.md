@@ -6,6 +6,8 @@
 
 ## I have created a printer_1 branch as of 07/13/2026 for Robert Kempf
 
+- Updated 07/20/2026 for a cleaner `install.sh` & added extra documentation
+
 ## This setup is very specialized, it is for a Server or PC mainly, also will work on Raspberry Pi 3B's and up
 
 ## Linux Distro's are widely different on python versions, so I set up different requirements.txt files, to be *Universal* across Python 3.9 - 3.14
