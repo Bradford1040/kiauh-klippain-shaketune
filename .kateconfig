@@ -1,0 +1,6 @@
+﻿# Core default for the directory
+kate: replace-tabs on; indent-width 4; tab-width 4;
+
+# Override targeting specific file types
+kate-wildcard(*.md;*.markdown): indent-width 2;
+kate-wildcard(Makefile): replace-tabs off;
