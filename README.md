@@ -1,6 +1,8 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## I have repaired my `devel-st-v2.0` branch as of 07/20/2026
+## The `devel-st-v2.0` branch is under active development
+
+- I continue to work on this branch; if you have any issues, please report them.
 
 ## This setup is very specialized
 
@@ -18,9 +20,9 @@ Check out the **[detailed documentation here](https://github.com/Bradford1040/ki
 
 ## Installation
 
-* I have completed the default install for KIAUH custom names, still in testing phase, please report any issues you find on the Issues tab.
+I have reworked the default install for KIAUH custom names, still in testing phase, please report any issues you find on the Issues tab.
 
-* Follow these steps to install Shake&Tune on your printer:
+Follow these steps to install Shake&Tune on your printer:
 
   1. Be sure to have a working accelerometer on your machine and a `[resonance_tester]` section defined. You can follow the official
 
@@ -29,7 +31,7 @@ Check out the **[detailed documentation here](https://github.com/Bradford1040/ki
   3. Install Shake&Tune by running over SSH on your printer:
 
 ```shell
-git clone -b devel-st-v2.0 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+git clone -b devel-st-v2.0 https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
 ```
 
 ```shell

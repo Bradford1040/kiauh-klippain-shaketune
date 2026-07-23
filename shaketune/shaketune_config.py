@@ -10,7 +10,7 @@
 
 from pathlib import Path
 
-from .helpers.console_output import ConsoleOutput
+from .helpers.common_func import get_git_version as get_st_version
 
 KLIPPER_FOLDER = Path.home() / 'klipper'
 KLIPPER_LOG_FOLDER = Path.home() / 'punisher_data/logs'
@@ -58,19 +58,5 @@ class ShakeTuneConfig:
 
     @staticmethod
     def get_git_version() -> str:
-        try:
-            from git import GitCommandError, Repo
-
-            # Get the absolute path of the script, resolving any symlinks
-            # Then get 1 times to parent dir to be at the git root folder
-            script_path = Path(__file__).resolve()
-            repo_path = script_path.parents[1]
-            repo = Repo(repo_path)
-            try:
-                version = repo.git.describe('--tags')
-            except GitCommandError:
-                version = repo.head.commit.hexsha[:7]  # If no tag is found, use the simplified commit SHA instead
-            return version
-        except Exception as e:
-            ConsoleOutput.print(f'Warning: unable to retrieve Shake&Tune version number: {e}')
-            return 'unknown'
+        version = get_st_version()
+        return version if version is not None else 'unknown'
