@@ -18,7 +18,7 @@ import uuid
 from io import TextIOWrapper
 from multiprocessing import Process, Queue, Value
 from pathlib import Path
-from typing import List, Optional, Tuple, TypedDict
+from typing import Any, List, Optional, Tuple, TypedDict, cast
 
 import numpy as np
 from zstandard import FLUSH_FRAME, ZstdCompressor, ZstdDecompressor
@@ -31,7 +31,7 @@ SamplesList = List[Sample]
 STOP_SENTINEL = 'STOP_SENTINEL'
 WRITE_TIMEOUT = 300
 WAIT_FOR_SAMPLE_TIMEOUT = 30
-COMPRESSION_LEVEL = 11  # Zstandard compression level (0 to 22, higher is slower but better compression)
+COMPRESSION_LEVEL = 11  # zstandard compression level (0 to 22, higher is slower but better compression)
 
 
 class Measurement(TypedDict):
@@ -40,7 +40,7 @@ class Measurement(TypedDict):
 
 
 class MeasurementsManager:
-    def __init__(self, chunk_size: int, k_reactor=None, stdata_filename: Path = None):
+    def __init__(self, chunk_size: int, k_reactor=None, stdata_filename: Optional[Path] = None):
         # Klipper reactor is optional here as when running in CLI mode, we don't need it since in this mode
         # we are only reading a file to create graphs and never recording anything (so no disk writes)
         self._k_reactor = k_reactor
@@ -50,9 +50,12 @@ class MeasurementsManager:
 
         # Get the stdata filename and associated temporary file (with the correct extension)
         if stdata_filename is not None:
-            self._final_file = stdata_filename
-            if self._final_file.suffix != '.stdata':
-                self._final_file = self._final_file.with_suffix('.stdata')
+            # Explicitly cast stdata_filename to Path for the type checker
+            current_final_file: Path = cast(Path, stdata_filename)
+            if current_final_file.suffix != '.stdata':
+                current_final_file = current_final_file.with_suffix('.stdata')
+            self._final_file = current_final_file
+            assert self._final_file is not None  # Explicit assertion for type checker
             self._temp_file = self._final_file.parent / f'snt_tmp-{str(uuid.uuid4())[:8]}.stdata'
 
         self.measurements: List[Measurement] = []
@@ -62,9 +65,9 @@ class MeasurementsManager:
         self._is_writing = Value('b', False)
         self._writer_process: Optional[Process] = None
 
-    # Dedicated writer process: opens the output file in binary write mode and wraps it with a Zstandard compressor
+    # Dedicated writer process: opens the output file in binary write mode and wraps it with a zstandard compressor
     # stream. It then continuously reads measurement objects from the queue and writes each as a JSON line
-    def _writer_loop(self, output_file: Path, write_queue: Queue, is_writing: Value):
+    def _writer_loop(self, output_file: Path, write_queue: Queue, is_writing: Any):
         try:
             with open(output_file, 'wb') as f:
                 cctx = ZstdCompressor(level=COMPRESSION_LEVEL)
@@ -92,7 +95,7 @@ class MeasurementsManager:
         except IndexError as err:
             raise ValueError('no measurements available to append samples to!') from err
 
-    def add_measurement(self, name: str, samples: SamplesList = None, timeout: float = WRITE_TIMEOUT):
+    def add_measurement(self, name: str, samples: Optional[SamplesList] = None, timeout: float = WRITE_TIMEOUT):
         if not self._temp_file:
             raise ValueError('no file path provided to the MeasurementsManager! Unable to add any measurement.')
 
@@ -141,7 +144,8 @@ class MeasurementsManager:
         self.clear_measurements(keep_last=True)
 
     def save_stdata(self, timeout: int = WRITE_TIMEOUT):
-        # Klipper reactor is required to save the data to disk (but optional for the CLI mode that never saves any .stdata)
+        # Klipper reactor is required to save the data to disk.
+        # (Optional for CLI mode, which never saves .stdata files.)
         if not self._k_reactor:
             raise ValueError('no Klipper reactor provided! Unable to save data to disk.')
         if not self._writer_process:
@@ -240,7 +244,7 @@ class MeasurementsManager:
                         continue
 
                     # Add the parsed klipper raw accelerometer data to Shake&Tune measurements object
-                    samples = [tuple(row) for row in data]
+                    samples = [tuple(float(x) for x in row) for row in data]
                     if os.environ.get('SHAKETUNE_IN_CLI') != '1':
                         # When running as a Klipper plugin, we can use the standard add_measurement method
                         self.add_measurement(name=logname.stem, samples=samples)
@@ -258,7 +262,7 @@ class MeasurementsManager:
 
     def __del__(self):
         try:
-            if self._temp_file.exists():
+            if self._temp_file and self._temp_file.exists():
                 self._temp_file.unlink()
         except Exception:
             pass  # Ignore errors during cleanup

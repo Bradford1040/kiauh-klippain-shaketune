@@ -4,11 +4,16 @@ description = "Klipper streamlined input shaper workflow and calibration tools"
 readme = "README.md"
 requires-python = ">= 3.9"
 authors = [
-  {name = "Félix Boisselier", email = "felix@fboisselier.fr"}
+  {name = "Bradford Adams", email = "bradfordaldenadams@gmail.com"}
 ]
 keywords = ["klipper", "input shaper", "calibration", "3d printer"]
 license = {file = "LICENSE"}
 dynamic = ["version"]
+dependencies = [
+    "gitpython>=3.1.55",
+    "matplotlib>=3.9.4",
+    "numpy>=2.0.2",
+]
 [project.urls]
 Repository = "https://github.com/Bradford1040/kiauh-klippain-shaketune"
 Documentation = "https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki"
