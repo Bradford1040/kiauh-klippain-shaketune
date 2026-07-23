@@ -11,10 +11,11 @@ The CLI mode uses the same dependencies as the main Shake&Tune plugin. Ensure yo
 - The Klipper repository cloned locally in your home folder (no need to install it, just clone it)
 
 You can install these dependencies using:
+
 ```bash
 cd ~/
 git clone https://github.com/Klipper3d/klipper.git
-git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
 cd ~/klippain-shaketune
 pip install uv
 uv pip install -r requirements.txt
@@ -23,6 +24,7 @@ uv pip install -r requirements.txt
 ## Basic Usage
 
 The CLI follows this general pattern:
+
 ```bash
 uv run python -m shaketune.cli <graph_type> [options] <input_files>
 ```
@@ -41,7 +43,7 @@ python -m shaketune.cli input_shaper --help
 ### Available Graph Types
 
 | Command        | Description                             |
-| ----------------| -----------------------------------------|
+| ---------------| ----------------------------------------|
 | `static_freq`  | Static frequency analysis               |
 | `axes_map`     | Accelerometer axes mapping detection    |
 | `belts`        | Belt tension comparison (CoreXY/CoreXZ) |
@@ -89,6 +91,7 @@ python -m shaketune.cli axes_map \
 ```
 
 **Required parameters:**
+
 - `--accel`: Acceleration used during measurement (mm/s²)
 **Optional parameters:**
 - `--axes_map`: Existing axes_map configuration to invert for analysis. Use this to verify or correct an already configured axes_map. **Important:** When the value starts with `-`, use the `=` syntax (e.g., `--axes_map="-y,x,z"`).
@@ -105,6 +108,7 @@ python -m shaketune.cli static_freq \
 ```
 
 **Optional parameters:** (these are only used for the legend and the title of the graph)
+
 - `--frequency`: Maintained frequency during measurement (Hz)
 - `--duration`: Duration of the measurement (seconds)
 - `--accel_per_hz`: Acceleration per Hz used (mm/s²/Hz)
@@ -125,10 +129,12 @@ python -m shaketune.cli belts \
 ```
 
 **Required parameters:**
+
 - `--kinematics`: Machine kinematics (`corexy`, `corexz`, `cartesian`, etc.)
 - `-k, --klipper_dir`: Path to Klipper directory (for shaper calculations)
 
 **Optional parameters:** (these are only used for the legend and the title of the graph)
+
 - `--mode`: Test mode used (`SWEEPING`, `FIXED`, etc.)
 - `--accel_per_hz`: Acceleration per Hz (mm/s²/Hz)
 - `--sweeping_accel`: Acceleration for sweeping tests (mm/s²)
@@ -151,10 +157,12 @@ python -m shaketune.cli input_shaper \
 ```
 
 **Required parameters:**
+
 - `-k, --klipper_dir`: Path to Klipper directory
 - `--scv`: Square corner velocity (mm/s)
 
 **Optional parameters:** (these are only used for the legend and the title of the graph)
+
 - `--max_smoothing`: Maximum allowed smoothing
 - `--mode`: Test mode used
 - `--accel_per_hz`: Acceleration per Hz (mm/s²/Hz)
@@ -174,6 +182,7 @@ python -m shaketune.cli vibrations \
 ```
 
 **Required parameters:**
+
 - `--kinematics`: Machine kinematics
 - `--accel`: Acceleration used during measurements (mm/s²)
 - `-k, --klipper_dir`: Path to Klipper directory
