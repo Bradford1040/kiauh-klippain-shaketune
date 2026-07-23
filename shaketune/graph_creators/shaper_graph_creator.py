@@ -4,6 +4,7 @@
 # Copyright (C) 2020  Dmitry Butyugin <dmbutyugin@google.com>
 # Copyright (C) 2020  Kevin O'Connor <kevin@koconnor.net>
 # Copyright (C) 2022 - 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+# Copyright (C) 2026  Bradford Adams <bradfordaldenadams@gmail.com> (Bradford1040 or 𝔅яа∂ƒøя∂¹⁰⁴⁰)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: shaper_graph_creator.py

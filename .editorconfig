@@ -1,15 +1,108 @@
+# top-most EditorConfig file
 root = true
 
+# ==============================================================================
+# 1. Global Defaults (The "Safe" Baseline)
+# ==============================================================================
 [*]
 indent_style = space
-indent_size = 4
-insert_final_newline = true
-trim_trailing_whitespace = true
-charset = utf-8
+indent_size = 2
 end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
 
+# ==============================================================================
+# 2. Programming Languages
+# ==============================================================================
+# Python (Strict PEP 8 standards)
 [*.py]
+indent_style = space
+indent_size = 4
 max_line_length = 120
 
-[*.{sh,yml,yaml,json}]
+# C / C++ Source Files (Standard Systems/Firmware layouts)
+[*.{c,h,cpp,hpp,cc,hh}]
+indent_style = space
+indent_size = 4
+
+# Rust Source Files
+[*.rs]
+indent_style = space
+indent_size = 4
+
+# ==============================================================================
+# 3. Scripts, Shells & System Daemons
+# ==============================================================================
+# Linux/Unix Shell Scripts (Strict LF line endings to prevent syntax errors)
+[*.{sh,bash,fish,zsh}]
+indent_style = space
 indent_size = 2
+end_of_line = lf
+
+# Linux Systemd Service Units
+[*.{service,timer,autofs,mount}]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+
+# Windows Specific Scripts/Files (Fixed Syntax + Strict CRLF for Windows native execution)
+[*.{bat,cmd,ps1,xml}]
+end_of_line = crlf
+
+# ==============================================================================
+# 4. Web, Serialization & Data Formats
+# ==============================================================================
+# JavaScript, TypeScript, and Web Formats
+[*.{js,jsx,ts,tsx,html,css,scss}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# Data Serialization & Engine Configs
+[*.{json,yml,yaml,toml}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# ==============================================================================
+# 5. Build, Automation & Container Configurations
+# ==============================================================================
+# Tab-Strict Build Files (Makefiles MUST use tabs)
+[Makefile]
+indent_style = tab
+
+# Docker & Container Configs
+[Dockerfile*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+
+# Source Control & Local Environment Metadata
+[{.gitignore,.gitattributes,.env,.env.*}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# ==============================================================================
+# 6. Documentation & Copy
+# ==============================================================================
+# Markdown (Preserve double-space line breaks)
+[*.{md,markdown,mdown,mkdn}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+trim_trailing_whitespace = false
+
+# ==============================================================================
+# 7. Specialty, Lockfiles & Safety Overrides
+# ==============================================================================
+# Minified Files (Do not touch performance-optimized files)
+[**.min.js]
+indent_style = ignore
+insert_final_newline = ignore
+
+# Lockfiles & Large Data Dumps (Prevent unwanted auto-formatting edits)
+[*.{json,lock,pnpm-lock.yaml,yarn.lock}]
+insert_final_newline = ignore
+trim_trailing_whitespace = true

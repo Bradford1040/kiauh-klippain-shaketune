@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+# Copyright (C) 2026  Bradford Adams <bradfordaldenadams@gmail.com> (Bradford1040 or 𝔅яа∂ƒøя∂¹⁰⁴⁰)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: accelerometer.py
@@ -16,12 +16,18 @@ import time
 import uuid
 from io import TextIOWrapper
 from multiprocessing import Process, Queue, Value
+from multiprocessing.sharedctypes import SynchronizedBase
 from pathlib import Path
-from typing import List, Optional, Tuple, TypedDict
+from typing import TYPE_CHECKING, List, Optional, Tuple, TypedDict
 
 import numpy as np
 from zstandard import FLUSH_FRAME, ZstdCompressor, ZstdDecompressor
 
+# The Synchronized type is not public, but it's what multiprocessing.Value returns.
+if TYPE_CHECKING:
+    Synchronized = SynchronizedBase
+else:
+    Synchronized = type(Value('b', False))
 from ..helpers.console_output import ConsoleOutput
 
 Sample = Tuple[float, float, float, float]
@@ -63,7 +69,7 @@ class MeasurementsManager:
 
     # Dedicated writer process: opens the output file in binary write mode and wraps it with a Zstandard compressor
     # stream. It then continuously reads measurement objects from the queue and writes each as a JSON line
-    def _writer_loop(self, output_file: Path, write_queue: Queue, is_writing: Value):
+    def _writer_loop(self, output_file: Path, write_queue: Queue, is_writing: Synchronized):
         try:
             with open(output_file, 'wb') as f:
                 cctx = ZstdCompressor(level=COMPRESSION_LEVEL)

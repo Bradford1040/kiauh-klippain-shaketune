@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+# Copyright (C) 2026  Bradford Adams <bradfordaldenadams@gmail.com> (Bradford1040 or 𝔅яа∂ƒøя∂¹⁰⁴⁰)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: axes_map_graph_creator.py
@@ -10,7 +10,10 @@
 from typing import List, Optional, Tuple
 
 import numpy as np
-import pywt
+try:
+    import pywt
+except ImportError:
+    pywt = None
 from scipy import stats
 
 from ..helpers.accelerometer import Measurement, MeasurementsManager
@@ -181,10 +184,16 @@ class AxesMapComputation:
         accel_y -= offset_y
         accel_z -= offset_z
 
-        # Apply wavelet denoising
-        accel_x, noise_x = self._wavelet_denoise(accel_x)
-        accel_y, noise_y = self._wavelet_denoise(accel_y)
-        accel_z, noise_z = self._wavelet_denoise(accel_z)
+        # Apply wavelet denoising if pywt is available
+        if pywt is not None:
+            accel_x, noise_x = self._wavelet_denoise(accel_x)
+            accel_y, noise_y = self._wavelet_denoise(accel_y)
+            accel_z, noise_z = self._wavelet_denoise(accel_z)
+        else:
+            ConsoleOutput.print("[WARNING] PyWavelets library not found. Skipping wavelet denoising. Results may be less accurate.")
+            noise_x = np.zeros_like(accel_x)
+            noise_y = np.zeros_like(accel_y)
+            noise_z = np.zeros_like(accel_z)
 
         # Integrate acceleration to get velocity using trapezoidal rule
         velocity_x = self._integrate_trapz(accel_x, time)

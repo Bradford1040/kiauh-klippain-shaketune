@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-# Copyright (C) 2024 Félix Boisselier <felix@fboisselier.fr> (Frix_x on Discord)
+# Copyright (C) 2026  Bradford Adams <bradfordaldenadams@gmail.com> (Bradford1040 or 𝔅яа∂ƒøя∂¹⁰⁴⁰)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: shaketune.py

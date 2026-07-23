@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2026  Bradford Adams <bradfordaldenadams@gmail.com> (Bradford1040 or 𝔅яа∂ƒøя∂¹⁰⁴⁰)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: __init__.py
@@ -11,27 +11,39 @@ import sys
 
 
 def get_shaper_calibrate_module():
-    if os.environ.get('SHAKETUNE_IN_CLI') != '1':
-        # Non-CLI mode. Assume shaper_calibrate.py and shaper_defs.py
-        # are at the project root (two levels up from this file's directory).
-        # The project root is the parent directory of the 'shaketune' package.
-        # current file: .../shaketune/graph_creators/__init__.py
-        # project_root: .../ (e.g., kiauh-klippain-shaketune/)
-        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-        try:
-            import shaper_calibrate
-            import shaper_defs
-        except ImportError:
-            klipper_extras = os.path.expanduser("~/klipper/klippy/extras")
-            if klipper_extras not in sys.path:
-                sys.path.insert(0, klipper_extras)
-            import shaper_calibrate
-            import shaper_defs
-    else:
+    # In CLI mode, the modules are pre-loaded.
+    if os.environ.get('SHAKETUNE_IN_CLI') == '1':
         shaper_calibrate = sys.modules['shaper_calibrate']
         shaper_defs = sys.modules['shaper_defs']
+        return shaper_calibrate.ShaperCalibrate(printer=None), shaper_defs
+
+    # In Klipper plugin mode, we need to find the modules.
+    try:
+        # This will work if Klipper is in the python path or if the IDE
+        # is configured with extraPaths (recommended for development).
+        from importlib import import_module
+        klippy_extras = import_module('klippy.extras')
+        shaper_calibrate = klippy_extras.shaper_calibrate
+        shaper_defs = klippy_extras.shaper_defs
+    except ImportError as e:
+        # Fallback for when running as a Klipper plugin where the path might
+        # not be configured in the environment.
+        klipper_path = os.path.expanduser('~/klipper')
+        klipper_extras_path = os.path.join(klipper_path, 'klippy', 'extras')
+
+        if klipper_extras_path not in sys.path:
+            sys.path.insert(0, klipper_extras_path)
+
+        try:
+            shaper_calibrate = import_module('shaper_calibrate')
+            shaper_defs = import_module('shaper_defs')
+        except ImportError:
+            # If both methods fail, raise a comprehensive error message.
+            raise ImportError(
+                "Could not import shaper_calibrate from Klipper. Please ensure Klipper is installed "
+                "at '~/klipper' or that the path is configured in your environment (e.g. VSCode's extraPaths)."
+            ) from e
+
     return shaper_calibrate.ShaperCalibrate(printer=None), shaper_defs
 
 
