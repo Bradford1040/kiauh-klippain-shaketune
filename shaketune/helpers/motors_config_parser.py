@@ -22,7 +22,7 @@ class Motor:
         self._config: Dict[str, Any] = {}
 
     def set_register(self, register: str, value_dict: dict) -> None:
-        # First we filter out entries with a value of 0 to avoid having too much uneeded data
+        # First we filter out entries with a value of 0 to avoid having too much un-needed data
         value_dict = {k: v for k, v in value_dict.items() if v != 0}
 
         # Special parsing for CHOPCONF to extract meaningful values
@@ -30,7 +30,7 @@ class Motor:
             # Add intpol=0 if missing from the register dump to force printing it as it's important
             if 'intpol' not in value_dict:
                 value_dict['intpol'] = '0'
-            # Remove the microsteps entry as the format here is not easy to read and
+            # Remove the microsteps entry as the format here is not easy to read, and
             # it's already read in the correct format directly from the Klipper config
             if 'mres' in value_dict:
                 del value_dict['mres']
