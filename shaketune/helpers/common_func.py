@@ -42,7 +42,7 @@ def get_git_version():
             version = repo.head.commit.hexsha[:7]
         return version
 
-    except Exception:
+    except (ImportError, AttributeError):
         return None
 
 # Compute natural resonant frequency and damping ratio by using the half power bandwidth method with interpolated frequencies
@@ -100,12 +100,15 @@ def compute_mechanical_parameters(psd, freqs, min_freq=None):
 
 # This find all the peaks in a curve by looking at when the derivative term goes from positive to negative
 # Then only the peaks found above a threshold are kept to avoid capturing peaks in the low amplitude noise of a signal
-def detect_peaks(data, indices, detection_threshold, relative_height_threshold=None, window_size=5, vicinity=3):
+def detect_peaks(data: np.ndarray, indices, detection_threshold, relative_height_threshold=None, window_size=5, vicinity=3):
     # Smooth the curve using a moving average to avoid catching peaks everywhere in noisy signals
-    kernel = np.ones(window_size) / window_size
-    smoothed_data = np.convolve(data, kernel, mode='valid')
-    mean_pad = [np.mean(data[:window_size])] * (window_size // 2)
-    smoothed_data = np.concatenate((mean_pad, smoothed_data))
+    # Ensure data is a 1D float array for numpy.convolve
+    data_for_convolve = np.asarray(data, dtype=np.float64)
+    kernel = np.ones(window_size, dtype=np.float64) / window_size
+    smoothed_data = np.convolve(data_for_convolve, kernel, mode='valid')  # type: ignore[arg-type]
+    pad_left = window_size // 2
+    pad_right = window_size - 1 - pad_left
+    smoothed_data = np.concatenate(([smoothed_data[0]] * pad_left, smoothed_data, [smoothed_data[-1]] * pad_right))
 
     # Find peaks on the smoothed curve
     smoothed_peaks = (
@@ -139,7 +142,7 @@ def detect_peaks(data, indices, detection_threshold, relative_height_threshold=N
 def identify_low_energy_zones(power_total, detection_threshold=0.1):
     valleys = []
 
-    # Calculate the a "mean + 1/4" and standard deviation of the entire power_total
+    # Calculate the mean energy as "mean + 1/4" and standard deviation of the entire power_total
     mean_energy = np.mean(power_total) + (np.max(power_total) - np.min(power_total)) / 4
     std_energy = np.std(power_total)
 
