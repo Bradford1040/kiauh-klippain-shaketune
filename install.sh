@@ -108,8 +108,8 @@ function setup_venv {
     # shellcheck source=/dev/null
     source "${KLIPPER_VENV_PATH}/bin/activate"
     echo "[SETUP] Installing/Updating Shake&Tune dependencies in Klipper venv..."
-    pip install --upgrade pip
-    pip install -r "${K_SHAKETUNE_PATH}/requirements.txt"
+    pip install --upgrade pip uv
+    uv pip sync --python "${KLIPPER_VENV_PATH}/bin/python" "${K_SHAKETUNE_PATH}/uv.lock"
     deactivate
     printf "\n"
 }
@@ -178,6 +178,22 @@ printf "\n=============================================\n"
 echo "- Klippain Shake&Tune module install script -"
 printf "=============================================\n\n"
 
+# Confirm paths with the user
+echo "This script will use the following paths:"
+echo "Klipper Path: ${KLIPPER_PATH}"
+echo "Klipper Venv: ${KLIPPER_VENV_PATH}"
+echo "Printer Config: ${USER_CONFIG_PATH}"
+echo "Moonraker Conf: ${MOONRAKER_CONFIG}"
+printf "\n"
+
+read -p "Do you want to continue with these paths? (y/N) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Installation cancelled by user."
+    exit 1
+fi
+printf "\n"
+
 # Execution flow
 preflight_checks
 check_download
@@ -185,6 +201,7 @@ setup_venv
 link_extension
 link_module
 add_updater
+
 restart_klipper
 restart_moonraker
 

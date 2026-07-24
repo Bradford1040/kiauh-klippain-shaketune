@@ -7,6 +7,7 @@
 ## I have created a printer_1 branch as of 07/13/2026 for Robert Kempf
 
 - Updated 07/20/2026 for a cleaner `install.sh` & added extra documentation
+- Updated 07/24/2026 for adding path double check from user
 
 ## This setup is very specialized, it is for a Server or PC mainly, also will work on Raspberry Pi 3B's and up
 
@@ -39,24 +40,10 @@ Follow these steps to install Shake&Tune on your printer:
   3. Install Shake&Tune by running over SSH on your printer:
 
    ```shell
-     git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
-   ```
-
-   ```shell
+     cd ~
+     git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git klippain_shaketune
      cd ~/klippain_shaketune
-   ```
-  
-   ```shell
      ./install.sh
-   ```
-
-  1. Sometimes this is needed on certain linux distros, or may have already been done when installing Klippain, not sure, so I added it just in case
-
-   ```shell
-   cd ~/klippain-shaketune
-
-   pip install uv
-   uv pip install -r requirements.txt
    ```
 
   1. Your printer name is `printer_1_data` which is standard naming used with multiple printers in KIAUH. You can find your printer name by typing `ls ~/p*`.
