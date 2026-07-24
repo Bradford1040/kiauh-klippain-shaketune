@@ -99,7 +99,7 @@ class ShakeTune:
         ]
 
         # Register Shake&Tune's measurement commands using the official Klipper API (gcode.register_command)
-        # Doing this makes the commands available in Klipper but they are not shown in the web interfaces
+        # Doing this makes the commands available in Klipper, but they are not shown in the web interfaces
         # and are only available by typing the full name in the console (like all the other Klipper commands)
         for name, command, description in measurement_commands:
             gcode.register_command(f'_{name}' if self._show_macros else name, command, desc=description)
