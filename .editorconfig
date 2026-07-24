@@ -99,10 +99,16 @@ trim_trailing_whitespace = false
 # ==============================================================================
 # Minified Files (Do not touch performance-optimized files)
 [**.min.js]
-indent_style = ignore
-insert_final_newline = ignore
+# For minified files we don't enforce an indent style and we avoid forcing
+# an inserted final newline. Remove invalid/unsupported 'ignore' values and
+# use valid EditorConfig settings instead.
+# (Leave indent_style unspecified so tools won't complain.)
+insert_final_newline = false
 
 # Lockfiles & Large Data Dumps (Prevent unwanted auto-formatting edits)
 [*.{json,lock,pnpm-lock.yaml,yarn.lock}]
-insert_final_newline = ignore
+# Lockfiles: do not force a final newline (some lockfiles intentionally
+# omit it). Use a valid boolean value instead of 'ignore'. Keep trimming
+# of trailing whitespace enabled where safe.
+insert_final_newline = false
 trim_trailing_whitespace = true
