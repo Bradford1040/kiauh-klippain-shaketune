@@ -129,6 +129,7 @@ env.bak/
 venv.bak/
 .idea
 uv.lock
+.ruff_cache
 #.shellcheckrc  # uncomment if you want
 
 # Spyder project settings
