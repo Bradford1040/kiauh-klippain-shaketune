@@ -4,7 +4,7 @@ description = "Klipper streamlined input shaper workflow and calibration tools"
 readme = "README.md"
 requires-python = ">= 3.9"
 authors = [
-  {name = "Félix Boisselier", email = "felix@fboisselier.fr"}
+  {name = "Bradford Adams", email = "bradfordaldenadams@gmail.com"}
 ]
 keywords = ["klipper", "input shaper", "calibration", "3d printer"]
 license = {file = "LICENSE"}
