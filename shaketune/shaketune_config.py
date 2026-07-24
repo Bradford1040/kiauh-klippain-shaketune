@@ -9,12 +9,13 @@
 
 
 from pathlib import Path
+from typing import Optional, List
 
 from .helpers.console_output import ConsoleOutput
 
 KLIPPER_FOLDER = Path.home() / 'klipper'
-KLIPPER_LOG_FOLDER = Path.home() / 'printer_data/logs'
-RESULTS_BASE_FOLDER = Path.home() / 'printer_data/config/K-ShakeTune_results'
+KLIPPER_LOG_FOLDER = Path.home() / 'punisher_data/logs'
+RESULTS_BASE_FOLDER = Path.home() / 'punisher_data/config/K-ShakeTune_results'
 RESULTS_SUBFOLDERS = {
     'axes map': 'axes_map',
     'belts comparison': 'belts',
@@ -46,13 +47,13 @@ class ShakeTuneConfig:
         self.klipper_folder = KLIPPER_FOLDER
         self.klipper_log_folder = KLIPPER_LOG_FOLDER
 
-    def get_results_folder(self, type: str = None) -> Path:
+    def get_results_folder(self, type: Optional[str] = None) -> Path:
         if type is None:
             return self._result_folder
         else:
             return self._result_folder / RESULTS_SUBFOLDERS[type]
 
-    def get_results_subfolders(self) -> Path:
+    def get_results_subfolders(self) -> List[Path]:
         subfolders = [self._result_folder / subfolder for subfolder in RESULTS_SUBFOLDERS.values()]
         return subfolders
 
