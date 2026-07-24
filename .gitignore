@@ -127,6 +127,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea
+uv.lock
 #.shellcheckrc  # uncomment if you want
 
 # Spyder project settings
