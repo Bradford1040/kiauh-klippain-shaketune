@@ -101,7 +101,7 @@ class KlipperCompatibility:
         """
         if self.res_tester is None:
             # Fallback for static frequency tests where res_tester is None
-            return (50, 200, 75, 1, 0.0, None)
+            return 50, 200, 75, 1, 0.0, None
 
         if self.has_legacy_res_tester_api():
             return (
