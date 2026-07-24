@@ -23,35 +23,35 @@ def compute_spectrogram(data):
             - t: 1D array of time values for each segment
             - f: 1D array of frequency values
     """
-    N = data.shape[0]
-    if N < 2:
+    n = data.shape[0]
+    if n < 2:
         raise ValueError('Not enough data samples')
 
     # Sampling frequency
-    Fs = N / (data[-1, 0] - data[0, 0])
+    fs = n / (data[-1, 0] - data[0, 0])
 
     # Round up to a power of 2 for faster FFT
-    nperseg = 1 << int(0.5 * Fs - 1).bit_length()
+    nperseg = 1 << int(0.5 * fs - 1).bit_length()
     noverlap = nperseg // 2
 
     # Guard against data too short to form one full segment
-    if N < nperseg:
+    if n < nperseg:
         raise ValueError(f'Input data too short for nperseg={nperseg}')
 
     window = np.kaiser(nperseg, 6.0)
 
     # Step between segments and number of segments
     step = nperseg - noverlap
-    n_segments = 1 + (N - nperseg) // step
+    n_segments = 1 + (n - nperseg) // step
     n_freqs = nperseg // 2 + 1
 
     # Time and frequency arrays
-    t = np.arange(n_segments) * step / Fs + nperseg / (2 * Fs)
-    f = np.fft.rfftfreq(nperseg, 1 / Fs)
+    t = np.arange(n_segments) * step / fs + nperseg / (2 * fs)
+    f = np.fft.rfftfreq(nperseg, 1 / fs)
 
     # Output PSD accumulator
     pdata = np.zeros((n_freqs, n_segments))
-    window_norm = 1.0 / (Fs * (window**2).sum())
+    window_norm = 1.0 / (fs * (window**2).sum())
 
     # Process each axis (x, y, z) using a reusable buffer for memory efficiency
     segment_buffer = np.empty(nperseg)

@@ -206,7 +206,7 @@ class ResonanceTestManager:
         reactor = self.reactor
         systime = reactor.monotonic()
         toolhead_info = toolhead.get_status(systime)
-        X, Y, Z, E = toolhead.get_position()
+        x, y, z, e = toolhead.get_position()
 
         old_max_accel = toolhead_info['max_accel']
 
@@ -243,8 +243,8 @@ class ResonanceTestManager:
             v2 = v * v
             half_inv_accel = 0.5 / accel if accel != 0 else 0.0
             d = (v2 - last_v2) * half_inv_accel if accel != 0 else 0.0
-            dX, dY, dZ = self._project_distance(d, normalized_direction)
-            nX, nY, nZ = X + dX, Y + dY, Z + dZ
+            dx, dy, dz = self._project_distance(d, normalized_direction)
+            nx, ny, nz = x + dx, y + dy, z + dz
 
             if self.compat.can_limit_junction_speed():
                 toolhead.limit_next_junction_speed(abs_last_v)
@@ -253,16 +253,16 @@ class ResonanceTestManager:
             if v * last_v < 0:
                 d_decel = -last_v2 * half_inv_accel if accel != 0 else 0.0
                 decel_x, decel_y, decel_z = self._project_distance(d_decel, normalized_direction)
-                toolhead.move([X + decel_x, Y + decel_y, Z + decel_z, E], abs_last_v)
-                toolhead.move([nX, nY, nZ, E], abs_v)
+                toolhead.move([x + decel_x, y + decel_y, z + decel_z, e], abs_last_v)
+                toolhead.move([nx, ny, nz, e], abs_v)
             else:
-                toolhead.move([nX, nY, nZ, E], max(abs_v, abs_last_v))
+                toolhead.move([nx, ny, nz, e], max(abs_v, abs_last_v))
 
             if math.floor(freq) > math.floor(last_freq):
                 ConsoleOutput.print(f'Testing frequency: {freq:.1f} Hz')
                 reactor.pause(reactor.monotonic() + 0.01)
 
-            X, Y, Z = nX, nY, nZ
+            x, y, z = nx, ny, nz
             last_t = next_t
             last_v = v
             last_v2 = v2
@@ -271,9 +271,9 @@ class ResonanceTestManager:
         # Decelerate if needed
         if last_v != 0.0:
             d_decel = -0.5 * last_v2 / old_max_accel if old_max_accel != 0 else 0
-            ddX, ddY, ddZ = self._project_distance(d_decel, normalized_direction)
+            ddx, ddy, ddz = self._project_distance(d_decel, normalized_direction)
             self.compat.set_toolhead_acceleration(self.gcode, old_max_accel)
-            toolhead.move([X + ddX, Y + ddY, Z + ddZ, E], abs(last_v))
+            toolhead.move([x + ddx, y + ddy, z + ddz, e], abs(last_v))
 
         # Restore the previous acceleration values
         if old_mcr is not None:  # minimum_cruise_ratio found: Klipper >= v0.12.0-239
