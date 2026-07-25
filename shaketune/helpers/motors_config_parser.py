@@ -8,7 +8,7 @@
 #              from the Klipper configuration and TMC registers.
 
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 TRINAMIC_DRIVERS = ['tmc2130', 'tmc2208', 'tmc2209', 'tmc2240', 'tmc2660', 'tmc5160']
 MOTORS = ['stepper_x', 'stepper_y', 'stepper_x1', 'stepper_y1', 'stepper_z', 'stepper_z1', 'stepper_z2', 'stepper_z3']
@@ -18,8 +18,8 @@ RELEVANT_TMC_REGISTERS = ['CHOPCONF', 'PWMCONF', 'COOLCONF', 'TPWMTHRS', 'TCOOLT
 class Motor:
     def __init__(self, name: str):
         self.name: str = name
-        self._registers: Dict[str, Dict[str, Any]] = {}
-        self._config: Dict[str, Any] = {}
+        self._registers: dict[str, dict[str, Any]] = {}
+        self._config: dict[str, Any] = {}
 
     def set_register(self, register: str, value_dict: dict) -> None:
         # First we filter out entries with a value of 0 to avoid having too much uneeded data
@@ -52,10 +52,10 @@ class Motor:
         else:
             self._registers[register] = value_dict
 
-    def get_register(self, register: str) -> Optional[Dict[str, Any]]:
+    def get_register(self, register: str) -> Optional[dict[str, Any]]:
         return self._registers.get(register)
 
-    def get_registers(self) -> Dict[str, Dict[str, Any]]:
+    def get_registers(self) -> dict[str, dict[str, Any]]:
         return self._registers
 
     def set_config(self, field: str, value: Any) -> None:
@@ -68,7 +68,7 @@ class Motor:
         return f'Stepper: {self.name}\nKlipper config: {self._config}\nTMC Registers: {self._registers}'
 
     # Return the other motor config and registers that are different from the current motor
-    def compare_to(self, other: 'Motor') -> Optional[Dict[str, Dict[str, Any]]]:
+    def compare_to(self, other: 'Motor') -> Optional[dict[str, dict[str, Any]]]:
         differences = {'config': {}, 'registers': {}}
 
         # Compare Klipper config
@@ -105,10 +105,10 @@ class Motor:
 
 
 class MotorsConfigParser:
-    def __init__(self, config, motors: List[str] = MOTORS, drivers: List[str] = TRINAMIC_DRIVERS):
+    def __init__(self, config, motors: list[str] = MOTORS, drivers: list[str] = TRINAMIC_DRIVERS):
         self._printer = config.get_printer()
 
-        self._motors: List[Motor] = []
+        self._motors: list[Motor] = []
 
         if motors is not None:
             for motor_name in motors:
@@ -184,5 +184,5 @@ class MotorsConfigParser:
         return next((motor for motor in self._motors if motor.name == motor_name), None)
 
     # Get all the motor list at once
-    def get_motors(self) -> List[Motor]:
+    def get_motors(self) -> list[Motor]:
         return self._motors

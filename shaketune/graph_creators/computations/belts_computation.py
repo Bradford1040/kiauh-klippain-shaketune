@@ -6,7 +6,7 @@
 # File: belts_computation.py
 # Description: Computation implementation for belts comparison analysis
 
-from typing import Any, List, NamedTuple, Optional, Tuple
+from typing import Any, NamedTuple, Optional
 
 import numpy as np
 
@@ -25,9 +25,9 @@ DC_MAX_UNPAIRED_PEAKS_ALLOWED = 0  # No unpaired peaks are tolerated
 class PeakPairingResult(NamedTuple):
     """Result from peak pairing algorithm"""
 
-    paired_peaks: List[Tuple[Tuple[int, float, float], Tuple[int, float, float]]]
-    unpaired_peaks1: List[int]
-    unpaired_peaks2: List[int]
+    paired_peaks: list[tuple[tuple[int, float, float], tuple[int, float, float]]]
+    unpaired_peaks1: list[int]
+    unpaired_peaks2: list[int]
 
 
 class BeltsComputation:
@@ -35,7 +35,7 @@ class BeltsComputation:
 
     def __init__(
         self,
-        measurements: List[Measurement],
+        measurements: list[Measurement],
         kinematics: Optional[str],
         max_freq: float,
         test_params: Optional[Any],

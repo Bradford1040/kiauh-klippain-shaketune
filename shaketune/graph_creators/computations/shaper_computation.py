@@ -6,7 +6,7 @@
 # File: shaper_computation.py
 # Description: Computation implementation for input shaper calibration
 
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import numpy as np
 
@@ -29,7 +29,7 @@ class ShaperComputation:
 
     def __init__(
         self,
-        measurements: List[Measurement],
+        measurements: list[Measurement],
         max_smoothing: Optional[float],
         scv: float,
         max_freq: float,

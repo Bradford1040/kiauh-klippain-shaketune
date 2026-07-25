@@ -9,7 +9,7 @@
 import math
 import os
 import re
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 
@@ -34,11 +34,11 @@ class VibrationsComputation:
 
     def __init__(
         self,
-        measurements: List[Measurement],
+        measurements: list[Measurement],
         kinematics: str,
         accel: float,
         max_freq: float,
-        motors: Optional[List[Motor]],
+        motors: Optional[list[Motor]],
         st_version: str,
     ):
         self.measurements = measurements
@@ -222,7 +222,7 @@ class VibrationsComputation:
         freqs: np.ndarray,
         psds: dict,
         all_angles_energy: dict,
-        measured_angles: Optional[List[int]] = None,
+        measured_angles: Optional[list[int]] = None,
         energy_amplification_factor: int = 2,
     ) -> Tuple[dict, np.ndarray]:
         """Calculate motor frequency profiles based on the measured Power Spectral Density (PSD) measurements"""
@@ -260,11 +260,11 @@ class VibrationsComputation:
 
     def _compute_dir_speed_spectrogram(
         self,
-        measured_speeds: List[float],
+        measured_speeds: list[float],
         data: dict,
         kinematics: str = 'cartesian',
-        measured_angles: Optional[List[int]] = None,
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        measured_angles: Optional[list[int]] = None,
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Compute directional speed spectrogram using trigonometry to project motor vibrations"""
         if measured_angles is None:
             measured_angles = [0, 90]
@@ -274,7 +274,7 @@ class VibrationsComputation:
         spectrum_speeds = np.linspace(min(measured_speeds), max(measured_speeds), len(measured_speeds) * 6)
         spectrum_vibrations = np.zeros((len(spectrum_angles), len(spectrum_speeds)))
 
-        def get_interpolated_vibrations(data: dict, speed: float, speeds: List[float]) -> float:
+        def get_interpolated_vibrations(data: dict, speed: float, speeds: list[float]) -> float:
             idx = np.clip(np.searchsorted(speeds, speed, side='left'), 1, len(speeds) - 1)
             lower_speed = speeds[idx - 1]
             upper_speed = speeds[idx]
@@ -349,10 +349,10 @@ class VibrationsComputation:
     def _filter_and_split_ranges(
         self,
         all_speeds: np.ndarray,
-        good_speeds: List[Tuple[int, int, float]],
+        good_speeds: list[tuple[int, int, float]],
         peak_speed_indices: dict,
         deletion_range: int,
-    ) -> List[Tuple[int, int, float]]:
+    ) -> list[tuple[int, int, float]]:
         """Filter and split the good_speed ranges"""
         # Process each range to filter out and split based on peak indices
         filtered_good_speeds = []
@@ -394,7 +394,7 @@ class VibrationsComputation:
         return merged_ranges
 
     def _compute_symmetry_analysis(
-        self, all_angles: np.ndarray, spectrogram_data: np.ndarray, measured_angles: Optional[List[int]] = None
+        self, all_angles: np.ndarray, spectrogram_data: np.ndarray, measured_angles: Optional[list[int]] = None
     ) -> float:
         """Compute symmetry score that reflects the spectrogram apparent symmetry"""
         if measured_angles is None:
@@ -421,7 +421,7 @@ class VibrationsComputation:
 
         return np.clip(0, 100, percentage_correlation_biased)
 
-    def _extract_angle_and_speed(self, logname: str) -> Tuple[float, float]:
+    def _extract_angle_and_speed(self, logname: str) -> tuple[float, float]:
         """Extract from the measurement name the angle and speed of the tested movement"""
         try:
             match = re.search(r'an(\d+)_\d+sp(\d+)_\d+', os.path.basename(logname))

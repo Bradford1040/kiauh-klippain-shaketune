@@ -6,7 +6,7 @@
 # File: axes_map_computation.py
 # Description: Computation implementation for axes map detection using velocity-based algorithm
 
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 
@@ -128,7 +128,7 @@ class AxesMapComputation:
 
     def __init__(
         self,
-        measurements: List[Measurement],
+        measurements: list[Measurement],
         accel: float,
         st_version: str,
         current_axes_map: Optional[str] = None,
@@ -137,7 +137,7 @@ class AxesMapComputation:
         self.accel = accel
         self.st_version = st_version
         self.current_axes_map = current_axes_map
-        self._inverse_axes_map_matrix = _parse_axes_map_to_inverse_matrix(current_axes_map) 
+        self._inverse_axes_map_matrix = _parse_axes_map_to_inverse_matrix(current_axes_map)
 
     def compute(self) -> AxesMapResult:
         """Perform axes map detection computation."""
@@ -236,7 +236,7 @@ class AxesMapComputation:
             extrapolated_axis=extrapolated_axis,
         )
 
-    def _parse_measurements(self) -> Dict[str, np.ndarray]:
+    def _parse_measurements(self) -> dict[str, np.ndarray]:
         """Parse measurements into a dict keyed by axis name."""
         raw_datas = {}
         for measurement in self.measurements:
@@ -367,8 +367,8 @@ class AxesMapComputation:
         return velocity_corrected
 
     def _detect_direction(
-        self, velocities: Dict[str, np.ndarray]
-    ) -> Tuple[np.ndarray, np.ndarray, float, float, Dict[str, float]]:
+        self, velocities: dict[str, np.ndarray]
+    ) -> tuple[np.ndarray, np.ndarray, float, float, dict[str, float]]:
         """Determine axis and direction from peak velocities.
 
         Returns:
@@ -446,8 +446,8 @@ class AxesMapComputation:
 
     def _detect_noise_only_axis(
         self,
-        confidences: List[float],
-        peak_velocities_data: List[Dict[str, float]],
+        confidences: list[float],
+        peak_velocities_data: list[dict[str, float]],
     ) -> Optional[int]:
         """Detect if exactly one axis has noise-only data (2-axis machine).
 
@@ -486,10 +486,10 @@ class AxesMapComputation:
 
     def _extrapolate_missing_axis(
         self,
-        direction_vectors: List[np.ndarray],
-        actual_directions: List[np.ndarray],
+        direction_vectors: list[np.ndarray],
+        actual_directions: list[np.ndarray],
         noise_axis_idx: int,
-    ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+    ) -> tuple[list[np.ndarray], list[np.ndarray]]:
         """Extrapolate missing axis using cross product of two good axes.
 
         When exactly one axis has no signal, we can compute its direction
@@ -521,12 +521,12 @@ class AxesMapComputation:
 
     def _validate_results(
         self,
-        direction_vectors: List[np.ndarray],
-        confidences: List[float],
-        angle_errors: List[float],
+        direction_vectors: list[np.ndarray],
+        confidences: list[float],
+        angle_errors: list[float],
         noise_level: float,
         gravity: float,
-    ) -> Dict:
+    ) -> dict:
         """Validate detection results and return quality status."""
         messages = []
         status = 'ok'
@@ -574,7 +574,7 @@ class AxesMapComputation:
 
         return {'status': status, 'messages': messages}
 
-    def _format_direction_vector(self, vectors: List[np.ndarray]) -> str:
+    def _format_direction_vector(self, vectors: list[np.ndarray]) -> str:
         """Format direction vectors into axes_map config string."""
         formatted = []
         axes_count = {'x': 0, 'y': 0, 'z': 0}
@@ -595,13 +595,13 @@ class AxesMapComputation:
 
     def _print_results(
         self,
-        direction_vectors: List[np.ndarray],
-        angle_errors: List[float],
-        euler_angles: Tuple[float, float, float],
+        direction_vectors: list[np.ndarray],
+        angle_errors: list[float],
+        euler_angles: tuple[float, float, float],
         noise_level: float,
         gravity: float,
         formatted_direction_vector: str,
-        quality_status: Dict,
+        quality_status: dict,
         extrapolated_axis: Optional[int] = None,
     ) -> None:
         """Print results to console."""

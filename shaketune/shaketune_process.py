@@ -13,7 +13,7 @@ import threading
 import traceback
 from multiprocessing import Process
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from .helpers.accelerometer import MeasurementsManager
 from .helpers.console_output import ConsoleOutput
@@ -34,7 +34,7 @@ class ShakeTuneProcess:
     def get_st_config(self):
         return self._config
 
-    def run(self, filenames: Union[Path, List[Path]]) -> None:
+    def run(self, filenames: Union[Path, list[Path]]) -> None:
         filelist = []
 
         # Single .stdata or a legacy .csv file
@@ -46,7 +46,8 @@ class ShakeTuneProcess:
             filelist.append(filenames)
 
         # List of legacy .csv files (still supported to be able to use CSVs when using the CLI mode)
-        if isinstance(filenames, List):
+        # Use the concrete built-in 'list' type for isinstance checks rather than typing.List.
+        if isinstance(filenames, list):
             extensions = {f.suffix for f in filenames}
             if len(extensions) > 1:
                 raise ValueError('Mixed file types are not allowed! Please provide Klipper CSV files only.')
@@ -68,6 +69,12 @@ class ShakeTuneProcess:
         if self._process is None:
             return  # Nothing to wait for
         eventtime = self._reactor.monotonic()
+        # If no timeout was specified, wait until the process completes.
+        if self._timeout is None:
+            while self._process.is_alive():
+                eventtime = self._reactor.pause(eventtime + 0.05)
+            return
+
         endtime = eventtime + self._timeout
         complete = False
         while eventtime < endtime:
@@ -80,7 +87,8 @@ class ShakeTuneProcess:
 
     # This function is a simple wrapper to start the Shake&Tune process. It's needed in order to get the timeout
     # as a Timer in a thread INSIDE the Shake&Tune child process to not interfere with the main Klipper process
-    def _shaketune_process_wrapper(self, graph_creator, filelist: List[Path], timeout) -> None:
+    def _shaketune_process_wrapper(self, graph_creator, filelist: list[Path], timeout) -> None:
+        timer: Optional[threading.Timer] = None
         if timeout is not None:
             # Add 5 seconds to the timeout for safety. The goal is to avoid the Timer to finish before the
             # Shake&Tune process is done in case we call the wait_for_completion() function that uses Klipper's reactor.
@@ -90,14 +98,14 @@ class ShakeTuneProcess:
         try:
             self._shaketune_process(graph_creator, filelist)
         finally:
-            if timeout is not None:
+            if timer is not None:
                 timer.cancel()
 
     def _handle_timeout(self) -> None:
         ConsoleOutput.print('Timeout: Shake&Tune computation did not finish within the specified timeout!')
         os._exit(1)  # Forcefully exit the process
 
-    def _shaketune_process(self, graph_creator, filelist: List[Path]) -> None:
+    def _shaketune_process(self, graph_creator, filelist: list[Path]) -> None:
         # Reducing Shake&Tune process priority by putting the scheduler into batch mode with low priority. This in order to avoid
         # slowing down the main Klipper process as this can lead to random "Timer too close" or "Move queue overflow" errors
         # when also already running CANbus, neopixels and other consumming stuff in Klipper's main process.

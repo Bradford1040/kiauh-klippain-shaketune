@@ -7,7 +7,7 @@
 # Description: Plotter for machine vibrations analysis graphs
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -74,7 +74,7 @@ class VibrationsPlotter(PlotterStrategy):
 
         return fig
 
-    def _add_titles(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_titles(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add title lines to the figure"""
         try:
             filename_parts = data['measurements'][0]['name'].split('_')
@@ -98,7 +98,7 @@ class VibrationsPlotter(PlotterStrategy):
         ]
         self.add_title(fig, title_lines)
 
-    def _plot_motor_info(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _plot_motor_info(self, fig: Figure, data: dict[str, Any]) -> None:
         """Plot motor information if available"""
         motors = data.get('motors')
         if motors is not None and len(motors) == 2:
@@ -158,7 +158,7 @@ class VibrationsPlotter(PlotterStrategy):
                     color=PlottingConstants.KLIPPAIN_COLORS['dark_purple'],
                 )
 
-    def _plot_angle_energy_profile(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_angle_energy_profile(self, ax, data: dict[str, Any]) -> None:
         """Plot angle energy profile on polar plot"""
         all_angles = data['all_angles']
         all_angles_energy = data['all_angles_energy']
@@ -217,7 +217,7 @@ class VibrationsPlotter(PlotterStrategy):
         new_pos = [pos.x0 - 0.01, pos.y0 - 0.01, pos.width, pos.height]
         ax.set_position(new_pos)
 
-    def _plot_polar_heatmap(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_polar_heatmap(self, ax, data: dict[str, Any]) -> None:
         """Plot polar vibrations heatmap"""
         all_speeds = data['all_speeds']
         all_angles = data['all_angles']
@@ -240,7 +240,7 @@ class VibrationsPlotter(PlotterStrategy):
         new_pos = [pos.x0 - 0.01, pos.y0 - 0.01, pos.width, pos.height]
         ax.set_position(new_pos)
 
-    def _plot_speed_energy_profile(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_speed_energy_profile(self, ax, data: dict[str, Any]) -> None:
         """Plot global speed energy profile"""
         all_speeds = data['all_speeds']
         sp_min_energy = data['sp_min_energy']
@@ -316,7 +316,7 @@ class VibrationsPlotter(PlotterStrategy):
         )
         ax_2.legend(loc='upper right', prop=fontP)
 
-    def _plot_angular_speed_profiles(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_angular_speed_profiles(self, ax, data: dict[str, Any]) -> None:
         """Plot angular speed energy profiles"""
         all_speeds = data['all_speeds']
         all_angles = data['all_angles']
@@ -350,7 +350,7 @@ class VibrationsPlotter(PlotterStrategy):
         )
         ax.legend(loc='upper right', prop=fontP)
 
-    def _plot_vibrations_heatmap(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_vibrations_heatmap(self, ax, data: dict[str, Any]) -> None:
         """Plot vibrations heatmap"""
         all_speeds = data['all_speeds']
         all_angles = data['all_angles']
@@ -386,7 +386,7 @@ class VibrationsPlotter(PlotterStrategy):
             ax, xlabel='Speed (mm/s)', ylabel='Angle (deg)', title='Vibrations heatmap', grid=False
         )
 
-    def _plot_motor_profiles(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_motor_profiles(self, ax, data: dict[str, Any]) -> None:
         """Plot motor frequency profiles"""
         target_freqs = data['target_freqs']
         global_motor_profile = data['global_motor_profile']

@@ -6,7 +6,7 @@
 # File: static_frequency_computation.py
 # Description: Computation implementation for static frequency analysis
 
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
 
@@ -22,7 +22,7 @@ class StaticFrequencyComputation:
 
     def __init__(
         self,
-        measurements: List[Measurement],
+        measurements: list[Measurement],
         freq: Optional[float],
         duration: Optional[float],
         max_freq: float,

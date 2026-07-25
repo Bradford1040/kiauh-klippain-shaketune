@@ -7,7 +7,7 @@
 # Description: Plotter for axes map detection graphs using 3D orientation visualization
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -59,7 +59,7 @@ class AxesMapPlotter(PlotterStrategy):
 
         return fig
 
-    def _add_titles(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_titles(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add title lines including mapping info and quality status"""
         # Parse timestamp from filename
         try:
@@ -125,7 +125,7 @@ class AxesMapPlotter(PlotterStrategy):
         ]
         self.add_title(fig, title_lines)
 
-    def _plot_3d_orientation(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_3d_orientation(self, ax, data: dict[str, Any]) -> None:
         """Plot 3D orientation showing actual measured accelerometer axes relative to machine axes"""
         # Find which accelerometer axis corresponds to the extrapolated machine axis
         extrapolated_accel_idx = None
@@ -211,10 +211,10 @@ class AxesMapPlotter(PlotterStrategy):
         ax.set_ylim([-1, 1])
         ax.set_zlim([-1, 1])
 
-    def _plot_velocity_sequence(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_velocity_sequence(self, ax, data: dict[str, Any]) -> None:
         """Plot velocity sequence with watermark zones and confidence percentages"""
         # Concatenate velocity data from all measurements into continuous sequence
-        all_times: List[float] = []
+        all_times: list[float] = []
         all_vels = {'x': [], 'y': [], 'z': []}
         zone_boundaries = [0.0]
         zone_info = []

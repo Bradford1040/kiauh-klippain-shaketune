@@ -7,7 +7,7 @@
 # Description: Plotter for static frequency graphs
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -54,7 +54,7 @@ class StaticFrequencyPlotter(PlotterStrategy):
 
         return fig
 
-    def _add_titles(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_titles(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add title lines to the figure"""
         try:
             filename_parts = data['measurements'][0]['name'].split('_')
@@ -89,7 +89,7 @@ class StaticFrequencyPlotter(PlotterStrategy):
         ]
         self.add_title(fig, title_lines)
 
-    def _plot_spectrogram(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_spectrogram(self, ax, data: dict[str, Any]) -> None:
         """Plot the time-frequency spectrogram"""
         SpectrogramHelper.plot_spectrogram(ax, data['pdata'], data['t'], data['bins'], data['max_freq'])
 
@@ -97,7 +97,7 @@ class StaticFrequencyPlotter(PlotterStrategy):
             ax, xlabel='Frequency (Hz)', ylabel='Time (s)', grid=False, title='Time-Frequency Spectrogram'
         )
 
-    def _plot_cumulative_energy(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_cumulative_energy(self, ax, data: dict[str, Any]) -> None:
         """Plot cumulative energy"""
         cumulative_energy = np.trapz(data['pdata'], data['t'], axis=0)
         ax.plot(cumulative_energy, data['bins'], color=PlottingConstants.KLIPPAIN_COLORS['orange'])

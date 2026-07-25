@@ -9,13 +9,15 @@
 
 
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional
 
 from .helpers.console_output import ConsoleOutput
 
 KLIPPER_FOLDER = Path.home() / 'klipper'
 KLIPPER_LOG_FOLDER = Path.home() / 'punisher_data/logs'
-RESULTS_BASE_FOLDER = Path.home() / 'punisher_data/config/K-ShakeTune_results'
+# Keep the default results folder consistent with other modules that expect
+# 'ShakeTune_results' (previous value had a likely typo 'K-ShakeTune_results').
+RESULTS_BASE_FOLDER = Path.home() / 'punisher_data/config/ShakeTune_results'
 RESULTS_SUBFOLDERS = {
     'axes map': 'axes_map',
     'belts comparison': 'belts',
@@ -47,13 +49,21 @@ class ShakeTuneConfig:
         self.klipper_folder = KLIPPER_FOLDER
         self.klipper_log_folder = KLIPPER_LOG_FOLDER
 
-    def get_results_folder(self, type: Optional[str] = None) -> Path:
-        if type is None:
+    def get_results_folder(self, category: Optional[str] = None) -> Path:
+        """Return the path to the results' folder. If `category` is provided, return the
+        subfolder for that category. Raises a KeyError with a helpful message
+        when an unknown category is requested.
+        """
+        if category is None:
             return self._result_folder
-        else:
-            return self._result_folder / RESULTS_SUBFOLDERS[type]
+        sub = RESULTS_SUBFOLDERS.get(category)
+        if sub is None:
+            raise KeyError(
+                f"Unknown results category '{category}'. Valid categories: {list(RESULTS_SUBFOLDERS.keys())}"
+            )
+        return self._result_folder / sub
 
-    def get_results_subfolders(self) -> List[Path]:
+    def get_results_subfolders(self) -> list[Path]:
         subfolders = [self._result_folder / subfolder for subfolder in RESULTS_SUBFOLDERS.values()]
         return subfolders
 

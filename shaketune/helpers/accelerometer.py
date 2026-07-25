@@ -18,15 +18,15 @@ import uuid
 from io import TextIOWrapper
 from multiprocessing import Process, Queue, Value
 from pathlib import Path
-from typing import List, Optional, Tuple, TypedDict
+from typing import Optional, TypedDict
 
 import numpy as np
 from zstandard import FLUSH_FRAME, ZstdCompressor, ZstdDecompressor
 
 from ..helpers.console_output import ConsoleOutput
 
-Sample = Tuple[float, float, float, float]
-SamplesList = List[Sample]
+Sample = tuple[float, float, float, float]
+SamplesList = list[Sample]
 
 STOP_SENTINEL = 'STOP_SENTINEL'
 WRITE_TIMEOUT = 300
@@ -55,7 +55,7 @@ class MeasurementsManager:
                 self._final_file = self._final_file.with_suffix('.stdata')
             self._temp_file = self._final_file.parent / f'snt_tmp-{str(uuid.uuid4())[:8]}.stdata'
 
-        self.measurements: List[Measurement] = []
+        self.measurements: list[Measurement] = []
 
         # Create a dedicated process with a Queue to manage all the writing operations
         self._writer_queue = Queue()
@@ -181,11 +181,11 @@ class MeasurementsManager:
             ConsoleOutput.print(f'Shake&Tune was unable to create the final data file ({self._final_file}): {e}')
 
     # Return all the measurements from memory. Measurements flushed to disk are available via load_from_stdata()
-    def get_measurements(self) -> List[Measurement]:
+    def get_measurements(self) -> list[Measurement]:
         return self.measurements
 
     # Load all the measurements from the .stdata file
-    def load_from_stdata(self, filename: Path) -> List[Measurement]:
+    def load_from_stdata(self, filename: Path) -> list[Measurement]:
         measurements = []
         try:
             with open(filename, 'rb') as f:
@@ -202,7 +202,7 @@ class MeasurementsManager:
             self.measurements = []
         return self.measurements
 
-    def load_from_csvs(self, klipper_CSVs: List[Path]) -> List[Measurement]:
+    def load_from_csvs(self, klipper_CSVs: list[Path]) -> list[Measurement]:
         for logname in klipper_CSVs:
             try:
                 if logname.suffix != '.csv':

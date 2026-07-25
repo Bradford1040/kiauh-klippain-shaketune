@@ -9,9 +9,10 @@
 
 
 import importlib
+import importlib.util
 import os
 from pathlib import Path
-from typing import Callable
+from typing import Callable, cast
 
 from .commands import (
     axes_map_calibration,
@@ -45,7 +46,10 @@ ST_COMMANDS = {
         'Perform a custom half-axis test to analyze and compare the '
         'frequency profiles of individual belts on CoreXY or CoreXZ printers'
     ),
-    'AXES_SHAPER_CALIBRATION': 'Perform standard axis input shaper tests on one or both XY axes to select the best input shaper filter',
+    'AXES_SHAPER_CALIBRATION': (
+        'Perform standard axis input shaper tests on one or both XY axes to select '
+        'the best input shaper filter'
+    ),
     'CREATE_VIBRATIONS_PROFILE': (
         'Run a series of motions to find speed/angle ranges where the printer could be '
         'exposed to VFAs to optimize your slicer speed profiles and TMC driver parameters'
@@ -74,7 +78,7 @@ class ShakeTune:
         self._register_commands()
 
     # Initialize the ShakeTune object and its configuration
-    def _initialize_config(self, k_conf) -> None:
+    def _initialize_config(self, k_conf) -> tuple[ShakeTuneConfig, float, bool]:
         result_folder = k_conf.get('result_folder', default=DEFAULT_FOLDER)
         result_folder_path = Path(result_folder).expanduser() if result_folder else None
         keep_n_results = k_conf.getint('number_of_results_to_keep', default=DEFAULT_NUMBER_OF_RESULTS, minval=0)
@@ -82,8 +86,11 @@ class ShakeTune:
         max_freq = k_conf.getfloat('max_freq', default=DEFAULT_MAX_FREQ, minval=100.0)
         dpi = k_conf.getint('dpi', default=DEFAULT_DPI, minval=100, maxval=500)
         m_chunk_size = k_conf.getint('measurements_chunk_size', default=DEFAULT_MEASUREMENTS_CHUNK_SIZE, minval=2)
-        st_config = ShakeTuneConfig(result_folder_path, keep_n_results, keep_raw_data, m_chunk_size, max_freq, dpi)
-        timeout = k_conf.getfloat('timeout', DEFAULT_TIMEOUT, above=0.0)
+        # result_folder_path may be None (meaning use defaults). Use cast to
+        # satisfy static type checkers while preserving runtime behavior.
+        st_config = ShakeTuneConfig(cast(Path, result_folder_path), keep_n_results, keep_raw_data, m_chunk_size, max_freq, dpi)
+        # Use named `default` and `minval` for consistency with other config getters.
+        timeout = k_conf.getfloat('timeout', default=DEFAULT_TIMEOUT, minval=0.0)
         show_macros = k_conf.getboolean('show_macros_in_webui', default=DEFAULT_SHOW_MACROS)
         return st_config, timeout, show_macros
 
@@ -119,7 +126,7 @@ class ShakeTune:
             for gcode_macro in dummy_macros_cfg.get_prefix_sections('gcode_macro '):
                 gcode_macro_name = gcode_macro.get_name()
 
-                # Replace the dummy description by the one from ST_COMMANDS (to avoid code duplication and define it in only one place)
+                # Replace dummy description with one from ST_COMMANDS to avoid duplication
                 command = gcode_macro_name.split(' ', 1)[1]
                 description = ST_COMMANDS.get(command, 'Shake&Tune macro')
                 gcode_macro.fileconfig.set(gcode_macro_name, 'description', description)

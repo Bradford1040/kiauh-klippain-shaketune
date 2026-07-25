@@ -6,7 +6,7 @@
 # File: plotting_utils.py
 # Description: Common plotting utilities and helpers
 
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import matplotlib
 import matplotlib.font_manager
@@ -114,11 +114,11 @@ class TableHelper:
     @staticmethod
     def create_table(
         ax: matplotlib.axes.Axes,
-        data: List[List[str]],
-        columns: List[str],
-        bbox: List[float],
+        data: list[list[str]],
+        columns: list[str],
+        bbox: list[float],
         fontsize: int = 10,
-        column_widths: Optional[List[int]] = None,
+        column_widths: Optional[list[int]] = None,
     ) -> matplotlib.table.Table:
         """Create a formatted table on the axes"""
         table = ax.table(cellText=data, colLabels=columns, bbox=bbox, loc='upper right', cellLoc='center')
@@ -161,7 +161,7 @@ class PeakAnnotator:
         color: str = 'black',
         fontsize: int = 13,
         weight: str = 'normal',
-        offset: Tuple[int, int] = (8, 5),
+        offset: tuple[int, int] = (8, 5),
     ) -> None:
         """Annotate a peak on the plot"""
         ax.annotate(

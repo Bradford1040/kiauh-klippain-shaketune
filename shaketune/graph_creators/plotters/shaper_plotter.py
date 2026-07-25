@@ -7,7 +7,7 @@
 # Description: Plotter for input shaper calibration graphs
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -64,7 +64,7 @@ class ShaperPlotter(PlotterStrategy):
 
         return fig
 
-    def _add_titles(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_titles(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add title lines to the figure"""
         try:
             filename_parts = data['measurements'][0]['name'].split('_')
@@ -108,7 +108,7 @@ class ShaperPlotter(PlotterStrategy):
         ]
         self.add_title(fig, title_lines)
 
-    def _plot_frequency_profile(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_frequency_profile(self, ax, data: dict[str, Any]) -> None:
         """Plot frequency profile with PSDs and shapers"""
         calibration_data = data['calibration_data']
         freqs = calibration_data.freqs
@@ -177,7 +177,7 @@ class ShaperPlotter(PlotterStrategy):
         )
         ax_2.legend(loc='upper right', prop=fontP)
 
-    def _plot_spectrogram(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_spectrogram(self, ax, data: dict[str, Any]) -> None:
         """Plot time-frequency spectrogram"""
         SpectrogramHelper.plot_spectrogram(
             ax,
@@ -207,7 +207,7 @@ class ShaperPlotter(PlotterStrategy):
             ax, xlabel='Frequency (Hz)', ylabel='Time (s)', title='Time-Frequency Spectrogram', grid=False
         )
 
-    def _add_shaper_table(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_shaper_table(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add shaper parameters table"""
         columns = ['Type', 'Frequency', 'Vibrations', 'Smoothing', 'Max Accel']
         table_data = [
@@ -239,7 +239,7 @@ class ShaperPlotter(PlotterStrategy):
                 cell.get_text().set_fontproperties(bold_font)
                 cell.get_text().set_color(PlottingConstants.KLIPPAIN_COLORS['dark_orange'])
 
-    def _add_recommendations(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_recommendations(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add filter recommendations and damping ratio"""
         fig.text(
             0.575,

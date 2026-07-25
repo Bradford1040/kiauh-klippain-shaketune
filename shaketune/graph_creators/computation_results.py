@@ -7,7 +7,7 @@
 # Description: Specific computation result models for each graph type
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 
@@ -18,23 +18,23 @@ from .base_models import ComputationResult
 class AxesMapResult(ComputationResult):
     """Result from axes map detection computation using velocity-based algorithm"""
 
-    acceleration_data: List[Tuple[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]]]
-    velocity_data: List[Tuple[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]]]
+    acceleration_data: list[tuple[np.ndarray, tuple[np.ndarray, np.ndarray, np.ndarray]]]
+    velocity_data: list[tuple[np.ndarray, tuple[np.ndarray, np.ndarray, np.ndarray]]]
     gravity: float
     noise_level: float
-    quality_status: Dict[str, Any]
-    peak_velocities_data: List[Dict[str, float]]
-    direction_vectors: List[np.ndarray]
-    actual_directions: List[np.ndarray]
+    quality_status: dict[str, Any]
+    peak_velocities_data: list[dict[str, float]]
+    direction_vectors: list[np.ndarray]
+    actual_directions: list[np.ndarray]
     rotation_matrix: np.ndarray  # Orthonormalized 3x3 rotation matrix
-    euler_angles: Tuple[float, float, float]  # (roll, pitch, yaw) in degrees
-    angle_errors: List[float]
-    confidences: List[float]
+    euler_angles: tuple[float, float, float]  # (roll, pitch, yaw) in degrees
+    angle_errors: list[float]
+    confidences: list[float]
     formatted_direction_vector: str
     accel: Optional[float] = None
     extrapolated_axis: Optional[int] = None  # Index (0=X, 1=Y, 2=Z) if 2-axis machine
 
-    def get_plot_data(self) -> Dict[str, Any]:
+    def get_plot_data(self) -> dict[str, Any]:
         return {
             'acceleration_data': self.acceleration_data,
             'velocity_data': self.velocity_data,
@@ -63,8 +63,8 @@ class SignalData:
     freqs: np.ndarray
     psd: np.ndarray
     peaks: np.ndarray
-    paired_peaks: Optional[List[Tuple[Tuple[int, float, float], Tuple[int, float, float]]]] = None
-    unpaired_peaks: Optional[List[int]] = None
+    paired_peaks: Optional[list[tuple[tuple[int, float, float], tuple[int, float, float]]]] = None
+    unpaired_peaks: Optional[list[int]] = None
 
 
 @dataclass
@@ -82,7 +82,7 @@ class BeltsResult(ComputationResult):
     similarity_factor: Optional[float] = None
     mhi: Optional[str] = None
 
-    def get_plot_data(self) -> Dict[str, Any]:
+    def get_plot_data(self) -> dict[str, Any]:
         return {
             'signal1': self.signal1,
             'signal2': self.signal2,
@@ -111,7 +111,7 @@ class StaticFrequencyResult(ComputationResult):
     pdata: np.ndarray
     max_freq: float
 
-    def get_plot_data(self) -> Dict[str, Any]:
+    def get_plot_data(self) -> dict[str, Any]:
         return {
             'freq': self.freq,
             'duration': self.duration,
@@ -130,12 +130,12 @@ class ShaperResult(ComputationResult):
     """Result from input shaper computation"""
 
     calibration_data: Any  # CalibrationData type
-    shapers: List[Any]  # List of shaper objects
-    shaper_table_data: Dict[str, Any]
-    shaper_choices: List[str]
+    shapers: list[Any]  # List of shaper objects
+    shaper_table_data: dict[str, Any]
+    shaper_choices: list[str]
     peaks: np.ndarray
     peaks_freqs: np.ndarray
-    peaks_threshold: Tuple[float, float]
+    peaks_threshold: tuple[float, float]
     fr: float
     zeta: float
     t: np.ndarray
@@ -149,7 +149,7 @@ class ShaperResult(ComputationResult):
     compat: bool = False
     max_smoothing_computed: Optional[float] = None
 
-    def get_plot_data(self) -> Dict[str, Any]:
+    def get_plot_data(self) -> dict[str, Any]:
         return {
             'measurements': self.measurements,
             'compat': self.compat,
@@ -181,12 +181,12 @@ class VibrationsResult(ComputationResult):
 
     all_speeds: np.ndarray
     all_angles: np.ndarray
-    all_angles_energy: Dict[float, np.ndarray]
+    all_angles_energy: dict[float, np.ndarray]
     good_speeds: np.ndarray
     good_angles: np.ndarray
     kinematics: str
     accel: float
-    motors: Optional[List[Any]]  # Motor objects
+    motors: Optional[list[Any]]  # Motor objects
     motors_config_differences: Optional[str]
     symmetry_factor: float
     spectrogram_data: np.ndarray
@@ -195,17 +195,17 @@ class VibrationsResult(ComputationResult):
     sp_variance_energy: float
     vibration_metric: float
     num_peaks: int
-    vibration_peaks: List[Tuple[float, float, float, float]]
-    target_freqs: List[Tuple[str, List[float]]]
-    main_angles: List[float]
-    global_motor_profile: Optional[Tuple[str, Tuple[float, float]]]
-    motor_profiles: Optional[List[Tuple[str, Tuple[float, float]]]]
+    vibration_peaks: list[tuple[float, float, float, float]]
+    target_freqs: list[tuple[str, list[float]]]
+    main_angles: list[float]
+    global_motor_profile: Optional[tuple[str, tuple[float, float]]]
+    motor_profiles: Optional[list[tuple[str, tuple[float, float]]]]
     max_freq: float
     motor_fr: Optional[float]
     motor_zeta: Optional[float]
     motor_res_idx: Optional[int]
 
-    def get_plot_data(self) -> Dict[str, Any]:
+    def get_plot_data(self) -> dict[str, Any]:
         return {
             'measurements': self.measurements,
             'all_speeds': self.all_speeds,

@@ -8,7 +8,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
+from typing import Any, Optional, Protocol, runtime_checkable
 
 from matplotlib.figure import Figure
 
@@ -23,7 +23,7 @@ class GraphMetadata:
     subtitle: Optional[str] = None
     version: str = 'unknown'
     timestamp: Optional[str] = None
-    additional_info: Dict[str, Any] = field(default_factory=dict)
+    additional_info: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -31,10 +31,10 @@ class ComputationResult(ABC):
     """Base class for computation results"""
 
     metadata: GraphMetadata
-    measurements: List[Measurement]
+    measurements: list[Measurement]
 
     @abstractmethod
-    def get_plot_data(self) -> Dict[str, Any]:
+    def get_plot_data(self) -> dict[str, Any]:
         """Return data formatted for plotting"""
         pass
 
@@ -88,7 +88,7 @@ class PlotterStrategy(ABC):
         """Create a plot from computation result"""
         pass
 
-    def add_logo(self, fig: Figure, position: List[float] = None) -> None:
+    def add_logo(self, fig: Figure, position: list[float] = None) -> None:
         """Add logo to the figure"""
         if position is None:
             position = [0.001, 0.894, 0.105, 0.105]
@@ -110,7 +110,7 @@ class PlotterStrategy(ABC):
                 color=self.KLIPPAIN_COLORS['purple'],
             )
 
-    def add_title(self, fig: Figure, title_lines: List[Dict[str, Any]]) -> None:
+    def add_title(self, fig: Figure, title_lines: list[dict[str, Any]]) -> None:
         """Add title lines to the figure"""
         for line in title_lines:
             fig.text(

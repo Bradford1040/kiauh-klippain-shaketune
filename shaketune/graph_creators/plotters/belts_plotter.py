@@ -7,7 +7,7 @@
 # Description: Plotter for belts comparison graphs
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -54,7 +54,7 @@ class BeltsPlotter(PlotterStrategy):
 
         return fig
 
-    def _add_titles(self, fig: Figure, data: Dict[str, Any]) -> None:
+    def _add_titles(self, fig: Figure, data: dict[str, Any]) -> None:
         """Add title lines to the figure"""
         try:
             filename = data['measurements'][0]['name']
@@ -106,7 +106,7 @@ class BeltsPlotter(PlotterStrategy):
 
         self.add_title(fig, title_lines)
 
-    def _plot_psd_signals(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_psd_signals(self, ax, data: dict[str, Any]) -> None:
         """Plot PSD signals and annotate peaks"""
         signal1 = data['signal1']
         signal2 = data['signal2']
@@ -215,7 +215,7 @@ class BeltsPlotter(PlotterStrategy):
             cell.set_facecolor('white')
             cell.set_alpha(0.6)
 
-    def _plot_cross_comparison(self, ax, data: Dict[str, Any]) -> None:
+    def _plot_cross_comparison(self, ax, data: dict[str, Any]) -> None:
         """Plot cross-belts comparison"""
         signal1 = data['signal1']
         signal2 = data['signal2']
