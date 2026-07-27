@@ -64,7 +64,7 @@ class MeasurementsManager:
 
     # Dedicated writer process: opens the output file in binary write mode and wraps it with a Zstandard compressor
     # stream. It then continuously reads measurement objects from the queue and writes each as a JSON line
-    def _writer_loop(self, output_file: Path, write_queue: Queue, is_writing: Value):
+    def _writer_loop(self, output_file: Path, write_queue: Queue, is_writing):
         try:
             with open(output_file, 'wb') as f:
                 cctx = ZstdCompressor(level=COMPRESSION_LEVEL)

@@ -60,7 +60,7 @@ def find_best_shaper_compat(shaper_calibrate, *args, **kwargs):
 
 def get_shaper_calibrate_module():
     if os.environ.get('SHAKETUNE_IN_CLI') != '1':
-        from ... import shaper_calibrate, shaper_defs
+        from .. import shaper_calibrate, shaper_defs
     else:
         shaper_calibrate = sys.modules['shaper_calibrate']
         shaper_defs = sys.modules['shaper_defs']
