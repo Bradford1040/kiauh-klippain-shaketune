@@ -24,8 +24,10 @@ AXIS_CONFIG = [
 ]
 
 
-# This is used to print the current S&T version on top of the png graph file
 def get_git_version():
+    """
+    This is used to print the current S&T version on top of the png graph file
+    """
     try:
         # Get the absolute path of the script, resolving any symlinks
         # Then get 2 times to parent dir to be at the git root folder
@@ -45,8 +47,12 @@ def get_git_version():
     except Exception:
         return None
 
-# Compute natural resonant frequency and damping ratio by using the half power bandwidth method with interpolated frequencies
+
 def compute_mechanical_parameters(psd, freqs, min_freq=None):
+    """
+    Compute natural resonant frequency and damping ratio using the half power
+    bandwidth method with interpolated frequencies.
+    """
     max_under_min_freq = False
 
     if min_freq is not None:
@@ -72,7 +78,7 @@ def compute_mechanical_parameters(psd, freqs, min_freq=None):
     indices_below = np.where(psd[:max_power_index] <= half_power)[0]
     indices_above = np.where(psd[max_power_index:] <= half_power)[0]
 
-    # If we are not able to find points around the half power, we can't compute the damping ratio and return None instead
+    # If unable to find points around half power, damping ratio cannot be computed
     if len(indices_below) == 0 or len(indices_above) == 0:
         return fr, None, max_power_index, max_under_min_freq
 
@@ -114,12 +120,12 @@ def detect_peaks(data, indices, detection_threshold, relative_height_threshold=N
     smoothed_peaks = smoothed_peaks[smoothed_data[smoothed_peaks] > detection_threshold]
 
     # Additional validation for peaks based on relative height
-    valid_peaks = smoothed_peaks
+    valid_peaks = []
     if relative_height_threshold is not None:
         valid_peaks = []
         for peak in smoothed_peaks:
             peak_height = smoothed_data[peak] - np.min(
-                smoothed_data[max(0, peak - vicinity) : min(len(smoothed_data), peak + vicinity + 1)]
+                smoothed_data[max(0, peak - vicinity):min(len(smoothed_data), peak + vicinity + 1)]
             )
             if peak_height > relative_height_threshold * smoothed_data[peak]:
                 valid_peaks.append(peak)
@@ -127,7 +133,7 @@ def detect_peaks(data, indices, detection_threshold, relative_height_threshold=N
     # Refine peak positions on the original curve
     refined_peaks = []
     for peak in valid_peaks:
-        local_max = peak + np.argmax(data[max(0, peak - vicinity) : min(len(data), peak + vicinity + 1)]) - vicinity
+        local_max = peak + np.argmax(data[max(0, peak - vicinity):min(len(data), peak + vicinity + 1)]) - vicinity
         refined_peaks.append(local_max)
 
     num_peaks = len(refined_peaks)

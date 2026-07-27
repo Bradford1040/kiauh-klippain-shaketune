@@ -41,8 +41,7 @@ class Measurement(TypedDict):
 
 class MeasurementsManager:
     def __init__(self, chunk_size: int, k_reactor=None, stdata_filename: Path = None):
-        # Klipper reactor is optional here as when running in CLI mode, we don't need it since in this mode
-        # we are only reading a file to create graphs and never recording anything (so no disk writes)
+        # Klipper reactor is required to save data (optional for CLI mode, which never saves .stdata)
         self._k_reactor = k_reactor
         self._chunk_size = chunk_size
         self._final_file = None
@@ -97,7 +96,7 @@ class MeasurementsManager:
             raise ValueError('no file path provided to the MeasurementsManager! Unable to add any measurement.')
 
         # Start the writer process if it's not already running
-        if self._writer_process is None:
+        if self._writer_process == None:
             self._writer_process = Process(
                 target=self._writer_loop,
                 args=(self._temp_file, self._writer_queue, self._is_writing),
@@ -141,7 +140,7 @@ class MeasurementsManager:
         self.clear_measurements(keep_last=True)
 
     def save_stdata(self, timeout: int = WRITE_TIMEOUT):
-        # Klipper reactor is required to save the data to disk (but optional for the CLI mode that never saves any .stdata)
+        # Klipper reactor is required to save data (optional for CLI mode, which never saves .stdata)
         if not self._k_reactor:
             raise ValueError('no Klipper reactor provided! Unable to save data to disk.')
         if not self._writer_process:

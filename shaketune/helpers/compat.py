@@ -80,7 +80,7 @@ class KlipperCompatibility:
         Returns a ResTesterConfig namedtuple with default values and test points.
         """
         if self.has_legacy_res_tester_api():
-            # Legacy API (before Dec 6, 2024: https://github.com/Klipper3d/klipper/commit/16b4b6b302ac3ffcd55006cd76265aad4e26ecc8)
+            # Legacy API (Klipper commit < 16b4b6b302ac)
             default_min_freq = self.res_tester.test.min_freq
             default_max_freq = self.res_tester.test.max_freq
             default_accel_per_hz = self.res_tester.test.accel_per_hz

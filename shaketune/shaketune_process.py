@@ -58,7 +58,7 @@ class ShakeTuneProcess:
                     raise FileNotFoundError(f'File {filename} does not exist!')
                 filelist.append(filename)
 
-        # Start the target function in a new process (a thread is known to cause issues with Klipper and CANbus due to the GIL)
+        # Start the target function in a new process (thread causes issues with Klipper/CANbus due to GIL)
         self._process = Process(
             target=self._shaketune_process_wrapper,
             args=(self.graph_creator, filelist, self._timeout),
@@ -106,13 +106,12 @@ class ShakeTuneProcess:
         os._exit(1)  # Forcefully exit the process
 
     def _shaketune_process(self, graph_creator, filelist: list[Path]) -> None:
-        # Reducing Shake&Tune process priority by putting the scheduler into batch mode with low priority. This in order to avoid
-        # slowing down the main Klipper process as this can lead to random "Timer too close" or "Move queue overflow" errors
-        # when also already running CANbus, neopixels and other consumming stuff in Klipper's main process.
+        # Reduce Shake&Tune process priority to avoid slowing down Klipper's main process,
+        # which can cause "Timer too close" or "Move queue overflow" errors.
         try:
             param = os.sched_param(os.sched_get_priority_min(os.SCHED_BATCH))
             os.sched_setscheduler(0, os.SCHED_BATCH, param)
-        except Exception:
+        except OSError:
             ConsoleOutput.print('Warning: failed reducing Shake&Tune process priority, continuing...')
 
         # Load the measurements from the file
@@ -137,7 +136,7 @@ class ShakeTuneProcess:
             ConsoleOutput.print(f'Timeout error: {e}')
             return
         except Exception as e:
-            ConsoleOutput.print(f'Error while generating the graphs: {e}\n{traceback.print_exc()}')
+            ConsoleOutput.print(f'Error while generating the graphs: {e}\n{traceback.format_exc()}')
             return
 
         graph_creator.clean_old_files(self._config.keep_n_results)
