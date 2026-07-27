@@ -9,6 +9,9 @@ authors = [
 keywords = ["klipper", "input shaper", "calibration", "3d printer"]
 license = {file = "LICENSE"}
 dynamic = ["version"]
+dependencies = [
+    "gitpython>=3.1.41",
+]
 [project.urls]
 Repository = "https://github.com/Bradford1040/kiauh-klippain-shaketune"
 Documentation = "https://github.com/Bradford1040/kiauh-klippain-shaketune/tree/main/docs"
