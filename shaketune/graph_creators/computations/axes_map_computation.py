@@ -6,7 +6,7 @@
 # File: axes_map_computation.py
 # Description: Computation implementation for axes map detection using velocity-based algorithm
 
-from typing import Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 import numpy as np
 
