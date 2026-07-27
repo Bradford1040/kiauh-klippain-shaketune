@@ -82,6 +82,7 @@ env/
 ENV/
 env.bak/
 venv.bak/
+# exa_agent.py is running the agent in a virtual environment
 
 # Type checkers / Linters
 .mypy_cache/
