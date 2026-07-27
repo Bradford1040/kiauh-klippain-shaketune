@@ -96,7 +96,7 @@ class MeasurementsManager:
             raise ValueError('no file path provided to the MeasurementsManager! Unable to add any measurement.')
 
         # Start the writer process if it's not already running
-        if self._writer_process == None:
+        if self._writer_process is None:
             self._writer_process = Process(
                 target=self._writer_loop,
                 args=(self._temp_file, self._writer_queue, self._is_writing),

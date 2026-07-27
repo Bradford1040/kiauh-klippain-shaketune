@@ -50,8 +50,11 @@ def configure_graph_creator(graph_type, args, dummy_config):
 def load_klipper_module(args):
     """Helper function to load the shaper_calibrate module from the specified Klipper folder."""
     if hasattr(args, 'klipper_dir') and args.klipper_dir:
-        kdir = os.path.expanduser(args.klipper_dir)
-        sys.path.append(os.path.join(kdir, 'klippy'))
+        # Normalize and ensure we pass a plain string to sys.path.append
+        # to satisfy type checkers (os.path.join can return str|bytes).
+        kdir = Path(os.path.expanduser(str(args.klipper_dir)))
+        klippy_path = str(kdir / 'klippy')
+        sys.path.append(klippy_path)
         sys.modules['shaper_calibrate'] = import_module('.shaper_calibrate', 'extras')
         sys.modules['shaper_defs'] = import_module('.shaper_defs', 'extras')
 
