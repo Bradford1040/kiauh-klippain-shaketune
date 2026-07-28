@@ -6,9 +6,10 @@
 # File: axes_map_computation.py
 # Description: Computation implementation for axes map detection using velocity-based algorithm
 
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Any
 
 import numpy as np
+from numpy import dtype, ndarray
 
 from ...helpers.accelerometer import Measurement
 from ...helpers.console_output import ConsoleOutput
@@ -83,7 +84,8 @@ def _orthonormalize_rotation_matrix(R: np.ndarray) -> np.ndarray:
     return R_ortho
 
 
-def _extract_euler_xyz(R: np.ndarray) -> Tuple[float, float, float]:
+def _extract_euler_xyz(R: np.ndarray) -> tuple[
+    ndarray[tuple[Any, ...], dtype[Any]], ndarray[tuple[Any, ...], dtype[Any]], ndarray[tuple[Any, ...], dtype[Any]]]:
     """Extract XYZ intrinsic Euler angles (roll, pitch, yaw) from rotation matrix.
 
     Convention: Intrinsic XYZ means rotations applied in order: X, then Y, then Z.
