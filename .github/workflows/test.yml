@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - punisher
+      - printer_1
 
 jobs:
   klippy_testing:
