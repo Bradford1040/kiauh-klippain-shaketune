@@ -13,19 +13,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        klipper_repo:
-          - klipper3d/klipper
-          - KalicoCrew/kalico
-        klipper_version:
-          - master
-          - main
-          - v2026.07.00
-          - v0.13.0
+        include:
+          - klipper_repo: klipper3d/klipper
+            klipper_version: master
+          - klipper_repo: klipper3d/klipper
+            klipper_version: v0.13.0
+          - klipper_repo: KalicoCrew/kalico
+            klipper_version: main
+          - klipper_repo: KalicoCrew/kalico
+            klipper_version: v2026.07.00
         python_version:
           - "3.9" # Debian Bullseye default
           - "3.11" # Debian Bookworm default
           - "3.13" # Debian Trixie Default
-          - '3.14' # Latest Released as of 2026/7
+          - "3.14" # Latest Released as of 2026/7
     steps:
       - uses: actions/setup-python@v6
         with:
@@ -75,7 +76,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: "3.11"
           cache: "pip"
       - name: install ruff
         run: |
