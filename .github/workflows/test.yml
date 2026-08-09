@@ -2,6 +2,9 @@ name: Smoke Tests
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
+      - punisher
 
 jobs:
   klippy_testing:
@@ -10,27 +13,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        klipper_repo:
-          - klipper3d/klipper
-          - KalicoCrew/kalico
-        klipper_version:
-          - master
-          - v0.13.0
+        include:
+          - klipper_repo: klipper3d/klipper
+            klipper_version: master
+          - klipper_repo: klipper3d/klipper
+            klipper_version: v0.13.0
+          - klipper_repo: KalicoCrew/kalico
+            klipper_version: main
+          - klipper_repo: KalicoCrew/kalico
+            klipper_version: v2026.07.00
         python_version:
-          - '3.9' # Debian Bullseye default
-          - '3.11' # Debian Bookworm default
-          # Below disabled - Greenlet upstream version not compatable with py 3.12
-          # - '3.12' # Latest Released as of 2024/9
-    steps: 
-      - uses: actions/setup-python@v5
+          - "3.9" # Debian Bullseye default
+          - "3.11" # Debian Bookworm default
+          - "3.13" # Debian Trixie Default
+          # - "3.14" # Latest Released as of 2026/7
+    steps:
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python_version }}
       - name: Checkout shaketune
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: shaketune
       - name: Checkout Klipper
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: klipper
           repository: ${{ matrix.klipper_repo }}
@@ -38,7 +44,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-avr avr-libc
+          sudo apt-get install -y build-essential gcc-avr avr-libc python3-venv libusb-1.0-0-dev pkg-config
       - name: Build klipper dict
         run: |
           pushd klipper
@@ -53,7 +59,8 @@ jobs:
           ./klippy-env/bin/python -m pip install -r shaketune/requirements.txt
       - name: Install shaketune
         run: |
-          ln -s $PWD/shaketune/shaketune $PWD/klipper/klippy/extras/shaketune
+          mkdir -p klipper/klippy/extras
+          ln -sfn "$PWD/shaketune/shaketune" "klipper/klippy/extras/shaketune"
       - name: Klipper import test
         run: |
           ./klippy-env/bin/python klipper/klippy/klippy.py --import-test
@@ -61,18 +68,20 @@ jobs:
         run: |
           pushd klipper
           mkdir ../dicts
-          cp ../klipper/out/klipper.dict ../dicts/atmega2560.dict
+          cp out/klipper.dict ../dicts/atmega2560.dict
           ../klippy-env/bin/python scripts/test_klippy.py -d ../dicts ../shaketune/ci/smoke-test/klippy-tests/simple.test
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
       - name: install ruff
         run: |
-          pip install ruff
+          python -m pip install --upgrade pip
+          python -m pip install ruff
       - name: run ruff tests
         run: |
-          ruff check
+          ruff check .
