@@ -1,8 +1,8 @@
 # Klipper Shake&Tune plugin
 
-## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki) I am still editing, so some links don't work yet
+## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)
 
-## I have also updated [Frix-x's](https://github.com/Frix-x/klippain-shaketune) main branch with a more python 3.9 to 3.14 compatible requierments file for those that may want to integrate this into their system in the future. Other than a few fixes the `MAIN` branch is Frix-x's original code with some small additions and changes I made while developing this project.
+## I have also updated [Frix-x's](https://github.com/Frix-x/klippain-shaketune) `MAIN` branch with python 3.9 to 3.14 compatible requierments. Other than a few fixes the `MAIN` branch is Frix-x's original code with those small additions and changes I made while developing another branch I desided to put in the python fixes for newer versions of python into `MAIN`
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
@@ -10,17 +10,21 @@ Check out the **[detailed documentation here](https://github.com/Bradford1040/ki
 
 ![logo banner](./docs/banner.png)
 
-
 ## Installation
 
 Follow these steps to install Shake&Tune on your printer:
+
   1. Be sure to have a working accelerometer on your machine and a `[resonance_tester]` section defined. You can follow the official [Measuring Resonances Klipper documentation](https://www.klipper3d.org/Measuring_Resonances.html) to configure it.
+
   1. Install Shake&Tune by running over SSH on your printer:
+
      ```bash
      wget -O - https://raw.githubusercontent.com/Bradford1040/kiauh-klippain-shaketune/main/install.sh | bash
      ```
+
   1. Then, append the following to your `printer.cfg` file and restart Klipper:
-     ```
+
+     ```cfg
      [shaketune]
      # result_folder: ~/printer_data/config/ShakeTune_results
      #    Path where the processed results will be stored. If the folder doesn't exist,
