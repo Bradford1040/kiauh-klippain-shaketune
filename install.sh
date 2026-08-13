@@ -120,6 +120,22 @@ function link_module {
     fi
 }
 
+function fix_klipper_dirty {
+    echo "[POST-INSTALL] Ensuring Klipper shows as 'clean'..."
+    cd "${KLIPPER_PATH}" || return 1
+
+    # Unstage the folder if accidentally staged
+    git restore --staged klippy/extras/shaketune 2>/dev/null || true
+
+    # Add to local git exclude if not already present
+    if ! grep -q "klippy/extras/shaketune" .git/info/exclude 2>/dev/null; then
+        echo "klippy/extras/shaketune" >> .git/info/exclude
+        echo "[INFO] Added Shake&Tune to .git/info/exclude."
+    else
+        echo "[INFO] Shake&Tune already excluded from git status."
+    fi
+}
+
 function add_updater {
     update_section=$(grep -c '\[update_manager[a-z ]* Klippain-ShakeTune\]' $MOONRAKER_CONFIG || true)
     if [ "$update_section" -eq 0 ]; then
@@ -162,6 +178,7 @@ check_download
 setup_venv
 link_extension
 link_module
+fix_klipper_dirty
 add_updater
 restart_klipper
 restart_moonraker
