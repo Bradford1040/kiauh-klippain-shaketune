@@ -2,7 +2,7 @@
 
 ## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)
 
-## I have also updated [Frix-x's](https://github.com/Frix-x/klippain-shaketune) `MAIN` branch with python 3.9 to 3.14 compatible requierments. Other than a few fixes the `MAIN` branch is Frix-x's original code with those small additions and changes I made while developing another branch I desided to put in the python fixes for newer versions of python into `MAIN`
+## I have also updated [Frix-x's](https://github.com/Frix-x/klippain-shaketune) `MAIN` branch with python 3.9 to 3.14 compatible requierments. Other than a few fixes the `MAIN` branch is Frix-x's original code with those small additions and changes I made while developing another branch I decided to put in the python fixes for newer versions of python into `MAIN`
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
