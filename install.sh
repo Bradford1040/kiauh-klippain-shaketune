@@ -162,6 +162,22 @@ EOF
     fi
 }
 
+function fix_klipper_dirty {
+    echo "[POST-INSTALL] Ensuring Klipper shows as 'clean'..."
+    cd "${KLIPPER_PATH}" || return 1
+
+    # 1. Unstage the folder if it was accidentally staged
+    git restore --staged klippy/extras/shaketune 2>/dev/null || true
+
+    # 2. Add to local git exclude if not already present
+    if ! grep -q "klippy/extras/shaketune" .git/info/exclude 2>/dev/null; then
+        echo "klippy/extras/shaketune" >> .git/info/exclude
+        echo "[INFO] Added Shake&Tune to .git/info/exclude."
+    else
+        echo "[INFO] Shake&Tune already excluded from git status."
+    fi
+}
+
 function restart_klipper {
     echo "[POST-INSTALL] Restarting Klipper service (${KLIPPER_SERVICE_NAME})..."
     sudo systemctl restart "${KLIPPER_SERVICE_NAME}"
@@ -198,6 +214,7 @@ setup_venv
 link_extension
 link_module
 add_updater
+fix_klipper_dirty
 
 restart_klipper
 restart_moonraker
