@@ -42,7 +42,6 @@ EXTENSIONS=(
   eamodio.gitlens
   charliermarsh.ruff
   ms-python.black-formatter
-  VisualStudioExptTeam.vscodeintellicode
 )
 
 if [ -n "$CODE_CMD" ]; then
