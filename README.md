@@ -16,7 +16,9 @@ Only thing thats different is when you use KIAUH and install multiple printers, 
 
 Check out the **[detailed documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)**.
 
-![logo banner](./docs/banner.png)
+- If you want a custom branch, join my [telegram group](https://t.me/JerksOfAllTrades/32)
+
+![If you want a custom branch](./docs/Jerks-Of-All-Trades.png)
 
 ## Installation
 
