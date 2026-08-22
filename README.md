@@ -1,26 +1,36 @@
 # KIAUH & Klipper Shake & Tune plugin
 
-## Also I have moved documentation into the [WiKi](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)
+<div align="center"><!-- markdownlint-disable-line MD033 -->
 
-## This setup is very specialized, I use a Server not a Raspberry Pii
+| Version | Status |
+| --------- | -------- |
+| Python  3.9 | ✅ Supported |
+| Python 3.11 | ✅ Supported |
+| Python 3.12 | ✅ Supported |
+| Python 3.13 | ✅ Supported |
+| Python 3.14 | ✅ Supported |
 
+</div>
 ## Rhino Linux, a rolling AUR release of Ubuntu & Debian Linux 13.0 mix, Python version 3.14.6
 
-## Kalico Klipper - bleeding-edge-v2
+## Kalico Klipper - bleeding-edge-v2 - S2DW Accelerometer
 
 Shake&Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer. It can be installed on any Klipper machine and is not limited to those using the full Klippain.
 
-This is a modified version basically designed to work on my system, but can be edited to work on yours as well, if you need a hand just let me know, I plan on making a version that works with just one KIAUH installed printer without a custom name, the Branch will be named KIAUH_DEFAULT, but it is not completed as of yet.
+This is a modified version basically designed to work on my set-up & system, but can be edited to work on yours as well, if you need a modified branch, click this [telegram](https://t.me/JerksOfAllTrades/32) link. I am making a dynamic branch (devel-st-v2.0) that works with custom names when using KIAUH multiple printers option, but it is not completed as of yet. I have had issues with the `REG_EX`
 
-Only thing thats different is when you use KIAUH and install multiple printers, KIAUH no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom*name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom*name.service```) & (```moonraker-custom*name.service```). My branch `punisher` version is set up for one of my printers in the ```install.sh``` but is very easy to change to your proper naming scheme. I will try and make it more REGEX friendly so it automatically looks for the folders and service names but this is just a quick fix for one of my printers that I have an S2DW accelerometer on permanently.
+### The KIAUH and install multiple printers option issues
+
+Only thing thats different is when you use KIAUH and install multiple printers, Klipper & Moonraker no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom_name_data" which in turn changes (```klipper-printer_1.service```) & (```moonraker-printer_1.service```) or (```klipper-custom_name.service```) & (```moonraker-custom_name.service```). This branch (punisher) is set up for a printer named (punisher) in the `install.sh`
 
 Check out the **[detailed documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)**.
 
-- If you want a custom branch, join my [telegram group](https://t.me/JerksOfAllTrades/32)
+- Want a **Custom Branch**, or need **Help** join [telegram](https://t.me/JerksOfAllTrades/32)
+- Here you will get 🤝 Support & 👨‍💻 Developer Contact
 
-![If you want a custom branch](./docs/Jerks-Of-All-Trades.png)
+![Telegram_Group](./docs/Jerks-Of-All-Trades.png)
 
-## Installation
+## 🔧 Installation
 
 I removed the bash install as it would not work for you unless you edited the `install.sh` but I will add it back once I have completed the default install for KIAUH
 
@@ -44,7 +54,7 @@ Follow these steps to install Shake&Tune on your printer:
      ./install.sh
    ```
 
-  1. I highly doubt your printer name is punisher, so you are going to have to edit the install.sh
+  1. I highly doubt your printer name is (punisher), You are more than likely looking at the wrong Branch
 
   2. Then, append the following to your `printer.cfg` file and restart Klipper:
 
