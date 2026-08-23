@@ -26,7 +26,8 @@ jobs:
         python_version:
           - "3.9" # Debian Bullseye default
           - "3.11" # Debian Bookworm default
-          - "3.13" # Debian Trixie Default
+          - "3.12" # Ubuntu 24.04 Noble default
+          - "3.13" # Debian Trixie default
           # - "3.14" # Latest Released as of 2026/7
     steps:
       - uses: actions/setup-python@v6
