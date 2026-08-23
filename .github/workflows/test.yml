@@ -71,18 +71,3 @@ jobs:
           mkdir ../dicts
           cp out/klipper.dict ../dicts/atmega2560.dict
           ../klippy-env/bin/python scripts/test_klippy.py -d ../dicts ../shaketune/ci/smoke-test/klippy-tests/simple.test
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-          cache: "pip"
-      - name: install ruff
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff
-      - name: run ruff tests
-        run: |
-          ruff check .

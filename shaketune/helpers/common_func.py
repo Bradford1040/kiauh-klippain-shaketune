@@ -125,7 +125,7 @@ def detect_peaks(data, indices, detection_threshold, relative_height_threshold=N
         valid_peaks = []
         for peak in smoothed_peaks:
             peak_height = smoothed_data[peak] - np.min(
-                smoothed_data[max(0, peak - vicinity):min(len(smoothed_data), peak + vicinity + 1)]
+                smoothed_data[max(0, peak - vicinity) : min(len(smoothed_data), peak + vicinity + 1)]
             )
             if peak_height > relative_height_threshold * smoothed_data[peak]:
                 valid_peaks.append(peak)
@@ -133,7 +133,7 @@ def detect_peaks(data, indices, detection_threshold, relative_height_threshold=N
     # Refine peak positions on the original curve
     refined_peaks = []
     for peak in valid_peaks:
-        local_max = peak + np.argmax(data[max(0, peak - vicinity):min(len(data), peak + vicinity + 1)]) - vicinity
+        local_max = peak + np.argmax(data[max(0, peak - vicinity) : min(len(data), peak + vicinity + 1)]) - vicinity
         refined_peaks.append(local_max)
 
     num_peaks = len(refined_peaks)

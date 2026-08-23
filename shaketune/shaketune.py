@@ -47,8 +47,7 @@ ST_COMMANDS = {
         'frequency profiles of individual belts on CoreXY or CoreXZ printers'
     ),
     'AXES_SHAPER_CALIBRATION': (
-        'Perform standard axis input shaper tests on one or both XY axes to select '
-        'the best input shaper filter'
+        'Perform standard axis input shaper tests on one or both XY axes to select the best input shaper filter'
     ),
     'CREATE_VIBRATIONS_PROFILE': (
         'Run a series of motions to find speed/angle ranges where the printer could be '
@@ -88,7 +87,9 @@ class ShakeTune:
         m_chunk_size = k_conf.getint('measurements_chunk_size', default=DEFAULT_MEASUREMENTS_CHUNK_SIZE, minval=2)
         # result_folder_path may be None (meaning use defaults). Use cast to
         # satisfy static type checkers while preserving runtime behavior.
-        st_config = ShakeTuneConfig(cast(Path, result_folder_path), keep_n_results, keep_raw_data, m_chunk_size, max_freq, dpi)
+        st_config = ShakeTuneConfig(
+            cast(Path, result_folder_path), keep_n_results, keep_raw_data, m_chunk_size, max_freq, dpi
+        )
         # Use named `default` and `minval` for consistency with other config getters.
         timeout = k_conf.getfloat('timeout', default=DEFAULT_TIMEOUT, minval=0.0)
         show_macros = k_conf.getboolean('show_macros_in_webui', default=DEFAULT_SHOW_MACROS)
@@ -162,7 +163,9 @@ class ShakeTune:
     # ------------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------
 
-    def _cmd_helper(self, gcmd: Any, graph_type: str, cmd_function: Callable[[Any, Any, ShakeTuneProcess], None]) -> None:
+    def _cmd_helper(
+        self, gcmd: Any, graph_type: str, cmd_function: Callable[[Any, Any, ShakeTuneProcess], None]
+    ) -> None:
         ConsoleOutput.print(f'Shake&Tune version: {ShakeTuneConfig.get_git_version()}')  # type: ignore
         gcreator = GraphCreatorFactory.create_graph_creator(graph_type, self._st_config)
         st_process = ShakeTuneProcess(
@@ -174,16 +177,24 @@ class ShakeTune:
         cmd_function(gcmd, self._config, st_process)
 
     def cmd_EXCITATE_AXIS_AT_FREQ(self, gcmd: Any) -> None:
-        self._cmd_helper(gcmd, 'static frequency', cast(Callable[[Any, Any, ShakeTuneProcess], None], excitate_axis_at_freq))
+        self._cmd_helper(
+            gcmd, 'static frequency', cast(Callable[[Any, Any, ShakeTuneProcess], None], excitate_axis_at_freq)
+        )
 
     def cmd_AXES_MAP_CALIBRATION(self, gcmd: Any) -> None:
         self._cmd_helper(gcmd, 'axes map', cast(Callable[[Any, Any, ShakeTuneProcess], None], axes_map_calibration))
 
     def cmd_COMPARE_BELTS_RESPONSES(self, gcmd: Any) -> None:
-        self._cmd_helper(gcmd, 'belts comparison', cast(Callable[[Any, Any, ShakeTuneProcess], None], compare_belts_responses))
+        self._cmd_helper(
+            gcmd, 'belts comparison', cast(Callable[[Any, Any, ShakeTuneProcess], None], compare_belts_responses)
+        )
 
     def cmd_AXES_SHAPER_CALIBRATION(self, gcmd: Any) -> None:
-        self._cmd_helper(gcmd, 'input shaper', cast(Callable[[Any, Any, ShakeTuneProcess], None], axes_shaper_calibration))
+        self._cmd_helper(
+            gcmd, 'input shaper', cast(Callable[[Any, Any, ShakeTuneProcess], None], axes_shaper_calibration)
+        )
 
     def cmd_CREATE_VIBRATIONS_PROFILE(self, gcmd: Any) -> None:
-        self._cmd_helper(gcmd, 'vibrations profile', cast(Callable[[Any, Any, ShakeTuneProcess], None], create_vibrations_profile))
+        self._cmd_helper(
+            gcmd, 'vibrations profile', cast(Callable[[Any, Any, ShakeTuneProcess], None], create_vibrations_profile)
+        )

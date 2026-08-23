@@ -7,6 +7,7 @@
 # Description: Imports various graph creator classes for the Shake&Tune package.
 
 import inspect
+import importlib
 import os
 import sys
 
@@ -60,7 +61,12 @@ def find_best_shaper_compat(shaper_calibrate, *args, **kwargs):
 
 def get_shaper_calibrate_module():
     if os.environ.get('SHAKETUNE_IN_CLI') != '1':
-        from .. import shaper_calibrate, shaper_defs
+        package_name = __package__
+        if package_name is None:
+            raise RuntimeError('Unable to determine the Shake&Tune package name')
+        package = package_name.rsplit('.', 1)[0]
+        shaper_calibrate = importlib.import_module(f'{package}.shaper_calibrate')
+        shaper_defs = importlib.import_module(f'{package}.shaper_defs')
     else:
         shaper_calibrate = sys.modules['shaper_calibrate']
         shaper_defs = sys.modules['shaper_defs']

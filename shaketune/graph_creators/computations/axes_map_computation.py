@@ -6,10 +6,9 @@
 # File: axes_map_computation.py
 # Description: Computation implementation for axes map detection using velocity-based algorithm
 
-from typing import Dict, Optional, Tuple, Any
+from typing import Dict, Optional, Tuple
 
 import numpy as np
-from numpy import dtype, ndarray
 
 from ...helpers.accelerometer import Measurement
 from ...helpers.console_output import ConsoleOutput
@@ -84,8 +83,9 @@ def _orthonormalize_rotation_matrix(R: np.ndarray) -> np.ndarray:
     return R_ortho
 
 
-def _extract_euler_xyz(R: np.ndarray) -> tuple[
-    ndarray[tuple[Any, ...], dtype[Any]], ndarray[tuple[Any, ...], dtype[Any]], ndarray[tuple[Any, ...], dtype[Any]]]:
+def _extract_euler_xyz(
+    R: np.ndarray,
+) -> tuple[float, float, float]:
     """Extract XYZ intrinsic Euler angles (roll, pitch, yaw) from rotation matrix.
 
     Convention: Intrinsic XYZ means rotations applied in order: X, then Y, then Z.
@@ -105,7 +105,7 @@ def _extract_euler_xyz(R: np.ndarray) -> tuple[
         pitch = np.arctan2(-R[2, 0], sy)
         yaw = 0.0
 
-    return (np.degrees(roll), np.degrees(pitch), np.degrees(yaw))
+    return (float(np.degrees(roll)), float(np.degrees(pitch)), float(np.degrees(yaw)))
 
 
 class AxesMapComputation:
@@ -381,7 +381,7 @@ class AxesMapComputation:
             peak_velocities: Dict of peak velocity values per axis
         """
         # Find peak velocity for each axis (signed)
-        peak_velocities = {}
+        peak_velocities: dict[str, float] = {}
         for axis, vel in velocities.items():
             max_vel = np.max(vel)
             min_vel = np.min(vel)
@@ -401,8 +401,8 @@ class AxesMapComputation:
             actual_direction = raw_direction
 
         # Find axis with largest absolute peak velocity
-        abs_peaks = {axis: abs(vel) for axis, vel in peak_velocities.items()}
-        primary_axis = max(abs_peaks, key=abs_peaks.get)
+        abs_peaks: dict[str, float] = {axis: abs(vel) for axis, vel in peak_velocities.items()}
+        primary_axis = max(abs_peaks, key=lambda axis: abs_peaks[axis])
         primary_sign = 1.0 if peak_velocities[primary_axis] > 0 else -1.0
 
         # Build perfect direction vector

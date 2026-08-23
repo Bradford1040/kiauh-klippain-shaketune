@@ -14,7 +14,6 @@ import numpy as np
 from matplotlib.figure import Figure
 
 from ..base_models import PlotterStrategy
-from ..computation_results import AxesMapResult
 from ..plotting_utils import AxesConfiguration, PlottingConstants
 
 MACHINE_AXES = ['X', 'Y', 'Z']
@@ -29,9 +28,9 @@ ACCEL_COLORS = {
 class AxesMapPlotter(PlotterStrategy):
     """Plotter for axes map detection graphs using 3D orientation visualization"""
 
-    def plot(self, result: AxesMapResult) -> Figure:
+    def plot(self, data: Any) -> Figure:
         """Create axes map detection graph with 3D orientation cube and velocity sequence"""
-        data = result.get_plot_data()
+        data = data.get_plot_data()
 
         # Create figure with 1x2 layout: 3D cube (1/3) + velocity sequence (2/3)
         fig = plt.figure(figsize=(15, 7))
@@ -70,7 +69,6 @@ class AxesMapPlotter(PlotterStrategy):
                 title_line2 += f' -- at {data["accel"]:0.0f} mm/s²'
         except Exception:
             title_line2 = data['measurements'][0]['name'] + ' ...'
-
 
         # Build mapping details string: "X → -z (2.3°)  Y → y (1.5°)  Z → x (extrapolated)"
         extrapolated_axis = data.get('extrapolated_axis')
@@ -340,7 +338,7 @@ class AxesMapPlotter(PlotterStrategy):
                 linestyle='--',
                 alpha=0.4,
                 linewidth=2,
-                                zorder=2,
+                zorder=2,
             )
 
         # Draw accelerometer velocity curves
