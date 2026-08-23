@@ -19,10 +19,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - "3.9"
-          - "3.11"
-          - "3.12"
-          - "3.13"
+          - "3.9" # Debian Bullseye default
+          - "3.11" # Debian Bookworm default
+          - "3.12" # Ubuntu 24.04 Noble default
+          - "3.13" # Debian Trixie default
+          # - "3.14" # Latest Released as of 2026/7, I test on my running machine 𝔅яа∂ƒøя∂¹⁰⁴⁰
     steps:
       - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
