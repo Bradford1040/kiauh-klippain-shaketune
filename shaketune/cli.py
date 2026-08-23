@@ -3,13 +3,14 @@ import os
 import sys
 from importlib import import_module
 from pathlib import Path
+from typing import Any
 
 from .graph_creators.graph_creator_factory import GraphCreatorFactory
 from .helpers.accelerometer import MeasurementsManager
 from .shaketune_config import ShakeTuneConfig
 
 
-def add_common_arguments(parser):
+def add_common_arguments(parser: argparse.ArgumentParser):
     """Helper function to add common arguments to all subparsers."""
     parser.add_argument('-o', '--output', required=True, help='Output filename')
     parser.add_argument('files', nargs='+', help='Input data files (.csv or .stdata)')
@@ -17,10 +18,10 @@ def add_common_arguments(parser):
     parser.add_argument('--dpi', type=int, help='DPI value to use for the graph')
 
 
-def configure_graph_creator(graph_type, args, dummy_config):
+def configure_graph_creator(graph_type: str, args: argparse.Namespace, dummy_config: ShakeTuneConfig):
     """Helper function to get and configure a graph creator based on graph type and args."""
     graph_creator = GraphCreatorFactory.create_graph_creator(graph_type, dummy_config)
-    config_kwargs = {}
+    config_kwargs: dict[str, Any] = {}
 
     # Dynamically configure the graph creator based on graph type
     if graph_type == 'axes map':
@@ -43,11 +44,11 @@ def configure_graph_creator(graph_type, args, dummy_config):
     elif graph_type == 'vibrations profile':
         config_kwargs |= {'kinematics': args.kinematics, 'accel': args.accel}
 
-    graph_creator.configure(**config_kwargs)
+    graph_creator.configure(**config_kwargs)  # type: ignore
     return graph_creator
 
 
-def load_klipper_module(args):
+def load_klipper_module(args: argparse.Namespace):
     """Helper function to load the shaper_calibrate module from the specified Klipper folder."""
     if hasattr(args, 'klipper_dir') and args.klipper_dir:
         # Normalize and ensure we pass a plain string to sys.path.append

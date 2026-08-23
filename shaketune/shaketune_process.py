@@ -13,7 +13,7 @@ import threading
 import traceback
 from multiprocessing import Process
 from pathlib import Path
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from .helpers.accelerometer import MeasurementsManager
 from .helpers.console_output import ConsoleOutput
@@ -21,21 +21,23 @@ from .shaketune_config import ShakeTuneConfig
 
 
 class ShakeTuneProcess:
-    def __init__(self, st_config: ShakeTuneConfig, reactor, graph_creator, timeout: Optional[float] = None) -> None:
+    def __init__(
+        self, st_config: ShakeTuneConfig, reactor: Any, graph_creator: Any, timeout: Optional[float] = None
+    ) -> None:
         self._config = st_config
         self._reactor = reactor
         self.graph_creator = graph_creator
         self._timeout = timeout
         self._process = None
 
-    def get_graph_creator(self):
+    def get_graph_creator(self) -> Any:
         return self.graph_creator
 
     def get_st_config(self):
         return self._config
 
     def run(self, filenames: Union[Path, list[Path]]) -> None:
-        filelist = []
+        filelist: list[Path] = []
 
         # Single .stdata or a legacy .csv file
         if isinstance(filenames, Path):
@@ -87,7 +89,7 @@ class ShakeTuneProcess:
 
     # This function is a simple wrapper to start the Shake&Tune process. It's needed in order to get the timeout
     # as a Timer in a thread INSIDE the Shake&Tune child process to not interfere with the main Klipper process
-    def _shaketune_process_wrapper(self, graph_creator, filelist: list[Path], timeout) -> None:
+    def _shaketune_process_wrapper(self, graph_creator: Any, filelist: list[Path], timeout: Optional[float]) -> None:
         timer: Optional[threading.Timer] = None
         if timeout is not None:
             # Add 5 seconds to the timeout for safety. The goal is to avoid the Timer to finish before the
@@ -102,17 +104,17 @@ class ShakeTuneProcess:
                 timer.cancel()
 
     def _handle_timeout(self) -> None:
-        ConsoleOutput.print('Timeout: Shake&Tune computation did not finish within the specified timeout!')
+        ConsoleOutput.print('Timeout: Shake&Tune computation did not finish within the specified timeout!')  # type: ignore
         os._exit(1)  # Forcefully exit the process
 
-    def _shaketune_process(self, graph_creator, filelist: list[Path]) -> None:
+    def _shaketune_process(self, graph_creator: Any, filelist: list[Path]) -> None:
         # Reduce Shake&Tune process priority to avoid slowing down Klipper's main process,
         # which can cause "Timer too close" or "Move queue overflow" errors.
         try:
             param = os.sched_param(os.sched_get_priority_min(os.SCHED_BATCH))
             os.sched_setscheduler(0, os.SCHED_BATCH, param)
         except OSError:
-            ConsoleOutput.print('Warning: failed reducing Shake&Tune process priority, continuing...')
+            ConsoleOutput.print('Warning: failed reducing Shake&Tune process priority, continuing...')  # type: ignore
 
         # Load the measurements from the file
         m_manager = MeasurementsManager(self._config.chunk_size, self._reactor)
@@ -122,26 +124,26 @@ class ShakeTuneProcess:
             m_manager.load_from_csvs(filelist)
 
         # Check if there are any measurements to process
-        if m_manager.get_measurements() is None or len(m_manager.get_measurements()) == 0:
-            ConsoleOutput.print('Error: no measurements available to create the graphs!')
+        if not m_manager.get_measurements():
+            ConsoleOutput.print('Error: no measurements available to create the graphs!')  # type: ignore
             return
 
         # Generate the graphs
         try:
             graph_creator.create_graph(m_manager)
         except FileNotFoundError as e:
-            ConsoleOutput.print(f'FileNotFound error: {e}')
+            ConsoleOutput.print(f'FileNotFound error: {e}')  # type: ignore
             return
         except TimeoutError as e:
-            ConsoleOutput.print(f'Timeout error: {e}')
+            ConsoleOutput.print(f'Timeout error: {e}')  # type: ignore
             return
         except Exception as e:
-            ConsoleOutput.print(f'Error while generating the graphs: {e}\n{traceback.format_exc()}')
+            ConsoleOutput.print(f'Error while generating the graphs: {e}\n{traceback.format_exc()}')  # type: ignore
             return
 
         graph_creator.clean_old_files(self._config.keep_n_results)
 
-        ConsoleOutput.print(f'{graph_creator.get_type()} graphs created successfully!')
-        ConsoleOutput.print(
+        ConsoleOutput.print(f'{graph_creator.get_type()} graphs created successfully!')  # type: ignore
+        ConsoleOutput.print(  # type: ignore
             f'Cleaned up the output folder (only the last {self._config.keep_n_results} results were kept)!'
         )

@@ -12,8 +12,10 @@
 #              4. ...
 
 
+from typing import Any
+
 from .shaketune import ShakeTune as ShakeTune
 
 
-def load_config(config) -> ShakeTune:
+def load_config(config: Any) -> ShakeTune:
     return ShakeTune(config)

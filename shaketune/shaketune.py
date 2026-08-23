@@ -12,14 +12,14 @@ import importlib
 import importlib.util
 import os
 from pathlib import Path
-from typing import Callable, cast
+from typing import Any, Callable, cast
 
 from .commands import (
-    axes_map_calibration,
-    axes_shaper_calibration,
-    compare_belts_responses,
-    create_vibrations_profile,
-    excitate_axis_at_freq,
+    axes_map_calibration,  # type: ignore
+    axes_shaper_calibration,  # type: ignore
+    compare_belts_responses,  # type: ignore
+    create_vibrations_profile,  # type: ignore
+    excitate_axis_at_freq,  # type: ignore
 )
 from .graph_creators import GraphCreatorFactory
 from .helpers.console_output import ConsoleOutput
@@ -58,7 +58,7 @@ ST_COMMANDS = {
 
 
 class ShakeTune:
-    def __init__(self, config) -> None:
+    def __init__(self, config: Any) -> None:
         self._config = config
         self._printer = config.get_printer()
         self._printer.register_event_handler('klippy:connect', self._on_klippy_connect)
@@ -78,7 +78,7 @@ class ShakeTune:
         self._register_commands()
 
     # Initialize the ShakeTune object and its configuration
-    def _initialize_config(self, k_conf) -> tuple[ShakeTuneConfig, float, bool]:
+    def _initialize_config(self, k_conf: Any) -> tuple[ShakeTuneConfig, float, bool]:
         result_folder = k_conf.get('result_folder', default=DEFAULT_FOLDER)
         result_folder_path = Path(result_folder).expanduser() if result_folder else None
         keep_n_results = k_conf.getint('number_of_results_to_keep', default=DEFAULT_NUMBER_OF_RESULTS, minval=0)
@@ -97,7 +97,7 @@ class ShakeTune:
     # Create the Klipper commands to allow the user to run Shake&Tune's tools
     def _register_commands(self) -> None:
         gcode = self._printer.lookup_object('gcode')
-        measurement_commands = [
+        measurement_commands: list[tuple[str, Callable[[Any], None], str]] = [
             ('EXCITATE_AXIS_AT_FREQ', self.cmd_EXCITATE_AXIS_AT_FREQ, ST_COMMANDS['EXCITATE_AXIS_AT_FREQ']),
             ('AXES_MAP_CALIBRATION', self.cmd_AXES_MAP_CALIBRATION, ST_COMMANDS['AXES_MAP_CALIBRATION']),
             ('COMPARE_BELTS_RESPONSES', self.cmd_COMPARE_BELTS_RESPONSES, ST_COMMANDS['COMPARE_BELTS_RESPONSES']),
@@ -162,8 +162,8 @@ class ShakeTune:
     # ------------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------
 
-    def _cmd_helper(self, gcmd, graph_type: str, cmd_function: Callable) -> None:
-        ConsoleOutput.print(f'Shake&Tune version: {ShakeTuneConfig.get_git_version()}')
+    def _cmd_helper(self, gcmd: Any, graph_type: str, cmd_function: Callable[[Any, Any, ShakeTuneProcess], None]) -> None:
+        ConsoleOutput.print(f'Shake&Tune version: {ShakeTuneConfig.get_git_version()}')  # type: ignore
         gcreator = GraphCreatorFactory.create_graph_creator(graph_type, self._st_config)
         st_process = ShakeTuneProcess(
             self._st_config,
@@ -173,17 +173,17 @@ class ShakeTune:
         )
         cmd_function(gcmd, self._config, st_process)
 
-    def cmd_EXCITATE_AXIS_AT_FREQ(self, gcmd) -> None:
-        self._cmd_helper(gcmd, 'static frequency', excitate_axis_at_freq)
+    def cmd_EXCITATE_AXIS_AT_FREQ(self, gcmd: Any) -> None:
+        self._cmd_helper(gcmd, 'static frequency', cast(Callable[[Any, Any, ShakeTuneProcess], None], excitate_axis_at_freq))
 
-    def cmd_AXES_MAP_CALIBRATION(self, gcmd) -> None:
-        self._cmd_helper(gcmd, 'axes map', axes_map_calibration)
+    def cmd_AXES_MAP_CALIBRATION(self, gcmd: Any) -> None:
+        self._cmd_helper(gcmd, 'axes map', cast(Callable[[Any, Any, ShakeTuneProcess], None], axes_map_calibration))
 
-    def cmd_COMPARE_BELTS_RESPONSES(self, gcmd) -> None:
-        self._cmd_helper(gcmd, 'belts comparison', compare_belts_responses)
+    def cmd_COMPARE_BELTS_RESPONSES(self, gcmd: Any) -> None:
+        self._cmd_helper(gcmd, 'belts comparison', cast(Callable[[Any, Any, ShakeTuneProcess], None], compare_belts_responses))
 
-    def cmd_AXES_SHAPER_CALIBRATION(self, gcmd) -> None:
-        self._cmd_helper(gcmd, 'input shaper', axes_shaper_calibration)
+    def cmd_AXES_SHAPER_CALIBRATION(self, gcmd: Any) -> None:
+        self._cmd_helper(gcmd, 'input shaper', cast(Callable[[Any, Any, ShakeTuneProcess], None], axes_shaper_calibration))
 
-    def cmd_CREATE_VIBRATIONS_PROFILE(self, gcmd) -> None:
-        self._cmd_helper(gcmd, 'vibrations profile', create_vibrations_profile)
+    def cmd_CREATE_VIBRATIONS_PROFILE(self, gcmd: Any) -> None:
+        self._cmd_helper(gcmd, 'vibrations profile', cast(Callable[[Any, Any, ShakeTuneProcess], None], create_vibrations_profile))

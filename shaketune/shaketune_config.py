@@ -83,5 +83,5 @@ class ShakeTuneConfig:
                 version = repo.head.commit.hexsha[:7]  # If no tag is found, use the simplified commit SHA instead
             return version
         except Exception as e:
-            ConsoleOutput.print(f'Warning: unable to retrieve Shake&Tune version number: {e}')
+            ConsoleOutput.print(f'Warning: unable to retrieve Shake&Tune version number: {e}')  # type: ignore
             return 'unknown'
