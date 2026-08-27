@@ -2,13 +2,13 @@
 
 <div align="center"><!-- markdownlint-disable-line MD033 -->
 
-| Version | Status |
-| --------- | -------- |
-| Python  3.9 | ✅ Tested & Supported |
-| Python 3.11 | ✅ Tested & Supported |
-| Python 3.12 | ✅ Tested & Supported |
-| Python 3.13 | ✅ Tested & Supported |
-| Python 3.14 | ✅ Tested & Supported |
+| Version | Distributions | Status |
+| :---------: | :---------: | :--------: |
+| Python  3.9 | ARCH & Debian | ✅ Tested & Supported |
+| Python 3.11 | ARCH & Debian | ✅ Tested & Supported |
+| Python 3.12 | CachyOS & Ubuntu | ✅ Tested & Supported |
+| Python 3.13 | CachyOS & Ubuntu | ✅ Tested & Supported |
+| Python 3.14 | CachyOS & Ubuntu | ✅ Tested & Supported |
 
 </div>
 
@@ -100,4 +100,6 @@ dpi: 300
 #    without using too much RAM to generate them. Usually, you shouldn't need to change this value.
 ```
 
-Don't forget to check out **[Shake&Tune documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)** for more details and how to use the macros or the CLI.
+> [!TIP]
+>
+> Don't forget to check out **[Shake&Tune documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)** for more details and how to use the macros or the CLI.
