@@ -14,15 +14,13 @@
 
 </div>
 
-## 🦏 Rhino Linux - Kalico Klipper - 🩸 bleeding-edge-v2 - S2DW Accelerometer - 🐍 Python version 3.14.6
-
 - Shake & Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer.
 
-### **printer_1** branch, do not **Blindly** install, make sure you are downloading either, a custom branch made for you or **main**
+## **printer_1** branch, do not **Blindly** install, make sure you are downloading either, a custom branch made for you or **main**
 
 - This is a **Modified** branch is designed to work on Robert Kempf set-up & system, but can be edited to work on yours as well, if you need a modified branch, click this [telegram](https://t.me/JerksOfAllTrades/32) link and ping me @Bradford1040. I am making a dynamic branch [devel-st-v2.0](https://github.com/Bradford1040/kiauh-klippain-shaketune/tree/devel-st-v2.0) that works with custom names when using KIAUH multiple printers option, but it is not completed as of 07/23/2026. I have had issues with the `REG_EX` on top of the re-write
 
-#### KIAUH and Klipper: Installing on multiple printers option issues
+### KIAUH and Klipper: Installing on multiple printers option issues
 
 - Only thing thats different is when you use KIAUH and install multiple printers, Klipper & Moonraker no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom_name_data" which in turn changes (`klipper-printer_1.service`) & (`moonraker-printer_1.service`) or (`klipper-custom_name.service`) & (`moonraker-custom_name.service`). This branch (printer_1) is set up for a printer named (printer_1) in the `install.sh`
 
@@ -33,7 +31,7 @@ Check out the **[detailed documentation here](https://github.com/Bradford1040/ki
 
 ![Telegram_Group](./docs/Jerks-Of-All-Trades.png "Telegram Group, Scan QR-code with Phone")
 
-##### 🔧 Installation
+#### 🔧 Installation
 
 I removed the bash install as it would not work for you unless you edited the `install.sh` but I will add it back once I have completed the default install for KIAUH
 
