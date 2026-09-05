@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: vibrations_computation.py
@@ -87,9 +87,11 @@ class VibrationsComputation:
                 psds_sum[angle] = {}
 
             # Store the interpolated PSD and integral values
+            assert target_freqs is not None
             psds[angle][speed] = np.interp(target_freqs, first_freqs, psd_sum)
-            psds_sum[angle][speed] = np.trapz(psd_sum, first_freqs)
+            psds_sum[angle][speed] = np.trapezoid(psd_sum, first_freqs)
 
+        assert target_freqs is not None
         measured_angles = sorted(psds_sum.keys())
         measured_speeds = sorted({speed for angle_speeds in psds_sum.values() for speed in angle_speeds.keys()})
 
@@ -161,6 +163,7 @@ class VibrationsComputation:
         motor_fr, motor_zeta, motor_res_idx, lowfreq_max = compute_mechanical_parameters(
             global_motor_profile, target_freqs, 30
         )
+        motor_res_idx = int(motor_res_idx) if motor_res_idx is not None else None
         if lowfreq_max:
             ConsoleOutput.print(
                 '[WARNING] There are a lot of low frequency vibrations that can alter the readings. This is probably due to the test being performed at too high an acceleration!'
@@ -179,9 +182,11 @@ class VibrationsComputation:
 
         # Create metadata
         metadata = GraphMetadata(
-            title='MACHINE VIBRATIONS ANALYSIS TOOL',
-            version=self.st_version,
-            additional_info={
+            'MACHINE VIBRATIONS ANALYSIS TOOL',
+            None,
+            self.st_version,
+            None,
+            {
                 'kinematics': self.kinematics,
                 'accel': self.accel,
             },
@@ -221,7 +226,7 @@ class VibrationsComputation:
         self,
         freqs: np.ndarray,
         psds: dict,
-        all_angles_energy: dict,
+        all_angles_energy: np.ndarray,
         measured_angles: Optional[list[int]] = None,
         energy_amplification_factor: int = 2,
     ) -> Tuple[dict, np.ndarray]:
@@ -241,11 +246,12 @@ class VibrationsComputation:
             motor_profiles[angle] = np.convolve(sum_curve / len(psds[angle]), conv_filter, mode='same')
 
             # Calculate weights
+            angle_index = int(angle * len(all_angles_energy) / 360)
             angle_energy = (
-                all_angles_energy[angle] ** energy_amplification_factor
+                all_angles_energy[angle_index] ** energy_amplification_factor
             )  # First weighting factor is based on the total vibrations of the machine at the specified angle
             curve_area = (
-                np.trapz(motor_profiles[angle], freqs) ** energy_amplification_factor
+                np.trapezoid(motor_profiles[angle], freqs) ** energy_amplification_factor
             )  # Additional weighting factor is based on the area under the current motor profile at this specified angle
             total_angle_weight = angle_energy * curve_area
 
@@ -299,6 +305,8 @@ class VibrationsComputation:
                 elif kinematics in {'corexy', 'limited_corexy'}:
                     speed_1 = np.abs(target_speed * (cos_val + sin_val) * sqrt_2_inv)
                     speed_2 = np.abs(target_speed * (cos_val - sin_val) * sqrt_2_inv)
+                else:
+                    raise ValueError(f'Unsupported kinematics: {kinematics}')
 
                 vibrations_1 = get_interpolated_vibrations(data[measured_angles[0]], speed_1, measured_speeds)
                 vibrations_2 = get_interpolated_vibrations(data[measured_angles[1]], speed_2, measured_speeds)
@@ -308,7 +316,7 @@ class VibrationsComputation:
 
     def _compute_angle_powers(self, spectrogram_data: np.ndarray) -> np.ndarray:
         """Compute angle powers from spectrogram data"""
-        angles_powers = np.trapz(spectrogram_data, axis=1)
+        angles_powers = np.trapezoid(spectrogram_data, axis=1)
 
         # Since we want to plot it on a continuous polar plot later on, we need to append parts of
         # the array to start and end of it to smooth transitions when doing the convolution

@@ -51,6 +51,8 @@ nosetests.xml
 .pytest_cache/
 cover/
 test/
+adxl345.py
+test_script.py
 
 # Sphinx documentation
 docs/_build/

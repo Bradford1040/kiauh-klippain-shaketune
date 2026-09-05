@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: accelerometer.py
@@ -40,7 +40,7 @@ class Measurement(TypedDict):
 
 
 class MeasurementsManager:
-    def __init__(self, chunk_size: int, k_reactor=None, stdata_filename: Path = None):
+    def __init__(self, chunk_size: int, k_reactor=None, stdata_filename: Optional[Path] = None):
         # Klipper reactor is required to save data (optional for CLI mode, which never saves .stdata)
         self._k_reactor = k_reactor
         self._chunk_size = chunk_size
@@ -91,7 +91,7 @@ class MeasurementsManager:
         except IndexError as err:
             raise ValueError('no measurements available to append samples to!') from err
 
-    def add_measurement(self, name: str, samples: SamplesList = None, timeout: float = WRITE_TIMEOUT):
+    def add_measurement(self, name: str, samples: Optional[SamplesList] = None, timeout: float = WRITE_TIMEOUT):
         if not self._temp_file:
             raise ValueError('no file path provided to the MeasurementsManager! Unable to add any measurement.')
 
@@ -175,7 +175,7 @@ class MeasurementsManager:
         try:
             if self._final_file.exists():
                 self._final_file.unlink()
-            self._temp_file.rename(self._final_file)
+            self._temp_file.replace(self._final_file)  # type: ignore[union-attr]
         except Exception as e:
             ConsoleOutput.print(f'Shake&Tune was unable to create the final data file ({self._final_file}): {e}')
 
@@ -225,7 +225,7 @@ class MeasurementsManager:
                     if not header:
                         ConsoleOutput.print(
                             f"Warning: file {logname} doesn't seem to be a Klipper raw accelerometer data file. "
-                            f"Expected '#time,accel_x,accel_y,accel_z', but got '{header.strip()}'. "
+                            f"Expected '#time,accel_x,accel_y,accel_z', but got '{header}'. "
                             'This file will be ignored by Shake&Tune!'
                         )
                         continue
@@ -257,7 +257,7 @@ class MeasurementsManager:
 
     def __del__(self):
         try:
-            if self._temp_file.exists():
+            if self._temp_file is not None and self._temp_file.exists():
                 self._temp_file.unlink()
         except Exception:
             pass  # Ignore errors during cleanup
@@ -268,7 +268,7 @@ class Accelerometer:
         self._k_accelerometer = klipper_accelerometer
         self._k_reactor = k_reactor
         self._bg_client = None
-        self._measurements_manager: MeasurementsManager = None
+        self._measurements_manager: Optional[MeasurementsManager] = None
         self._samples_ready = False
         self._sample_error = None
 
@@ -282,7 +282,9 @@ class Accelerometer:
                 return chip_name
         return None
 
-    def start_recording(self, measurements_manager: MeasurementsManager, name: str = None, append_time: bool = True):
+    def start_recording(
+        self, measurements_manager: MeasurementsManager, name: Optional[str] = None, append_time: bool = True
+    ):
         if self._bg_client is None:
             self._bg_client = self._k_accelerometer.start_internal_client()
 
@@ -300,43 +302,26 @@ class Accelerometer:
         else:
             raise ValueError('recording already started!')
 
-    def stop_recording(self) -> MeasurementsManager:
+    def stop_recording(self) -> Optional[MeasurementsManager]:
         if self._bg_client is None:
             ConsoleOutput.print('Warning: no recording to stop!')
             return None
 
-        # Register a callback in Klipper's reactor to finish the measurements and get the
-        # samples when Klipper is ready to process them (and without blocking its main thread)
-        self._k_reactor.register_callback(self._finish_and_get_samples)
-        self._wait_for_samples()
+        manager = self._measurements_manager
+        if manager is None:
+            ConsoleOutput.print('Warning: no measurement manager configured for active recording!')
+            self._bg_client = None
+            return None
 
-        return self._measurements_manager
-
-    def _finish_and_get_samples(self, bg_client):
         try:
             self._bg_client.finish_measurements()
-            samples = self._bg_client.samples or self._bg_client.get_samples()
-            self._measurements_manager.append_samples_to_current_measurement(samples)
-            self._samples_ready = True
+            samples = getattr(self._bg_client, 'samples', None)
+            if samples is None or (isinstance(samples, list) and len(samples) == 0):
+                samples = self._bg_client.get_samples()
+            manager.append_samples_to_current_measurement(samples)
         except Exception as e:
             ConsoleOutput.print(f'Error during accelerometer data retrieval: {e}')
-            self._sample_error = e
         finally:
             self._bg_client = None
 
-    def _wait_for_samples(self, timeout: int = WAIT_FOR_SAMPLE_TIMEOUT):
-        eventtime = self._k_reactor.monotonic()
-        endtime = eventtime + timeout
-
-        while eventtime < endtime and not self._samples_ready:
-            if self._sample_error:
-                raise self._sample_error
-            eventtime = self._k_reactor.pause(eventtime + 0.05)
-
-        if not self._samples_ready:
-            raise TimeoutError(
-                'Shake&Tune was unable to retrieve accelerometer data in time. '
-                'This might be due to slow hardware or a busy system.'
-            )
-
-        self._samples_ready = False
+        return manager

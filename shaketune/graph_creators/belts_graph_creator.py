@@ -1,12 +1,12 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: belts_graph_creator.py
 # Description: Belts graph creator implementation
 
-from typing import Optional
+from typing import Any, Optional
 
 from ..helpers.accelerometer import MeasurementsManager
 from ..helpers.resonance_test import testParams
@@ -26,16 +26,11 @@ class BeltsGraphCreator(GraphCreator):
         self._test_params: Optional[testParams] = None
         self._max_scale: Optional[int] = None
 
-    def configure(
-        self,
-        kinematics: Optional[str] = None,
-        test_params: Optional[testParams] = None,
-        max_scale: Optional[int] = None,
-    ) -> None:
+    def configure(self, *args: Any, **kwargs: Any) -> None:
         """Configure the belts comparison parameters"""
-        self._kinematics = kinematics
-        self._test_params = test_params
-        self._max_scale = max_scale
+        self._kinematics = kwargs.get('kinematics', args[0] if len(args) > 0 else None)
+        self._test_params = kwargs.get('test_params', args[1] if len(args) > 1 else None)
+        self._max_scale = kwargs.get('max_scale', args[2] if len(args) > 2 else None)
 
     def _create_computation(self, measurements_manager: MeasurementsManager) -> BeltsComputation:
         """Create the computation instance with proper configuration"""

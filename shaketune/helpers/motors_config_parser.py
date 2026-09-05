@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: motors_config_parser.py
@@ -105,7 +105,7 @@ class Motor:
 
 
 class MotorsConfigParser:
-    def __init__(self, config, motors: list[str] = MOTORS, drivers: list[str] = TRINAMIC_DRIVERS):
+    def __init__(self, config, motors: Optional[list[str]] = MOTORS, drivers: list[str] = TRINAMIC_DRIVERS):
         self._printer = config.get_printer()
 
         self._motors: list[Motor] = []
@@ -166,6 +166,8 @@ class MotorsConfigParser:
                 if tmc_cmdhelper.read_translate is not None:
                     register, val = tmc_cmdhelper.read_translate(register, val)
                 fields_string = self._extract_register_values(tmc_cmdhelper, register, val)
+            else:
+                continue
 
             motor.set_register(register, fields_string)
 

@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: vibrations_plotter.py
@@ -9,9 +9,9 @@
 from datetime import datetime
 from typing import Any
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
 
 from ..base_models import PlotterStrategy
@@ -19,12 +19,12 @@ from ..computation_results import VibrationsResult
 from ..plotting_utils import AxesConfiguration, PlottingConstants
 
 
-class VibrationsPlotter(PlotterStrategy):
+class VibrationsPlotter(PlotterStrategy[VibrationsResult]):
     """Plotter for machine vibrations analysis graphs"""
 
-    def plot(self, result: VibrationsResult) -> Figure:
+    def plot(self, data: VibrationsResult) -> Figure:
         """Create machine vibrations analysis graph"""
-        data = result.get_plot_data()
+        plot_data = data.get_plot_data()
 
         fig = plt.figure(figsize=(20, 11.5))
         gs = fig.add_gridspec(
@@ -47,30 +47,30 @@ class VibrationsPlotter(PlotterStrategy):
         ax_6 = fig.add_subplot(gs[1, 2])
 
         # Add titles and logo
-        self._add_titles(fig, data)
-        self.add_logo(fig, position=[0.001, 0.924, 0.075, 0.075])
-        self.add_version_text(fig, data['st_version'], position=(0.995, 0.985))
+        self._add_titles(fig, plot_data)
+        self.add_logo(fig, position=(0.001, 0.924, 0.075, 0.075))
+        self.add_version_text(fig, plot_data['st_version'], position=(0.995, 0.985))
 
         # Plot motor info if available
-        self._plot_motor_info(fig, data)
+        self._plot_motor_info(fig, plot_data)
 
         # Plot angle energy profile (Polar plot)
-        self._plot_angle_energy_profile(ax_1, data)
+        self._plot_angle_energy_profile(ax_1, plot_data)
 
         # Plot polar vibrations heatmap
-        self._plot_polar_heatmap(ax_4, data)
+        self._plot_polar_heatmap(ax_4, plot_data)
 
         # Plot global speed energy profile
-        self._plot_speed_energy_profile(ax_2, data)
+        self._plot_speed_energy_profile(ax_2, plot_data)
 
         # Plot angular speed energy profiles
-        self._plot_angular_speed_profiles(ax_3, data)
+        self._plot_angular_speed_profiles(ax_3, plot_data)
 
         # Plot vibrations heatmap
-        self._plot_vibrations_heatmap(ax_5, data)
+        self._plot_vibrations_heatmap(ax_5, plot_data)
 
         # Plot motor profiles
-        self._plot_motor_profiles(ax_6, data)
+        self._plot_motor_profiles(ax_6, plot_data)
 
         return fig
 
@@ -226,7 +226,7 @@ class VibrationsPlotter(PlotterStrategy):
         angles_radians = np.deg2rad(all_angles)
         radius, theta = np.meshgrid(all_speeds, angles_radians)
 
-        ax.pcolormesh(theta, radius, spectrogram_data, norm=matplotlib.colors.LogNorm(), cmap='inferno', shading='auto')
+        ax.pcolormesh(theta, radius, spectrogram_data, norm=LogNorm(), cmap='inferno', shading='auto')
         ax.set_theta_zero_location('E')
         ax.set_theta_direction(1)
         ax.set_thetagrids([theta * 15 for theta in range(360 // 15)])
@@ -359,7 +359,7 @@ class VibrationsPlotter(PlotterStrategy):
 
         ax.imshow(
             spectrogram_data,
-            norm=matplotlib.colors.LogNorm(),
+            norm=LogNorm(),
             cmap='inferno',
             aspect='auto',
             extent=[all_speeds[0], all_speeds[-1], all_angles[0], all_angles[-1]],

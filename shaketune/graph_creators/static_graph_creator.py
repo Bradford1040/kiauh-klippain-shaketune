@@ -1,12 +1,12 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: static_graph_creator.py
 # Description: Static frequency graph creator implementation
 
-from typing import Optional
+from typing import Any, Optional
 
 from ..helpers.accelerometer import MeasurementsManager
 from ..shaketune_config import ShakeTuneConfig
@@ -25,11 +25,11 @@ class StaticGraphCreator(GraphCreator):
         self._duration: Optional[float] = None
         self._accel_per_hz: Optional[float] = None
 
-    def configure(self, freq: float = None, duration: float = None, accel_per_hz: Optional[float] = None) -> None:
+    def configure(self, *args: Any, **kwargs: Any) -> None:
         """Configure the static frequency analysis parameters"""
-        self._freq = freq
-        self._duration = duration
-        self._accel_per_hz = accel_per_hz
+        self._freq = kwargs.get('freq', args[0] if len(args) > 0 else None)
+        self._duration = kwargs.get('duration', args[1] if len(args) > 1 else None)
+        self._accel_per_hz = kwargs.get('accel_per_hz', args[2] if len(args) > 2 else None)
 
     def _create_computation(self, measurements_manager: MeasurementsManager) -> StaticFrequencyComputation:
         """Create the computation instance with proper configuration"""

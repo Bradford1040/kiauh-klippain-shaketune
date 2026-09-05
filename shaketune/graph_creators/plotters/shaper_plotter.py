@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: shaper_plotter.py
@@ -9,21 +9,21 @@
 from datetime import datetime
 from typing import Any
 
-import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+from matplotlib.font_manager import FontProperties
 
 from ..base_models import PlotterStrategy
 from ..computation_results import ShaperResult
 from ..plotting_utils import AxesConfiguration, PlottingConstants, SpectrogramHelper
 
 
-class ShaperPlotter(PlotterStrategy):
+class ShaperPlotter(PlotterStrategy[ShaperResult]):
     """Plotter for input shaper calibration graphs"""
 
-    def plot(self, result: ShaperResult) -> Figure:
+    def plot(self, data: ShaperResult) -> Figure:
         """Create input shaper calibration graph"""
-        data = result.get_plot_data()
+        plot_data = data.get_plot_data()
 
         fig = plt.figure(figsize=(15, 11.6))
         gs = fig.add_gridspec(
@@ -43,24 +43,24 @@ class ShaperPlotter(PlotterStrategy):
         ax_3 = fig.add_subplot(gs[1, 1])
 
         # Add titles and logo
-        self._add_titles(fig, data)
-        self.add_logo(fig, position=[0.001, 0.924, 0.075, 0.075])
-        self.add_version_text(fig, data['st_version'], position=(0.995, 0.985))
+        self._add_titles(fig, plot_data)
+        self.add_logo(fig, position=(0.001, 0.924, 0.075, 0.075))
+        self.add_version_text(fig, plot_data['st_version'], position=(0.995, 0.985))
 
         # Plot Frequency Profile
-        self._plot_frequency_profile(ax_1, data)
+        self._plot_frequency_profile(ax_1, plot_data)
 
         # Plot time-frequency spectrogram
-        self._plot_spectrogram(ax_2, data)
+        self._plot_spectrogram(ax_2, plot_data)
 
         # Remove ax_3 for now (TODO: re-add vibrations vs acceleration curves in next release)
         ax_3.remove()
 
         # Print shaper table
-        self._add_shaper_table(fig, data)
+        self._add_shaper_table(fig, plot_data)
 
         # Add filter recommendations
-        self._add_recommendations(fig, data)
+        self._add_recommendations(fig, plot_data)
 
         return fig
 
@@ -228,7 +228,7 @@ class ShaperPlotter(PlotterStrategy):
         table.set_zorder(100)
 
         # Style the table
-        bold_font = matplotlib.font_manager.FontProperties(weight='bold')
+        bold_font = FontProperties(weight='bold')
         for key, cell in table.get_celld().items():
             row, col = key
             cell.set_text_props(ha='center', va='center')

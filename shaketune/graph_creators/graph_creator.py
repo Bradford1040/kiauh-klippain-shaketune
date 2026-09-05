@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: graph_creator.py
@@ -9,7 +9,7 @@
 
 import abc
 from pathlib import Path
-from typing import Optional, Type
+from typing import Any, Optional, Type
 
 from matplotlib.figure import Figure
 
@@ -21,6 +21,7 @@ from .base_models import Computation, PlotterStrategy
 class GraphCreator(abc.ABC):
     """Base class for graph creators using composition-based architecture"""
 
+    graph_type: str
     registry = {}
 
     @classmethod
@@ -47,7 +48,7 @@ class GraphCreator(abc.ABC):
         self._plotter = plotter_class()
 
     @abc.abstractmethod
-    def configure(self, **kwargs) -> None:
+    def configure(self, *args: Any, **kwargs: Any) -> None:
         """Configure the graph creator with specific parameters"""
         pass
 

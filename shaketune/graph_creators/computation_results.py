@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: computation_results.py
@@ -181,13 +181,13 @@ class VibrationsResult(ComputationResult):
 
     all_speeds: np.ndarray
     all_angles: np.ndarray
-    all_angles_energy: dict[float, np.ndarray]
-    good_speeds: np.ndarray
-    good_angles: np.ndarray
+    all_angles_energy: np.ndarray
+    good_speeds: list[tuple[int, int, float]]
+    good_angles: list[tuple[int, int, float]]
     kinematics: str
     accel: float
     motors: Optional[list[Any]]  # Motor objects
-    motors_config_differences: Optional[str]
+    motors_config_differences: Optional[dict[str, dict[str, Any]]]
     symmetry_factor: float
     spectrogram_data: np.ndarray
     sp_min_energy: float
@@ -195,11 +195,11 @@ class VibrationsResult(ComputationResult):
     sp_variance_energy: float
     vibration_metric: float
     num_peaks: int
-    vibration_peaks: list[tuple[float, float, float, float]]
+    vibration_peaks: np.ndarray
     target_freqs: list[tuple[str, list[float]]]
-    main_angles: list[float]
-    global_motor_profile: Optional[tuple[str, tuple[float, float]]]
-    motor_profiles: Optional[list[tuple[str, tuple[float, float]]]]
+    main_angles: list[int]
+    global_motor_profile: Optional[np.ndarray]
+    motor_profiles: Optional[dict[int, np.ndarray]]
     max_freq: float
     motor_fr: Optional[float]
     motor_zeta: Optional[float]

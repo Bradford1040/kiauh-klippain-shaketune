@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: belts_computation.py
@@ -204,12 +204,15 @@ class BeltsComputation:
 
     def _compute_mhi(self, similarity_factor: float, signal1: SignalData, signal2: SignalData) -> str:
         """Compute Mechanical Health Indicator"""
-        num_unpaired_peaks = len(signal1.unpaired_peaks) + len(signal2.unpaired_peaks)
-        num_paired_peaks = len(signal1.paired_peaks)
+        unpaired_peaks1 = signal1.unpaired_peaks or []
+        unpaired_peaks2 = signal2.unpaired_peaks or []
+        paired_peaks = signal1.paired_peaks or []
+        num_unpaired_peaks = len(unpaired_peaks1) + len(unpaired_peaks2)
+        num_paired_peaks = len(paired_peaks)
 
         # Combine unpaired peaks from both signals
-        combined_unpaired_peaks = [(peak, signal1) for peak in signal1.unpaired_peaks] + [
-            (peak, signal2) for peak in signal2.unpaired_peaks
+        combined_unpaired_peaks = [(peak, signal1) for peak in unpaired_peaks1] + [
+            (peak, signal2) for peak in unpaired_peaks2
         ]
         psd_highest_max = max(signal1.psd.max(), signal2.psd.max())
 

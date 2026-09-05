@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: static_frequency_plotter.py
@@ -18,12 +18,12 @@ from ..computation_results import StaticFrequencyResult
 from ..plotting_utils import AxesConfiguration, PlottingConstants, SpectrogramHelper
 
 
-class StaticFrequencyPlotter(PlotterStrategy):
+class StaticFrequencyPlotter(PlotterStrategy[StaticFrequencyResult]):
     """Plotter for static frequency graphs"""
 
-    def plot(self, result: StaticFrequencyResult) -> Figure:
+    def plot(self, data: StaticFrequencyResult) -> Figure:
         """Create static frequency graph"""
-        data = result.get_plot_data()
+        plot_data = data.get_plot_data()
 
         fig, axes = plt.subplots(
             1,
@@ -42,15 +42,15 @@ class StaticFrequencyPlotter(PlotterStrategy):
         ax_1, ax_2 = axes
 
         # Add titles and logo
-        self._add_titles(fig, data)
+        self._add_titles(fig, plot_data)
         self.add_logo(fig)
-        self.add_version_text(fig, data['st_version'])
+        self.add_version_text(fig, plot_data['st_version'])
 
         # Plot spectrogram
-        self._plot_spectrogram(ax_1, data)
+        self._plot_spectrogram(ax_1, plot_data)
 
         # Plot cumulative energy
-        self._plot_cumulative_energy(ax_2, data)
+        self._plot_cumulative_energy(ax_2, plot_data)
 
         return fig
 
@@ -99,7 +99,7 @@ class StaticFrequencyPlotter(PlotterStrategy):
 
     def _plot_cumulative_energy(self, ax, data: dict[str, Any]) -> None:
         """Plot cumulative energy"""
-        cumulative_energy = np.trapz(data['pdata'], data['t'], axis=0)
+        cumulative_energy = np.trapezoid(data['pdata'], data['t'], axis=0)
         ax.plot(cumulative_energy, data['bins'], color=PlottingConstants.KLIPPAIN_COLORS['orange'])
         ax.set_ylim([data['bins'][0], data['bins'][-1]])
 

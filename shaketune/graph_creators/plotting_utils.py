@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: plotting_utils.py
@@ -9,7 +9,10 @@
 from typing import Optional
 
 import matplotlib
+import matplotlib.axes
+import matplotlib.colors
 import matplotlib.font_manager
+import matplotlib.table
 import matplotlib.ticker
 import numpy as np
 
@@ -58,7 +61,7 @@ class AxesConfiguration:
         fontP.set_size('x-small')
 
         if zlabel != '':
-            ax.set_zlabel(zlabel)
+            ax.set_zlabel(zlabel)  # type: ignore[attr-defined]
 
         if title != '':
             ax.set_title(title, fontsize=14, color=PlottingConstants.KLIPPAIN_COLORS['dark_orange'], weight='bold')
@@ -100,12 +103,12 @@ class SpectrogramHelper:
             norm=matplotlib.colors.LogNorm(vmin=vmin_value),
             cmap='inferno',
             aspect='auto',
-            extent=[t[0], t[-1], bins[0], bins[-1]],
+            extent=(t[0], t[-1], bins[0], bins[-1]),
             origin='lower',
             interpolation='antialiased',
         )
 
-        ax.set_xlim([0.0, max_freq])
+        ax.set_xlim(0.0, max_freq)
 
 
 class TableHelper:
@@ -121,7 +124,7 @@ class TableHelper:
         column_widths: Optional[list[int]] = None,
     ) -> matplotlib.table.Table:
         """Create a formatted table on the axes"""
-        table = ax.table(cellText=data, colLabels=columns, bbox=bbox, loc='upper right', cellLoc='center')
+        table = ax.table(cellText=data, colLabels=columns, bbox=bbox, loc='upper right', cellLoc='center')  # type: ignore[arg-type]
 
         table.auto_set_font_size(False)
         table.set_fontsize(fontsize)

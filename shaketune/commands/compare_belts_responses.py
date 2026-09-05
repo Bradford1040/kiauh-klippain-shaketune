@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: compare_belts_responses.py
@@ -118,6 +118,7 @@ def compare_belts_responses(gcmd, klipper_config, st_process: ShakeTuneProcess) 
     measurements_manager = MeasurementsManager(st_process.get_st_config().chunk_size, printer.get_reactor(), filename)
 
     # Run the test for each axis
+    test_params = None
     for config in filtered_config:
         toolhead.manual_move(point, feedrate_travel)
         toolhead.dwell(0.5)

@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: belts_plotter.py
@@ -18,12 +18,12 @@ from ..computation_results import BeltsResult
 from ..plotting_utils import AxesConfiguration, PeakAnnotator, PlottingConstants
 
 
-class BeltsPlotter(PlotterStrategy):
+class BeltsPlotter(PlotterStrategy[BeltsResult]):
     """Plotter for belts comparison graphs"""
 
-    def plot(self, result: BeltsResult) -> Figure:
+    def plot(self, data: BeltsResult) -> Figure:
         """Create belts comparison graph"""
-        data = result.get_plot_data()
+        plot_data = data.get_plot_data()
 
         fig, axes = plt.subplots(
             1,
@@ -42,15 +42,15 @@ class BeltsPlotter(PlotterStrategy):
         ax_1, ax_2 = axes
 
         # Add titles and logo
-        self._add_titles(fig, data)
+        self._add_titles(fig, plot_data)
         self.add_logo(fig)
-        self.add_version_text(fig, data['st_version'])
+        self.add_version_text(fig, plot_data['st_version'])
 
         # Plot PSD signals
-        self._plot_psd_signals(ax_1, data)
+        self._plot_psd_signals(ax_1, plot_data)
 
         # Plot cross-belts comparison
-        self._plot_cross_comparison(ax_2, data)
+        self._plot_cross_comparison(ax_2, plot_data)
 
         return fig
 

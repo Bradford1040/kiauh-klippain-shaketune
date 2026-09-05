@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: base_models.py
@@ -8,7 +8,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Optional, Protocol, runtime_checkable
+from typing import Any, Generic, Optional, Protocol, TypeVar, runtime_checkable
 
 from matplotlib.figure import Figure
 
@@ -39,6 +39,9 @@ class ComputationResult(ABC):
         pass
 
 
+ResultT = TypeVar('ResultT', bound=ComputationResult)
+
+
 @runtime_checkable
 class Plotter(Protocol):
     """Protocol for plotter implementations"""
@@ -57,7 +60,7 @@ class Computation(Protocol):
         ...
 
 
-class PlotterStrategy(ABC):
+class PlotterStrategy(Generic[ResultT], ABC):
     """Base class for plotting strategies"""
 
     KLIPPAIN_COLORS = {
@@ -84,14 +87,18 @@ class PlotterStrategy(ABC):
             self._logo_image = plt.imread(image_path)
 
     @abstractmethod
-    def plot(self, data: ComputationResult) -> Figure:
+    def plot(self, data: ResultT) -> Figure:
         """Create a plot from computation result"""
         pass
 
-    def add_logo(self, fig: Figure, position: list[float] = None) -> None:
+    def add_logo(
+        self,
+        fig: Figure,
+        position: Optional[tuple[float, float, float, float]] = None,
+    ) -> None:
         """Add logo to the figure"""
         if position is None:
-            position = [0.001, 0.894, 0.105, 0.105]
+            position = (0.001, 0.894, 0.105, 0.105)
         if self._logo_image is not None:
             ax_logo = fig.add_axes(position, anchor='NW')
             ax_logo.imshow(self._logo_image)

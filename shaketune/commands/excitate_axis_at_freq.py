@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: excitate_axis_at_freq.py
@@ -8,6 +8,7 @@
 #              and optionally creates a graph of the vibration data collected by the accelerometer.
 
 from datetime import datetime
+from typing import Optional
 
 from ..helpers.accelerometer import Accelerometer, MeasurementsManager
 from ..helpers.common_func import AXIS_CONFIG
@@ -38,6 +39,10 @@ def excitate_axis_at_freq(gcmd, klipper_config, st_process: ShakeTuneProcess) ->
     if axis_config is None:
         raise gcmd.error('AXIS selection invalid. Should be either x, y, a or b!')
 
+    accelerometer: Optional[Accelerometer] = None
+    creator = None
+    filename = None
+    measurements_manager = None
     if create_graph:
         printer = klipper_config.get_printer()
         if accel_chip is None:
@@ -100,6 +105,8 @@ def excitate_axis_at_freq(gcmd, klipper_config, st_process: ShakeTuneProcess) ->
 
     # If the user want to create a graph, we start accelerometer recording
     if create_graph:
+        assert accelerometer is not None
+        assert measurements_manager is not None
         accelerometer.start_recording(measurements_manager, name=f'staticfreq_{axis.upper()}', append_time=True)
 
     toolhead.dwell(0.5)
@@ -112,6 +119,10 @@ def excitate_axis_at_freq(gcmd, klipper_config, st_process: ShakeTuneProcess) ->
 
     # If the user wanted to create a graph, we stop the recording and generate it
     if create_graph:
+        assert accelerometer is not None
+        assert creator is not None
+        assert filename is not None
+        assert measurements_manager is not None
         accelerometer.stop_recording()
         toolhead.dwell(0.5)
 

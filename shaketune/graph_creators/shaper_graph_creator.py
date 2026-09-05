@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: shaper_graph_creator.py
@@ -26,18 +26,12 @@ class ShaperGraphCreator(GraphCreator):
         self._test_params: Optional[Any] = None
         self._max_scale: Optional[float] = None
 
-    def configure(
-        self,
-        scv: float = 5.0,
-        max_smoothing: Optional[float] = None,
-        test_params: Optional[Any] = None,
-        max_scale: Optional[float] = None,
-    ) -> None:
+    def configure(self, *args: Any, **kwargs: Any) -> None:
         """Configure the input shaper parameters"""
-        self._scv = scv
-        self._max_smoothing = max_smoothing
-        self._test_params = test_params
-        self._max_scale = max_scale
+        self._scv = float(kwargs.get('scv', args[0] if len(args) > 0 else 5.0))
+        self._max_smoothing = kwargs.get('max_smoothing', args[1] if len(args) > 1 else None)
+        self._test_params = kwargs.get('test_params', args[2] if len(args) > 2 else None)
+        self._max_scale = kwargs.get('max_scale', args[3] if len(args) > 3 else None)
 
     def _create_computation(self, measurements_manager: MeasurementsManager) -> ShaperComputation:
         """Create the computation instance with proper configuration"""

@@ -1,6 +1,6 @@
 # Shake&Tune: 3D printer analysis tools
 #
-#
+# Copyright (C) 2023-2026  Shake&Tune contributors Bradford Alden Adams aka (Bradford1040)
 # Licensed under the GNU General Public License v3.0 (GPL-3.0)
 #
 # File: shaper_computation.py
@@ -76,17 +76,17 @@ class ShaperComputation:
         calibration_data.freqs = freqs[freqs <= self.max_freq]
 
         # Peak detection algorithm
-        peaks_threshold = [
+        peaks_threshold = (
             PEAKS_DETECTION_THRESHOLD * calibration_data.psd_sum.max(),
             PEAKS_EFFECT_THRESHOLD * calibration_data.psd_sum.max(),
-        ]
+        )
         num_peaks, peaks, peaks_freqs = detect_peaks(
             calibration_data.psd_sum, calibration_data.freqs, peaks_threshold[0]
         )
 
         # Print the peaks info in the console
         peak_freqs_formated = ['{:.1f}'.format(f) for f in peaks_freqs]
-        num_peaks_above_effect_threshold = np.sum(calibration_data.psd_sum[peaks] > peaks_threshold[1])
+        num_peaks_above_effect_threshold = np.count_nonzero(calibration_data.psd_sum[peaks] > peaks_threshold[1])
         ConsoleOutput.print(
             f'Peaks detected on the graph: {num_peaks} @ {", ".join(map(str, peak_freqs_formated))} Hz ({num_peaks_above_effect_threshold} above effect threshold)'
         )
@@ -102,6 +102,8 @@ class ShaperComputation:
         perf_shaper_choice = None
         perf_shaper_freq = None
         perf_shaper_accel = 0
+        klipper_shaper_freq: Optional[float] = None
+        klipper_shaper_accel: Optional[float] = None
         max_smoothing_computed = 0
         for shaper in k_shapers:
             if hasattr(shaper, 'freq_bins') and shaper.freq_bins is not None:
@@ -134,6 +136,9 @@ class ShaperComputation:
                 perf_shaper_choice = shaper.name
                 perf_shaper_accel = shaper.max_accel
                 perf_shaper_freq = shaper.freq
+
+        assert klipper_shaper_freq is not None
+        assert klipper_shaper_accel is not None
 
         # Recommendations are put in the console: one is Klipper's original suggestion that is usually good for low vibrations
         # and the other one is the custom "performance" recommendation that looks for a suitable shaper that doesn't have excessive
@@ -203,6 +208,8 @@ class ShaperComputation:
 
         # We compute the damping ratio using the Klipper's default value if it fails
         fr, zeta, _, _ = compute_mechanical_parameters(calib_data.psd_sum, calib_data.freq_bins)
+        if fr is None:
+            raise ValueError('Unable to determine the resonant frequency from the provided measurements!')
         zeta = zeta if zeta is not None else 0.1
 
         # First we find the best shapers using the Klipper's standard algorithms. This will give us Klipper's
@@ -256,8 +263,12 @@ class ShaperComputation:
                 logger=None,
             )
 
+        k_shaper_choice_name = getattr(k_shaper_choice, 'name', None)
+        if not isinstance(k_shaper_choice_name, str):
+            raise TypeError('Unexpected result from Klipper find_best_shaper')
+
         return (
-            k_shaper_choice.name,
+            k_shaper_choice_name,
             k_shapers,
             None,  # shapers_tradeoff_data - not implemented in this version
             calib_data,
