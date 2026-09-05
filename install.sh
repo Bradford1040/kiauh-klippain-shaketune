@@ -1,11 +1,11 @@
 #!/bin/bash
 
-USER_CONFIG_PATH="${HOME}/punisher_data/config"
-MOONRAKER_CONFIG="${HOME}/punisher_data/config/moonraker.conf"
-MOONRAKER_SERVICE_NAME="moonraker-punisher.service"
+USER_CONFIG_PATH="${HOME}/printer_1_data/config"
+MOONRAKER_CONFIG="${HOME}/printer_1_data/config/moonraker.conf"
+MOONRAKER_SERVICE_NAME="moonraker-printer_1.service"
 KLIPPER_PATH="${HOME}/klipper"
 KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
-KLIPPER_SERVICE_NAME="klipper-punisher.service"
+KLIPPER_SERVICE_NAME="klipper-printer_1.service"
 
 OLD_K_SHAKETUNE_VENV="${HOME}/klippain_shaketune-env"
 K_SHAKETUNE_PATH="${HOME}/klippain_shaketune"
@@ -81,7 +81,7 @@ function install_package_requirements {
 function check_download {
     if [ ! -d "${K_SHAKETUNE_PATH}" ]; then
         echo "[DOWNLOAD] Downloading Klippain Shake&Tune module repository..."
-        if git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git "${K_SHAKETUNE_PATH}"; then
+        if git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git "${K_SHAKETUNE_PATH}"; then
             chmod +x "${K_SHAKETUNE_PATH}/install.sh"
             printf "[DOWNLOAD] Download complete!\n\n"
         else
@@ -156,7 +156,7 @@ path: ~/klippain_shaketune
 virtualenv: ~/klippy-env
 requirements: uv.lock
 system_dependencies: system-dependencies.json
-primary_branch: punisher
+primary_branch: printer_1
 managed_services: klipper moonraker
 EOF
     fi
@@ -171,7 +171,7 @@ function fix_klipper_dirty {
 
     # 2. Add to local git exclude if not already present
     if ! grep -q "klippy/extras/shaketune" .git/info/exclude 2>/dev/null; then
-        echo "klippy/extras/shaketune" >> .git/info/exclude
+        echo "klippy/extras/shaketune" >>.git/info/exclude
         echo "[INFO] Added Shake&Tune to .git/info/exclude."
     else
         echo "[INFO] Shake&Tune already excluded from git status."

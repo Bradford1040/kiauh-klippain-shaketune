@@ -1,5 +1,7 @@
 # KIAUH & Klipper Shake & Tune plugin
 
+[![wakatime](https://wakatime.com/badge/github/Bradford1040/kiauh-klippain-shaketune.svg)](https://wakatime.com/badge/github/Bradford1040/kiauh-klippain-shaketune)
+
 <div align="center"><!-- markdownlint-disable-line MD033 -->
 
 | Version | Distributions | Status |
@@ -16,13 +18,13 @@
 
 - Shake & Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer.
 
-### **Punisher** branch, do not **Blindly** install, make sure you are downloading either, a custom branch made for you or **main**
+### **printer_1** branch, do not **Blindly** install, make sure you are downloading either, a custom branch made for you or **main**
 
-- This is a **Modified** branch is designed to work on Bradford1040 set-up & system, but can be edited to work on yours as well, if you need a modified branch, click this [telegram](https://t.me/JerksOfAllTrades/32) link and ping me @Bradford1040. I am making a dynamic branch [devel-st-v2.0](https://github.com/Bradford1040/kiauh-klippain-shaketune/tree/devel-st-v2.0) that works with custom names when using KIAUH multiple printers option, but it is not completed as of 07/23/2026. I have had issues with the `REG_EX` on top of the re-write
+- This is a **Modified** branch is designed to work on Robert Kempf set-up & system, but can be edited to work on yours as well, if you need a modified branch, click this [telegram](https://t.me/JerksOfAllTrades/32) link and ping me @Bradford1040. I am making a dynamic branch [devel-st-v2.0](https://github.com/Bradford1040/kiauh-klippain-shaketune/tree/devel-st-v2.0) that works with custom names when using KIAUH multiple printers option, but it is not completed as of 07/23/2026. I have had issues with the `REG_EX` on top of the re-write
 
 #### KIAUH and Klipper: Installing on multiple printers option issues
 
-- Only thing thats different is when you use KIAUH and install multiple printers, Klipper & Moonraker no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom_name_data" which in turn changes (`klipper-printer_1.service`) & (`moonraker-printer_1.service`) or (`klipper-custom_name.service`) & (`moonraker-custom_name.service`). This branch (punisher) is set up for a printer named (punisher) in the `install.sh`
+- Only thing thats different is when you use KIAUH and install multiple printers, Klipper & Moonraker no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom_name_data" which in turn changes (`klipper-printer_1.service`) & (`moonraker-printer_1.service`) or (`klipper-custom_name.service`) & (`moonraker-custom_name.service`). This branch (printer_1) is set up for a printer named (printer_1) in the `install.sh`
 
 Check out the **[detailed documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)**.
 
@@ -44,7 +46,7 @@ Follow these steps to install Shake&Tune on your printer:
   3. Install Shake&Tune by running over a SSH connection to your computer or Raspberry PI on your printer:
 
    ``` shell
-     git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+     git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
    ```
 
    ``` shell
@@ -55,13 +57,13 @@ Follow these steps to install Shake&Tune on your printer:
      ./install.sh
    ```
 
-  1. I highly doubt your printer name is (punisher), You are more than likely looking at the wrong Branch
+  1. I highly doubt your printer name is (printer_1), You are more than likely looking at the wrong Branch
 
   2. Then, append the following to your `printer.cfg` file and restart Klipper:
 
 ``` ini
 [shaketune]
-result_folder: ~/punisher_data/config/ShakeTune_results
+result_folder: ~/printer_1_data/config/ShakeTune_results
 #    Path where the processed results will be stored. If the folder doesn't exist,
 #    it will be automatically created. You can change this if you'd like to store 
 #    results in a different location.

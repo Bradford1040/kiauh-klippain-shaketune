@@ -17,7 +17,7 @@ cd ~/
 git clone https://github.com/Klipper3d/klipper.git ~/klipper
 # OR
 git clone -b bleeding-edge-v2 --single-branch https://github.com/KalicoCrew/kalico.git ~/klipper
-git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
+git clone -b printer_1 --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
 cd ~/klippain-shaketune
 pip install uv
 uv pip install -r requirements.txt
