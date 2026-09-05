@@ -6,7 +6,7 @@
 # File: vibrations_graph_creator.py
 # Description: Machine vibrations graph creator implementation
 
-from typing import Optional
+from typing import Any, Optional
 
 from ..helpers.accelerometer import MeasurementsManager
 from ..helpers.motors_config_parser import Motor
