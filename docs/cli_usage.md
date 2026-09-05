@@ -11,9 +11,12 @@ The CLI mode uses the same dependencies as the main Shake&Tune plugin. Ensure yo
 - The Klipper repository cloned locally in your home folder (no need to install it, just clone it)
 
 You can install these dependencies using:
-```bash
+
+``` bash
 cd ~/
-git clone https://github.com/Klipper3d/klipper.git
+git clone https://github.com/Klipper3d/klipper.git ~/klipper
+# OR
+git clone -b bleeding-edge-v2 --single-branch https://github.com/KalicoCrew/kalico.git ~/klipper
 git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
 cd ~/klippain-shaketune
 pip install uv
@@ -23,13 +26,14 @@ uv pip install -r requirements.txt
 ## Basic Usage
 
 The CLI follows this general pattern:
-```bash
+
+``` bash
 uv run python -m shaketune.cli <graph_type> [options] <input_files>
 ```
 
 ### Quick Reference
 
-```bash
+``` bash
 # Show available commands or detailed help for a specific command
 python -m shaketune.cli --help
 python -m shaketune.cli <graph_type> --help
@@ -41,7 +45,7 @@ python -m shaketune.cli input_shaper --help
 ### Available Graph Types
 
 | Command        | Description                             |
-| ----------------| -----------------------------------------|
+| -------------: | --------------------------------------: |
 | `static_freq`  | Static frequency analysis               |
 | `axes_map`     | Accelerometer axes mapping detection    |
 | `belts`        | Belt tension comparison (CoreXY/CoreXZ) |
@@ -67,7 +71,7 @@ All commands support these common options:
 
 ### 1. Axes Map Detection
 
-```bash
+``` bash
 # Using .stdata file
 python -m shaketune.cli axes_map \
     -o ./results/axes_map_analysis.png \
@@ -89,13 +93,16 @@ python -m shaketune.cli axes_map \
 ```
 
 **Required parameters:**
+
 - `--accel`: Acceleration used during measurement (mm/s²)
+
 **Optional parameters:**
+
 - `--axes_map`: Existing axes_map configuration to invert for analysis. Use this to verify or correct an already configured axes_map. **Important:** When the value starts with `-`, use the `=` syntax (e.g., `--axes_map="-y,x,z"`).
 
 ### 2. Static Frequency Analysis
 
-```bash
+``` bash
 python -m shaketune.cli static_freq \
     -o ./results/static_frequency.png \
     --frequency 45.0 \
@@ -105,13 +112,14 @@ python -m shaketune.cli static_freq \
 ```
 
 **Optional parameters:** (these are only used for the legend and the title of the graph)
+
 - `--frequency`: Maintained frequency during measurement (Hz)
 - `--duration`: Duration of the measurement (seconds)
 - `--accel_per_hz`: Acceleration per Hz used (mm/s²/Hz)
 
 ### 3. Belt Comparison (CoreXY/CoreXZ)
 
-```bash
+``` bash
 python -m shaketune.cli belts \
     -o ./results/belt_comparison.png \
     --kinematics corexy \
@@ -125,10 +133,12 @@ python -m shaketune.cli belts \
 ```
 
 **Required parameters:**
+
 - `--kinematics`: Machine kinematics (`corexy`, `corexz`, `cartesian`, etc.)
 - `-k, --klipper_dir`: Path to Klipper directory (for shaper calculations)
 
 **Optional parameters:** (these are only used for the legend and the title of the graph)
+
 - `--mode`: Test mode used (`SWEEPING`, `FIXED`, etc.)
 - `--accel_per_hz`: Acceleration per Hz (mm/s²/Hz)
 - `--sweeping_accel`: Acceleration for sweeping tests (mm/s²)
@@ -137,7 +147,7 @@ python -m shaketune.cli belts \
 
 ### 4. Input Shaper Calibration
 
-```bash
+``` bash
 python -m shaketune.cli input_shaper \
     -o ./results/input_shaper_x.png \
     --scv 5.0 \
@@ -151,10 +161,12 @@ python -m shaketune.cli input_shaper \
 ```
 
 **Required parameters:**
+
 - `-k, --klipper_dir`: Path to Klipper directory
 - `--scv`: Square corner velocity (mm/s)
 
 **Optional parameters:** (these are only used for the legend and the title of the graph)
+
 - `--max_smoothing`: Maximum allowed smoothing
 - `--mode`: Test mode used
 - `--accel_per_hz`: Acceleration per Hz (mm/s²/Hz)
@@ -164,7 +176,7 @@ python -m shaketune.cli input_shaper \
 
 ### 5. Vibrations Profile
 
-```bash
+``` bash
 python -m shaketune.cli vibrations \
     -o ./results/vibrations_profile.png \
     --kinematics corexy \
@@ -174,6 +186,7 @@ python -m shaketune.cli vibrations \
 ```
 
 **Required parameters:**
+
 - `--kinematics`: Machine kinematics
 - `--accel`: Acceleration used during measurements (mm/s²)
 - `-k, --klipper_dir`: Path to Klipper directory

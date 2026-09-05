@@ -12,11 +12,11 @@
 
 </div>
 
-## 🦏 Rhino Linux - Kalico Klipper - 🩸 bleeding-edge-v2 - S2DW Accelerometer - Python version 3.14.6
+## 🦏 Rhino Linux - Kalico Klipper - 🩸 bleeding-edge-v2 - S2DW Accelerometer - 🐍 Python version 3.14.6
 
 - Shake & Tune is a Klipper plugin from the [Klippain](https://github.com/Frix-x/klippain) ecosystem, designed to create insightful visualizations to help you troubleshoot your mechanical problems and give you tools to better calibrate the input shaper filters on your 3D printer.
 
-### About this branch, do not **Blindly** install
+### **Punisher** branch, do not **Blindly** install, make sure you are downloading either, a custom branch made for you or **main**
 
 - This is a **Modified** branch is designed to work on Bradford1040 set-up & system, but can be edited to work on yours as well, if you need a modified branch, click this [telegram](https://t.me/JerksOfAllTrades/32) link and ping me @Bradford1040. I am making a dynamic branch [devel-st-v2.0](https://github.com/Bradford1040/kiauh-klippain-shaketune/tree/devel-st-v2.0) that works with custom names when using KIAUH multiple printers option, but it is not completed as of 07/23/2026. I have had issues with the `REG_EX` on top of the re-write
 
@@ -26,7 +26,7 @@
 
 Check out the **[detailed documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)**.
 
-- Want a **Custom Branch**, or need **Help** join [telegram](https://t.me/JerksOfAllTrades/32)
+- Need a **Custom Branch**, or want **Help** click the link to join [telegram group](https://t.me/JerksOfAllTrades/32) or scan QR-code below
 - Here you will get 🤝 Support & 👨‍💻 Developer Contact
 
 ![Telegram_Group](./docs/Jerks-Of-All-Trades.png "Telegram Group, Scan QR-code with Phone")
@@ -41,17 +41,17 @@ Follow these steps to install Shake&Tune on your printer:
 
   2. [Measuring Resonances Klipper documentation](https://www.klipper3d.org/Measuring_Resonances.html) to configure it.
 
-  3. Install Shake&Tune by running over SSH on your printer:
+  3. Install Shake&Tune by running over a SSH connection to your computer or Raspberry PI on your printer:
 
-   ```shell
+   ``` shell
      git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
    ```
 
-   ```shell
+   ``` shell
      cd ~/klippain_shaketune
    ```
   
-   ```shell
+   ``` shell
      ./install.sh
    ```
 
