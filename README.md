@@ -2,10 +2,10 @@
 
 <div align="center"><!-- markdownlint-disable-line MD033 -->
 
-| Version | Distributions | Status |
-| :---------: | :---------: | :--------: |
-| Python  3.9 | ARCH & Debian | ✅ Tested & Supported |
-| Python 3.11 | ARCH & Debian | ✅ Tested & Supported |
+|   Version   |  Distributions   |        Status        |
+|:-----------:|:----------------:|:--------------------:|
+| Python  3.9 |  ARCH & Debian   | ✅ Tested & Supported |
+| Python 3.11 |  ARCH & Debian   | ✅ Tested & Supported |
 | Python 3.12 | CachyOS & Ubuntu | ✅ Tested & Supported |
 | Python 3.13 | CachyOS & Ubuntu | ✅ Tested & Supported |
 | Python 3.14 | CachyOS & Ubuntu | ✅ Tested & Supported |
@@ -22,7 +22,7 @@
 
 #### KIAUH and Klipper: Installing on multiple printers option issues
 
-- Only thing thats different is when you use KIAUH and install multiple printers, Klipper & Moonraker no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom_name_data" which in turn changes (`klipper-printer_1.service`) & (`moonraker-printer_1.service`) or (`klipper-custom_name.service`) & (`moonraker-custom_name.service`). This branch (punisher) is set up for a printer named (punisher) in the `install.sh`
+- Only thing that's different is when you use KIAUH and install multiple printers, Klipper & Moonraker no longer uses (klipper.service or moonraker.service) it now uses a different naming scheme, like "printer_1_data" or "custom_name_data" which in turn changes (`klipper-printer_1.service`) & (`moonraker-printer_1.service`) or (`klipper-custom_name.service`) & (`moonraker-custom_name.service`). This branch (punisher) is set up for a printer named (punisher) in the `install.sh`
 
 Check out the **[detailed documentation here](https://github.com/Bradford1040/kiauh-klippain-shaketune/wiki)**.
 
@@ -41,7 +41,7 @@ Follow these steps to install Shake&Tune on your printer:
 
   2. [Measuring Resonances Klipper documentation](https://www.klipper3d.org/Measuring_Resonances.html) to configure it.
 
-  3. Install Shake&Tune by running over a SSH connection to your computer or Raspberry PI on your printer:
+  3. Install Shake&Tune by running over an SSH connection to your computer or Raspberry PI on your printer:
 
    ``` shell
      git clone -b punisher --single-branch https://github.com/Bradford1040/kiauh-klippain-shaketune.git ~/klippain_shaketune
